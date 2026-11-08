@@ -3,137 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Статика ЕГЭ 2027 — Блоки, полиспасты и гидростатика (Архимед)</title>
+  <title>Статика ЕГЭ — Блоки и полиспасты</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { extend: {} }
-    };
-  </script>
   <!-- KaTeX для формул -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-6 px-4 transition-colors duration-200">
+<body class="bg-slate-100 text-slate-900 min-h-screen py-6 px-4">
 
   <main class="max-w-4xl mx-auto flex flex-col gap-5">
-    <!-- Навигация -->
-    <nav class="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 overflow-x-auto pb-1">
-      <a href="index.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition flex items-center gap-1 shadow-xs">
-        <span>🏠</span> <span>Все темы</span>
-      </a>
-      <a href="lever.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">1. Рычаг</a>
-      <a href="pulleys.html" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white shadow-sm font-semibold">2. Блоки</a>
-      <a href="inclined-plane.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">3. Плоскость</a>
-      <a href="threads.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">4. Нити</a>
-      <a href="beam.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">5. Балка</a>
-      <a href="ladder.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">6. Лестница (№26)</a>
+    <!-- Навигация между HTML-файлами -->
+    <nav class="flex items-center gap-2 text-xs font-medium text-slate-600 overflow-x-auto pb-1">
+      <a href="lever.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">1. Рычаг</a>
+      <a href="pulleys.html" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white shadow-sm">2. Блоки</a>
+      <a href="inclined-plane.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">3. Наклонная плоскость</a>
+      <a href="threads.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">4. Нити</a>
+      <a href="beam.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">5. Балка</a>
     </nav>
 
     <!-- Шапка -->
-    <header class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+    <header class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
       <div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Топик 2 • Статика ЕГЭ</span>
-          <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-medium">Версия 2.0</span>
-        </div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Блоки, полиспасты и гидростатика (Архимед)</h1>
+        <span class="text-xs font-semibold uppercase tracking-wider text-blue-600">Топик 2 • Статика ЕГЭ</span>
+        <h1 class="text-2xl font-bold text-slate-900">Блоки и полиспасты</h1>
       </div>
       <div class="flex items-center gap-2">
-        <button id="btn-theme-toggle" class="p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition text-base" title="Переключить тему">
-          🌙
-        </button>
-        <button id="btn-reset" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition">
+        <button id="btn-reset" class="rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 active:scale-95 transition">
           Сброс
         </button>
-        <button id="btn-share" class="rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-blue-700 active:scale-95 transition shadow-xs">
+        <button id="btn-share" class="rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-blue-700 active:scale-95 transition">
           Поделиться
         </button>
       </div>
     </header>
 
-    <!-- Переключатель режима: Песочница / Задача ЕГЭ -->
-    <div class="flex items-center justify-between bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <div class="flex items-center gap-2">
-        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Режим:</span>
-        <div class="inline-flex rounded-lg bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700">
-          <button id="btn-mode-sandbox" class="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs shadow-sm transition">
-            🔬 Песочница
-          </button>
-          <button id="btn-mode-quiz" class="px-3.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-300 font-medium text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-            🎯 Задача ЕГЭ
-          </button>
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-slate-500 dark:text-slate-400">Испытания:</span>
-        <span id="challenges-counter" class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">0/3</span>
-      </div>
-    </div>
-
-    <!-- Карточка задачи ЕГЭ -->
-    <div id="quiz-card" class="hidden bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950/40 border border-blue-200 dark:border-indigo-900/60 rounded-xl p-4 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="text-sm font-bold text-blue-900 dark:text-blue-300">🎯 Задание ЕГЭ (выигрыш в силе и гидростатика):</span>
-        </div>
-        <button id="btn-quiz-new" class="text-xs px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-slate-700 transition">
-          🔄 Новые данные
-        </button>
-      </div>
-      <div id="quiz-prompt" class="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium"></div>
-      <div class="flex flex-wrap items-center gap-3 pt-1">
-        <div class="relative flex items-center">
-          <input type="text" id="quiz-input" placeholder="Введите ответ (Н)" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 outline-hidden w-44" />
-          <span class="ml-2 text-xs text-slate-500 dark:text-slate-400">Н</span>
-        </div>
-        <button id="btn-quiz-check" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs active:scale-95 transition">
-          Проверить ответ
-        </button>
-        <button id="btn-quiz-solution" class="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 text-xs font-medium transition">
-          Показать подсказку/решение
-        </button>
-      </div>
-      <div id="quiz-feedback"></div>
-      <div id="quiz-solution-text" class="hidden mt-2 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 space-y-1"></div>
-    </div>
-
     <!-- Краткая теория -->
-    <details class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-3 shadow-sm">
-      <summary class="cursor-pointer font-semibold text-slate-800 dark:text-slate-200 select-none">
-        📖 Краткая теория: золотое правило механики и закон Архимеда
+    <details class="bg-white rounded-xl border border-slate-200 px-4 py-3 shadow-sm">
+      <summary class="cursor-pointer font-semibold text-slate-800 select-none">
+        📖 Краткая теория: неподвижный и подвижный блоки, золотое правило механики
       </summary>
-      <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300 space-y-2 leading-relaxed">
+      <div class="mt-3 pt-3 border-t border-slate-100 text-sm text-slate-700 space-y-2 leading-relaxed">
         <p>
-          <strong>Неподвижный блок</strong> меняет направление силы, выигрыша в силе не даёт ($F = mg$).
+          <strong>Неподвижный блок</strong> имеет закреплённую ось. Он не даёт выигрыша в силе ($F = mg$), но позволяет изменить направление действия силы. Нагрузка на ось подвеса блока при вертикальных нитях равна $R = 2T$.
         </p>
         <p>
-          <strong>Подвижный блок и полиспаст:</strong> если подвижную обойму с грузом удерживают $k$ параллельных ветвей нити, натяжение нити:
-          $$T = F = \frac{(m + m_{\text{бл}})g - F_A}{k}$$
+          <strong>Подвижный блок</strong> движется вместе с грузом. Так как груз (и сам блок массы $m_{\text{бл}}$) удерживается двумя ветвями одной нити с одинаковым натяжением $T$, сила тяги в 2 раза меньше:
+          $$2T = (m + m_{\text{бл}})g \implies F = T = \frac{(m + m_{\text{бл}})g}{2}$$
         </p>
         <p>
-          <strong>Закон Архимеда в блоках (Задача №26):</strong> при погружении груза объёмом $V$ в жидкость плотностью $\rho_{\text{ж}}$ на него действует выталкивающая сила $F_A = \rho_{\text{ж}} g V$, уменьшающая вес груза и натяжение всех нитей!
+          <strong>Полиспаст</strong> — система из нескольких блоков. Если подвижную обойму с грузом удерживают $k$ ветвей нити, то идеальный выигрыш в силе равен $k$, однако свободный конец верёвки нужно вытянуть на длину $s_F = k \cdot h$ (<strong>«золотое правило механики»</strong>: во сколько раз выигрываем в силе, во столько же раз проигрываем в расстоянии).
         </p>
       </div>
     </details>
 
-    <!-- Шаблон обоснования №26 (Критерии ФИПИ) -->
-    <div id="justification-container"></div>
-
-    <!-- Выбор схемы блоков -->
-    <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm flex flex-col gap-3">
+    <!-- Выбор схемы блоков (5 кнопок по ТЗ) -->
+    <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm flex flex-col gap-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <span class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">Схема механизма:</span>
-        <div class="flex flex-wrap items-center gap-4 text-sm text-slate-700 dark:text-slate-300">
+        <span class="text-xs font-semibold uppercase text-slate-500">Выберите схему механизма:</span>
+        <div class="flex flex-wrap items-center gap-4 text-sm text-slate-700">
           <label class="flex items-center gap-1.5 cursor-pointer select-none">
             <input type="checkbox" id="toggle-forces" checked class="accent-blue-600" /> Силы ($F, T, mg$)
           </label>
           <label class="flex items-center gap-1.5 cursor-pointer select-none">
-            <input type="checkbox" id="toggle-arms" checked class="accent-blue-600" /> Высота ($h, s_F$)
+            <input type="checkbox" id="toggle-arms" checked class="accent-blue-600" /> Отсчёт высоты ($h, s_F$)
           </label>
           <label class="flex items-center gap-1.5 cursor-pointer select-none">
             <input type="checkbox" id="toggle-values" checked class="accent-blue-600" /> Числа
@@ -148,7 +83,7 @@
         <button data-scheme="movable" class="scheme-btn rounded-lg border px-3 py-2 text-xs sm:text-sm font-medium transition">
           2. Подвижный (2:1)
         </button>
-        <button data-scheme="combo" class="scheme-btn rounded-lg border px-3 py-2 text-xs sm:text-sm font-medium transition bg-blue-600 text-white shadow-xs">
+        <button data-scheme="combo" class="scheme-btn rounded-lg border px-3 py-2 text-xs sm:text-sm font-medium transition">
           3. Комбинация (2:1)
         </button>
         <button data-scheme="polyspast2" class="scheme-btn rounded-lg border px-3 py-2 text-xs sm:text-sm font-medium transition">
@@ -160,650 +95,628 @@
       </div>
     </div>
 
-    <!-- Режим Архимеда (гидростатика под блоком) -->
-    <div class="rounded-xl border border-sky-200 dark:border-sky-900/60 bg-sky-50/60 dark:bg-slate-900/70 p-4 shadow-sm space-y-3">
-      <div class="flex flex-wrap items-center justify-between gap-2">
-        <label class="flex items-center gap-2 cursor-pointer select-none">
-          <input type="checkbox" id="toggle-archimedes" class="w-4 h-4 accent-sky-600" />
-          <span class="font-bold text-sky-950 dark:text-sky-300 text-sm">🌊 Гидростатика: погружение груза в сосуд с жидкостью (Закон Архимеда)</span>
-        </label>
-        <span class="text-xs px-2 py-0.5 rounded bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 font-medium">ЕГЭ Задача №26</span>
-      </div>
-
-      <div id="archimedes-controls" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs">
-        <div>
-          <span class="text-slate-600 dark:text-slate-400 font-medium block mb-1">Жидкость в сосуде:</span>
-          <select id="select-fluid" class="w-full px-3 py-1.5 rounded-lg border border-sky-300 dark:border-sky-800 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 outline-hidden">
-            <option value="water">Вода (ρ = 1000 кг/м³)</option>
-            <option value="oil">Масло (ρ = 900 кг/м³)</option>
-            <option value="kerosene">Керосин (ρ = 800 кг/м³)</option>
-          </select>
-        </div>
-        <div>
-          <div class="flex justify-between text-slate-600 dark:text-slate-400 mb-1">
-            <span>Объём тела V:</span>
-            <span id="label-volume" class="font-mono font-bold text-sky-600 dark:text-sky-400">2.0 л (0.002 м³)</span>
-          </div>
-          <input type="range" id="slider-volume" min="0.5" max="5.0" step="0.5" value="2.0" class="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-600" />
-        </div>
-      </div>
-    </div>
-
-    <!-- Панель испытаний темы -->
-    <div class="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-slate-900/50 p-3.5 space-y-2">
-      <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-amber-950 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-          <span>🏆</span> <span>Испытания темы: Блоки и Архимед</span>
-        </span>
-        <span class="text-[11px] text-slate-500 dark:text-slate-400">Выполняйте условия в песочнице</span>
-      </div>
-      <div id="challenges-list" class="grid grid-cols-1 md:grid-cols-3 gap-2"></div>
-    </div>
-
-    <!-- Интерактивный холст SVG -->
-    <div class="relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 shadow-sm overflow-hidden">
-      <div class="text-[11px] font-medium text-slate-600 dark:text-slate-400 flex items-center justify-between mb-2">
-        <span class="flex items-center gap-1">
-          <span>👆</span> <span>Перетаскивайте груз по вертикали, чтобы изменить высоту подъёма</span>
-        </span>
-        <span id="canvas-status-badge" class="font-bold text-emerald-600 dark:text-emerald-400">● Равновесие полиспаста</span>
-      </div>
-
-      <svg id="scene" viewBox="0 0 700 430" class="w-full h-auto select-none rounded-lg bg-slate-50/60 dark:bg-slate-950/70 border border-slate-100 dark:border-slate-800/80 cursor-default">
+    <!-- SVG-сцена -->
+    <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-inner">
+      <svg id="scene" viewBox="0 0 700 430" class="w-full h-auto select-none touch-none" role="img" aria-label="Симулятор блоков и полиспастов">
         <defs>
-          <pattern id="grid-pattern" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" class="text-slate-200 dark:text-slate-800/60" stroke-width="0.75" />
+          <filter id="load-shadow" x="-20%" y="-10%" width="140%" height="130%">
+            <feDropShadow dx="0" dy="4" stdDeviation="3" flood-opacity="0.25" />
+          </filter>
+          <linearGradient id="pulley-wheel-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f8fafc" />
+            <stop offset="50%" stop-color="#e2e8f0" />
+            <stop offset="100%" stop-color="#94a3b8" />
+          </linearGradient>
+          <linearGradient id="load-box-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#475569" />
+            <stop offset="45%" stop-color="#334155" />
+            <stop offset="100%" stop-color="#1e293b" />
+          </linearGradient>
+
+          <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#2563eb" />
+          </marker>
+          <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#16a34a" />
+          </marker>
+          <!-- Штриховка потолка -->
+          <pattern id="ceiling-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="12" stroke="#94a3b8" stroke-width="2" />
           </pattern>
-          <pattern id="ceiling-hatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="0" y2="8" stroke="currentColor" class="text-slate-400 dark:text-slate-600" stroke-width="1.5" />
-          </pattern>
-          <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="10" markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M 1 0 L 5 10 L 9 0 z" fill="#ef4444" />
-          </marker>
-          <marker id="arrow-up" viewBox="0 0 10 10" refX="5" refY="0" markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M 1 10 L 5 0 L 9 10 z" fill="#2563eb" />
-          </marker>
-          <marker id="arrow-archimedes" viewBox="0 0 10 10" refX="5" refY="0" markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M 1 10 L 5 0 L 9 10 z" fill="#059669" />
-          </marker>
         </defs>
 
-        <!-- Фоновая сетка -->
-        <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+        <!-- Потолок-опора -->
+        <rect x="80" y="18" width="540" height="14" fill="url(#ceiling-hatch)" />
+        <line x1="80" y1="32" x2="620" y2="32" stroke="#475569" stroke-width="3" />
 
-        <!-- Потолок -->
-        <rect x="40" y="30" width="620" height="14" fill="#cbd5e1" class="dark:fill-slate-700" />
-        <rect x="40" y="16" width="620" height="14" fill="url(#ceiling-hatch)" />
-        <line x1="40" y1="44" x2="660" y2="44" stroke="#475569" stroke-width="2" class="dark:stroke-slate-500" />
-
-        <!-- Сосуд с жидкостью (режим гидростатики) -->
-        <g id="beaker-group" class="hidden">
-          <!-- Стеклянный мензурочный стакан -->
-          <rect id="beaker-rect" x="300" y="270" width="100" height="130" rx="4" fill="#e0f2fe" fill-opacity="0.25" stroke="#38bdf8" stroke-width="2" />
-          <!-- Уровень жидкости -->
-          <rect id="fluid-level" x="302" y="290" width="96" height="108" rx="2" fill="#38bdf8" fill-opacity="0.45" />
-          <text id="fluid-label" x="350" y="415" text-anchor="middle" font-size="10" font-weight="bold" fill="#0284c7">Вода (1000 кг/м³)</text>
-        </g>
-
-        <!-- Группа нитей -->
-        <g id="ropes-group"></g>
-
-        <!-- Группа блоков (неподвижные и подвижные) -->
-        <g id="pulleys-group"></g>
-
-        <!-- Подвес груза и сам груз -->
-        <g id="load-group" class="cursor-ns-resize">
-          <circle id="load-hitbox" cx="350" cy="270" r="32" fill="transparent" />
-          <rect id="load-rect" x="320" y="250" width="60" height="50" rx="6" fill="#64748b" stroke="#334155" stroke-width="2" class="dark:fill-slate-700 dark:stroke-slate-400 shadow-sm" />
-          <circle cx="350" cy="245" r="5" fill="none" stroke="#475569" stroke-width="2" class="dark:stroke-slate-400" />
-          <text id="load-label" x="350" y="280" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffffff">6.0 кг</text>
-        </g>
-
-        <!-- Группа сил и высот -->
-        <g id="forces-group"></g>
-        <g id="heights-group"></g>
+        <!-- Динамическое содержимое сцены -->
+        <g id="scene-content"></g>
       </svg>
-    </div>
-
-    <!-- Информационная таблица -->
-    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-      <div class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/60 rounded-xl p-3 shadow-sm">
-        <span class="text-xs font-bold text-blue-800 dark:text-blue-300 block mb-0.5">Сила тяги F</span>
-        <div class="text-xl font-extrabold text-blue-600 dark:text-blue-400" id="info-pull-force">29.4 Н</div>
-        <span class="text-[11px] text-slate-500 font-mono" id="info-advantage-text">Выигрыш 2:1</span>
-      </div>
-
-      <div class="bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/60 rounded-xl p-3 shadow-sm">
-        <span class="text-xs font-bold text-emerald-800 dark:text-emerald-300 block mb-0.5">Натяжение нити T</span>
-        <div class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400" id="info-tension">29.4 Н</div>
-        <span class="text-[11px] text-slate-500 font-mono">T = const вдоль нити</span>
-      </div>
-
-      <div class="bg-white dark:bg-slate-900 border border-red-200 dark:border-red-900/60 rounded-xl p-3 shadow-sm">
-        <span class="text-xs font-bold text-red-800 dark:text-red-300 block mb-0.5">Вес груза Pэфф</span>
-        <div class="text-xl font-extrabold text-red-600 dark:text-rose-400" id="info-load-weight">58.8 Н</div>
-        <span class="text-[11px] text-slate-500 font-mono" id="info-weight-subtext">mg = 58.8 Н</span>
-      </div>
-
-      <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/60 rounded-xl p-3 shadow-sm">
-        <span class="text-xs font-bold text-amber-800 dark:text-amber-300 block mb-0.5">КПД механизма</span>
-        <div class="text-xl font-extrabold text-amber-600 dark:text-amber-400" id="info-efficiency">100%</div>
-        <span class="text-[11px] text-slate-500 font-mono" id="info-work-text">Aполезн = Aзатрач</span>
+      <div class="bg-slate-100 px-4 py-2 text-xs text-slate-500 flex justify-between flex-wrap gap-2 border-t border-slate-200">
+        <span>💡 Совет: тяните за <strong>синее кольцо</strong> на свободном конце верёвки прямо на схеме или двигайте ползунок подъёма $h$.</span>
+        <span>Равномерный подъём в равновесии ($\vec{a} = 0$, $g = 10\text{ м/с}^2$)</span>
       </div>
     </div>
 
-    <!-- Ползунки параметров -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-4">
-      <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm flex items-center gap-1.5">
-        <span>⚙️</span> <span>Параметры груза и подвижного блока:</span>
-      </h3>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-            <span>Масса груза m:</span>
-            <span id="label-mass" class="font-bold text-blue-600 dark:text-blue-400">6.0 кг</span>
-          </div>
-          <input type="range" id="slider-mass" min="1.0" max="20.0" step="0.5" value="6.0" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600" />
-        </div>
+    <!-- Блок живых формул (FR-W-5) -->
+    <div class="grid gap-4 md:grid-cols-3">
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="text-xs font-medium uppercase text-slate-500">Сила тяги и натяжение ($F = T$)</div>
+        <div id="val-tension" class="mt-1 font-mono text-xl font-bold text-blue-600">0,0 Н</div>
+        <div id="formula-tension" class="mt-1 text-xs text-slate-500 font-mono">T = mg / k</div>
+      </div>
 
-        <div>
-          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-            <span>Масса подвижного блока m_бл:</span>
-            <span id="label-pulley-mass" class="font-bold text-amber-600 dark:text-amber-400">0.0 кг (невесомый)</span>
-          </div>
-          <input type="range" id="slider-pulley-mass" min="0.0" max="3.0" step="0.2" value="0.0" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-600" />
-        </div>
+      <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm text-emerald-900">
+        <div class="text-xs font-medium uppercase opacity-75">Выигрыш в силе</div>
+        <div id="val-advantage" class="mt-1 font-mono text-xl font-bold">×1,0</div>
+        <div id="formula-advantage" class="mt-1 text-xs opacity-85 font-mono">Идеальный: k = 1</div>
+      </div>
 
-        <div>
-          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-            <span>Высота подъёма h:</span>
-            <span id="label-lift-h" class="font-bold text-emerald-600 dark:text-emerald-400">0.15 м</span>
-          </div>
-          <input type="range" id="slider-lift-h" min="0.0" max="0.35" step="0.01" value="0.15" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-600" />
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="text-xs font-medium uppercase text-slate-500">Золотое правило механики</div>
+        <div id="val-rope-dist" class="mt-1 font-mono text-xl font-bold text-slate-900">s = 0,00 м</div>
+        <div id="formula-work" class="mt-1 text-xs text-slate-500 font-mono">A = F·s = mgh</div>
+      </div>
+    </div>
+
+    <!-- Ползунки управления параметрами -->
+    <div class="grid gap-4 sm:grid-cols-3">
+      <!-- Высота подъёма груза h -->
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex justify-between items-center">
+          <label for="slider-lift" class="font-semibold text-slate-800 text-sm">Подъём груза h</label>
+          <span id="label-lift" class="font-mono font-bold text-blue-600">0,20 м</span>
+        </div>
+        <input id="slider-lift" type="range" min="0" max="0.5" step="0.01" value="0.2" class="accent-blue-600 cursor-pointer" />
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>0,00 м</span>
+          <span>0,25 м</span>
+          <span>0,50 м</span>
+        </div>
+      </div>
+
+      <!-- Масса груза m -->
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex justify-between items-center">
+          <label for="slider-mass" class="font-semibold text-slate-800 text-sm">Масса груза m</label>
+          <span id="label-mass" class="font-mono font-bold text-slate-900">6,0 кг</span>
+        </div>
+        <input id="slider-mass" type="range" min="0.5" max="20" step="0.5" value="6" class="accent-slate-700 cursor-pointer" />
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>0,5 кг</span>
+          <span>10 кг</span>
+          <span>20 кг</span>
+        </div>
+      </div>
+
+      <!-- Масса подвижного блока m_бл -->
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex justify-between items-center">
+          <label for="slider-pulley-mass" class="font-semibold text-slate-800 text-sm">Масса подв. блока $m_{\text{бл}}$</label>
+          <span id="label-pulley-mass" class="font-mono font-bold text-slate-900">0,0 кг</span>
+        </div>
+        <input id="slider-pulley-mass" type="range" min="0" max="5" step="0.2" value="0" class="accent-emerald-600 cursor-pointer" />
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>0 (идеальный)</span>
+          <span>2,5 кг</span>
+          <span>5,0 кг</span>
         </div>
       </div>
     </div>
   </main>
 
-  <script type="module">
-    import { initTheme, toggleTheme } from './assets/js/theme.js';
-    import { initShareButton, formatSI, encodeState, loadStateFromUrl } from './assets/js/widget-utils.js';
-    import { renderJustificationBlock, initJustificationButtons } from './assets/js/justification.js';
-    import { createQuizManager } from './assets/js/quiz-engine.js';
-    import { playSuccessSound } from './assets/js/sound-effects.js';
-
-    const G = 9.8;
+  <script>
+    // =========================================================
+    // 1. КОНСТАНТЫ И РАСЧЁТНОЕ ЯДРО (pulleysPhysics)
+    // =========================================================
+    const G = 10; // м/с²
+    const PX_PER_METER = 150; // масштаб перемещения на сцене
 
     const SCHEMES = {
-      fixed: { title: 'Неподвижный блок (1:1)', k: 1, hasMovable: false, pullDir: 1 },
-      movable: { title: 'Подвижный блок (2:1)', k: 2, hasMovable: true, pullDir: -1 },
-      combo: { title: 'Комбинация: неподвижный + подвижный (2:1)', k: 2, hasMovable: true, pullDir: 1 },
-      polyspast2: { title: 'Полиспаст 2:1', k: 2, hasMovable: true, pullDir: 1 },
-      polyspast3: { title: 'Полиспаст 3:1', k: 3, hasMovable: true, pullDir: 1 }
-    };
-
-    const FLUIDS = {
-      water: { name: 'Вода (1000 кг/м³)', rho: 1000, color: '#38bdf8' },
-      oil: { name: 'Масло (900 кг/м³)', rho: 900, color: '#fbbf24' },
-      kerosene: { name: 'Керосин (800 кг/м³)', rho: 800, color: '#2dd4bf' }
-    };
-
-    const state = {
-      scheme: 'combo',
-      mass: 6.0,
-      pulleyMass: 0.0,
-      liftH: 0.15,
-      isArchimedes: false,
-      fluid: 'water',
-      volumeLiters: 2.0,
-      showForces: true,
-      showArms: true,
-      showValues: true
-    };
-
-    // Загрузка состояния из URL
-    const loadedState = loadStateFromUrl();
-    if (loadedState) {
-      if (loadedState.scheme && SCHEMES[loadedState.scheme]) state.scheme = loadedState.scheme;
-      if (typeof loadedState.mass === 'number') state.mass = loadedState.mass;
-      if (typeof loadedState.pulleyMass === 'number') state.pulleyMass = loadedState.pulleyMass;
-      if (typeof loadedState.liftH === 'number') state.liftH = loadedState.liftH;
-      if (typeof loadedState.isArchimedes === 'boolean') state.isArchimedes = loadedState.isArchimedes;
-      if (loadedState.fluid && FLUIDS[loadedState.fluid]) state.fluid = loadedState.fluid;
-      if (typeof loadedState.volumeLiters === 'number') state.volumeLiters = loadedState.volumeLiters;
-    }
-
-    // Инициализация темы и обоснования
-    initTheme();
-    document.getElementById('btn-theme-toggle')?.addEventListener('click', toggleTheme);
-
-    const justContainer = document.getElementById('justification-container');
-    if (justContainer) {
-      justContainer.innerHTML = renderJustificationBlock('pulleys');
-      initJustificationButtons();
-    }
-
-    // Квиз-движок
-    const quiz = createQuizManager({
-      topicId: 'pulleys',
-      generateTask: () => {
-        const withFluid = Math.random() > 0.5;
-        if (!withFluid) {
-          const m = [4, 6, 8, 10][Math.floor(Math.random() * 4)];
-          const mBl = [0, 0.4, 0.6][Math.floor(Math.random() * 3)];
-          const k = 2;
-          const target = ((m + mBl) * G) / k;
-          const rounded = Math.round(target * 10) / 10;
-          return {
-            prompt: `Груз массой <b>m = ${m} кг</b> удерживается с помощью подвижного блока (${k}:1) массой <b>m_бл = ${mBl} кг</b>. Найдите силу тяги $F$. ($g = 9.8\\text{ м/с}^2$).`,
-            answer: rounded,
-            tolerance: 0.2,
-            solution: `<b>Решение:</b><br/>Условие равновесия подвижного блока:<br/>
-              $k \\cdot T = (m + m_{\\text{бл}})g \\implies F = T = \\frac{(${m} + ${mBl}) \\cdot 9.8}{2} \\approx ${rounded}\\text{ Н}$.`
-          };
-        } else {
-          const m = [5, 6, 8][Math.floor(Math.random() * 3)];
-          const vL = [1.5, 2.0, 3.0][Math.floor(Math.random() * 3)];
-          const vM3 = vL / 1000;
-          const rho = 1000; // вода
-          const fa = rho * G * vM3;
-          const target = (m * G - fa) / 2;
-          const rounded = Math.round(target * 10) / 10;
-          return {
-            prompt: `Груз массой <b>m = ${m} кг</b> и объёмом <b>V = ${vL} л</b> полностью погружён в воду (плотность $\\rho = 1000\\text{ кг/м}^3$) и удерживается подвижным блоком ($k = 2$, блок невесом). Найдите силу тяги $F$. ($g = 9.8\\text{ м/с}^2$).`,
-            answer: rounded,
-            tolerance: 0.2,
-            solution: `<b>Решение:</b><br/>На груз в воде действует сила Архимеда $F_A = \\rho g V = 1000 \\cdot 9.8 \\cdot ${vM3} = ${fa.toFixed(1)}\\text{ Н}$.<br/>
-              Эффективный вес: $P_{\\text{эфф}} = mg - F_A = ${(m * G - fa).toFixed(1)}\\text{ Н}$.<br/>
-              Сила тяги: $F = \\frac{P_{\\text{эфф}}}{2} \\approx ${rounded}\\text{ Н}$.`
-          };
-        }
+      fixed: {
+        title: 'Неподвижный блок (1:1)',
+        k: 1, // число ветвей, удерживающих груз
+        hasMovable: false,
+        pullDir: 1 // 1 = тянем вниз, -1 = тянем вверх
       },
-      challenges: [
-        {
-          id: 0,
-          title: 'Золотое правило механики',
-          hint: 'Добейтесь КПД = 100% при подъёме',
-          isCompleted: (st, comp) => comp.effectivePulleyMass === 0 && st.liftH > 0.05
-        },
-        {
-          id: 1,
-          title: 'Гидростатика (Закон Архимеда)',
-          hint: 'Включите сосуд с жидкостью',
-          isCompleted: (st, comp) => st.isArchimedes && comp.fa > 5
-        },
-        {
-          id: 2,
-          title: 'Полиспаст высокой кратности (3:1)',
-          hint: 'Выберите схему полиспаста 3:1',
-          isCompleted: (st, comp) => comp.k === 3
-        }
-      ],
-      onModeChange: () => updateVisuals(),
-      onTaskSolved: () => playSuccessSound()
-    });
-    quiz.init();
+      movable: {
+        title: 'Подвижный блок (2:1)',
+        k: 2,
+        hasMovable: true,
+        pullDir: -1 // свободный конец тянем вертикально вверх
+      },
+      combo: {
+        title: 'Комбинация: неподвижный + подвижный (2:1)',
+        k: 2,
+        hasMovable: true,
+        pullDir: 1 // тянем вниз через неподвижный блок
+      },
+      polyspast2: {
+        title: 'Полиспаст 2:1 (обойма из 2 блоков)',
+        k: 2,
+        hasMovable: true,
+        pullDir: 1
+      },
+      polyspast3: {
+        title: 'Полиспаст 3:1 (3 удерживающие ветви)',
+        k: 3,
+        hasMovable: true,
+        pullDir: 1
+      }
+    };
 
-    // Расчёт физики
+    const DEFAULT_STATE = {
+      scheme: 'combo',
+      mass: 6,
+      pulleyMass: 0,
+      liftH: 0.15 // высота подъёма груза (0 .. 0.50 м)
+    };
+
+    let state = loadStateFromUrl() || structuredClone(DEFAULT_STATE);
+    let toggles = { showForces: true, showArms: true, showValues: true };
+
+    function formatSI(value, unit = '', digits = 1) {
+      const str = Number(value).toFixed(digits).replace('.', ',');
+      return unit ? `${str} ${unit}` : str;
+    }
+
     function computePulleys(st) {
       const meta = SCHEMES[st.scheme] || SCHEMES.combo;
       const k = meta.k;
       const effectivePulleyMass = meta.hasMovable ? st.pulleyMass : 0;
 
-      const mg = st.mass * G;
-      let fa = 0;
-      if (st.isArchimedes) {
-        const fluid = FLUIDS[st.fluid] || FLUIDS.water;
-        const volumeM3 = st.volumeLiters / 1000;
-        fa = fluid.rho * G * volumeM3;
-      }
+      const loadWeight = st.mass * G; // вес самого груза mg
+      const totalSupportedWeight = (st.mass + effectivePulleyMass) * G;
 
-      const pEff = Math.max(0, mg - fa);
-      const totalLoad = pEff + effectivePulleyMass * G;
-      const tension = totalLoad / k;
+      // Натяжение нити T и сила тяги F при равномерном подъёме (равновесии)
+      const tension = totalSupportedWeight / k;
       const pullForce = tension;
 
-      const ropeDist = k * st.liftH;
-      const usefulWork = pEff * st.liftH;
-      const fullWork = pullForce * ropeDist;
-      const efficiency = fullWork > 0 ? (usefulWork / fullWork) * 100 : 100;
+      // Идеальный выигрыш в силе = k, реальный = mg / F
+      const idealAdvantage = k;
+      const actualAdvantage = loadWeight / pullForce;
+
+      // Золотое правило механики: путь верёвки s_F = k * h
+      const ropePullDist = k * st.liftH;
+      const usefulWork = loadWeight * st.liftH;
+      const fullWork = pullForce * ropePullDist;
 
       return {
-        meta, k, effectivePulleyMass, mg, fa, pEff, totalLoad, tension, pullForce, ropeDist, usefulWork, fullWork, efficiency
+        meta,
+        k,
+        effectivePulleyMass,
+        loadWeight,
+        totalSupportedWeight,
+        tension,
+        pullForce,
+        idealAdvantage,
+        actualAdvantage,
+        ropePullDist,
+        usefulWork,
+        fullWork
       };
     }
 
-    // DOM Элементы
-    const sliderMass = document.getElementById('slider-mass');
-    const sliderPulleyMass = document.getElementById('slider-pulley-mass');
-    const sliderLiftH = document.getElementById('slider-lift-h');
-    const labelMass = document.getElementById('label-mass');
-    const labelPulleyMass = document.getElementById('label-pulley-mass');
-    const labelLiftH = document.getElementById('label-lift-h');
+    // =========================================================
+    // 2. СЕРИАЛИЗАЦИЯ СОСТОЯНИЯ В URL (?state=base64url)
+    // =========================================================
+    function encodeState(st) {
+      const json = JSON.stringify(st);
+      return btoa(encodeURIComponent(json)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
 
-    const toggleForces = document.getElementById('toggle-forces');
-    const toggleArms = document.getElementById('toggle-arms');
-    const toggleValues = document.getElementById('toggle-values');
-    const toggleArchimedes = document.getElementById('toggle-archimedes');
-    const archimedesControls = document.getElementById('archimedes-controls');
-    const selectFluid = document.getElementById('select-fluid');
-    const sliderVolume = document.getElementById('slider-volume');
-    const labelVolume = document.getElementById('label-volume');
+    function loadStateFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('state');
+      if (!raw) return null;
+      try {
+        const base64 = raw.replace(/-/g, '+').replace(/_/g, '/');
+        const parsed = JSON.parse(decodeURIComponent(atob(base64)));
+        if (!SCHEMES[parsed.scheme]) return null;
+        return {
+          scheme: parsed.scheme,
+          mass: Math.max(0.5, Math.min(20, Number(parsed.mass) || 6)),
+          pulleyMass: Math.max(0, Math.min(5, Number(parsed.pulleyMass) || 0)),
+          liftH: Math.max(0, Math.min(0.5, Number(parsed.liftH) || 0.15))
+        };
+      } catch {
+        return null;
+      }
+    }
 
-    // Кнопка «Поделиться»
-    initShareButton(document.getElementById('btn-share'), () => ({
-      scheme: state.scheme,
-      mass: state.mass,
-      pulleyMass: state.pulleyMass,
-      liftH: state.liftH,
-      isArchimedes: state.isArchimedes,
-      fluid: state.fluid,
-      volumeLiters: state.volumeLiters
-    }));
+    // =========================================================
+    // 3. ОТРИСОВКА SVG-СЦЕНЫ ДЛЯ ВСЕХ 5 СХЕМ
+    // =========================================================
+    const svgEl = document.getElementById('scene');
+    const sceneContent = document.getElementById('scene-content');
 
-    // Кнопка сброса
-    document.getElementById('btn-reset')?.addEventListener('click', () => {
-      state.scheme = 'combo';
-      state.mass = 6.0;
-      state.pulleyMass = 0.0;
-      state.liftH = 0.15;
-      state.isArchimedes = false;
-      state.fluid = 'water';
-      state.volumeLiters = 2.0;
-      syncInputs();
-      updateVisuals();
+    function drawWheel(cx, cy, r, label = '') {
+      // Угол поворота шкива пропорционален подъему верёвки
+      const rotDeg = Math.round(((state.liftH * 360) / (2 * Math.PI * (r / 100))) % 360);
+      return `
+        <g>
+          <!-- Обод шкива с металлическим градиентом -->
+          <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#pulley-wheel-grad)" stroke="#1e293b" stroke-width="2.5" />
+          <circle cx="${cx}" cy="${cy}" r="${r - 4}" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3" />
+          
+          <!-- Вращающиеся спицы шкива -->
+          <g transform="rotate(${rotDeg} ${cx} ${cy})">
+            <line x1="${cx - r + 5}" y1="${cy}" x2="${cx + r - 5}" y2="${cy}" stroke="#64748b" stroke-width="2" />
+            <line x1="${cx}" y1="${cy - r + 5}" x2="${cx}" y2="${cy + r - 5}" stroke="#64748b" stroke-width="2" />
+          </g>
+
+          <!-- Ось и подшипник шкива -->
+          <circle cx="${cx}" cy="${cy}" r="5.5" fill="#1e293b" stroke="#ffffff" stroke-width="1.5" />
+          ${label ? `<text x="${cx}" y="${cy + 4}" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold">${label}</text>` : ''}
+        </g>
+      `;
+    }
+
+    function drawForceVector(x1, y1, x2, y2, label, color = '#2563eb', marker = 'arrow-blue', textAlign = 'start', dx = 8) {
+      if (!toggles.showForces) return '';
+      return `
+        <g>
+          <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="3" marker-end="url(#${marker})" />
+          ${toggles.showValues && label ? `
+            <text x="${x2 + dx}" y="${(y1 + y2) / 2 + 4}" text-anchor="${textAlign}" fill="${color}" font-size="12" font-weight="bold">
+              ${label}
+            </text>
+          ` : ''}
+        </g>
+      `;
+    }
+
+    function drawPullHandle(x, y, pullDir, forceLabel) {
+      const arrowLen = 48;
+      const yEnd = y + pullDir * arrowLen;
+      return `
+        <g id="rope-handle" class="cursor-ns-resize">
+          <!-- Вектор приложенной силы F -->
+          ${drawForceVector(x, y, x, yEnd, forceLabel, '#2563eb', 'arrow-blue', 'start', 12)}
+          <!-- Прозрачная область захвата >= 44x44 px (FR-W-11) -->
+          <circle cx="${x}" cy="${y}" r="24" fill="transparent" />
+          <!-- Видимое синее кольцо захвата верёвки -->
+          <circle cx="${x}" cy="${y}" r="9" fill="#ffffff" stroke="#2563eb" stroke-width="4" />
+        </g>
+      `;
+    }
+
+    function drawLoadBlock(cx, topY, mass, totalWeight) {
+      const boxW = 64;
+      const boxH = 46;
+      const cy = topY + boxH / 2;
+      const arrowLen = Math.min(75, 28 + totalWeight * 0.22);
+
+      return `
+        <g filter="url(#load-shadow)">
+          <!-- Крюк подвеса -->
+          <path d="M ${cx} ${topY - 14} C ${cx - 6} ${topY - 8}, ${cx + 6} ${topY - 4}, ${cx} ${topY}"
+                fill="none" stroke="#334155" stroke-width="3" stroke-linecap="round" />
+          <rect x="${cx - boxW / 2}" y="${topY}" width="${boxW}" height="${boxH}" rx="6"
+                fill="url(#load-box-grad)" stroke="#0f172a" stroke-width="2" />
+          <text x="${cx}" y="${cy + 4}" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">
+            ${formatSI(mass, 'кг', 1)}
+          </text>
+          <!-- Вектор силы тяжести mg -->
+          ${drawForceVector(cx, topY + boxH, cx, topY + boxH + arrowLen, `mg = ${formatSI(mass * G, 'Н', 0)}`, '#2563eb', 'arrow-blue', 'middle', 0)}
+        </g>
+      `;
+    }
+
+    function renderScene(computed) {
+      const liftPx = state.liftH * PX_PER_METER;
+      const ropePullPx = computed.ropePullDist * PX_PER_METER;
+      const R = 32; // базовый радиус блока
+      let svgMarkup = '';
+
+      // Базовый уровень отсчёта высоты груза h = 0
+      const baseLoadTopY = 285;
+      const currentLoadTopY = baseLoadTopY - liftPx;
+
+      if (state.scheme === 'fixed') {
+        const cx = 330;
+        const cy = 90;
+        const leftX = cx - R;
+        const rightX = cx + R;
+        const handleY = 175 + ropePullPx;
+
+        svgMarkup = `
+          <!-- Кронштейн к потолку -->
+          <line x1="${cx}" y1="32" x2="${cx}" y2="${cy}" stroke="#334155" stroke-width="5" />
+          <!-- Ветви нити -->
+          <line x1="${leftX}" y1="${cy}" x2="${leftX}" y2="${currentLoadTopY - 12}" stroke="#0f172a" stroke-width="2.5" />
+          <line x1="${rightX}" y1="${cy}" x2="${rightX}" y2="${handleY}" stroke="#0f172a" stroke-width="2.5" />
+          ${drawWheel(cx, cy, R)}
+          <!-- Стрелки натяжения нити T -->
+          ${drawForceVector(leftX, currentLoadTopY - 16, leftX, currentLoadTopY - 58, `T = ${formatSI(computed.tension, 'Н', 1)}`, '#16a34a', 'arrow-green', 'end', -10)}
+          ${drawLoadBlock(leftX, currentLoadTopY, state.mass, computed.loadWeight)}
+          ${drawPullHandle(rightX, handleY, 1, `F = ${formatSI(computed.pullForce, 'Н', 1)}`)}
+        `;
+      } else if (state.scheme === 'movable') {
+        // Одиночный подвижный блок: левый конец закреплён на потолке, правый тянем вверх
+        const cx = 330;
+        const movY = currentLoadTopY - 46;
+        const leftX = cx - R;
+        const rightX = cx + R;
+        const handleY = Math.max(48, 210 - ropePullPx);
+
+        svgMarkup = `
+          <!-- Крепление левой ветви к потолку -->
+          <circle cx="${leftX}" cy="32" r="4" fill="#1e293b" />
+          <line x1="${leftX}" y1="32" x2="${leftX}" y2="${movY}" stroke="#0f172a" stroke-width="2.5" />
+          <line x1="${rightX}" y1="${movY}" x2="${rightX}" y2="${handleY}" stroke="#0f172a" stroke-width="2.5" />
+          <!-- Ось подвижного блока -->
+          <line x1="${cx}" y1="${movY}" x2="${cx}" y2="${currentLoadTopY - 12}" stroke="#334155" stroke-width="4" />
+          ${drawWheel(cx, movY, R)}
+          <!-- Натяжение двух ветвей T -->
+          ${drawForceVector(leftX, movY - 10, leftX, movY - 52, `T = ${formatSI(computed.tension, 'Н', 1)}`, '#16a34a', 'arrow-green', 'end', -10)}
+          ${drawForceVector(rightX, movY - 10, rightX, movY - 52, `T = ${formatSI(computed.tension, 'Н', 1)}`, '#16a34a', 'arrow-green', 'start', 10)}
+          ${drawLoadBlock(cx, currentLoadTopY, state.mass, computed.loadWeight)}
+          ${drawPullHandle(rightX, handleY, -1, `F = ${formatSI(computed.pullForce, 'Н', 1)}`)}
+        `;
+      } else if (state.scheme === 'combo') {
+        // Комбинация: подвижный блок (слева) + неподвижный блок (справа)
+        const movX = 280;
+        const movY = currentLoadTopY - 46;
+        const fixX = movX + 2 * R; // 344, чтобы правая ветвь подвижного шла вертикально на левый край неподвижного
+        const fixY = 82;
+        const handleY = 140 + ropePullPx;
+
+        svgMarkup = `
+          <!-- Кронштейн неподвижного блока -->
+          <line x1="${fixX}" y1="32" x2="${fixX}" y2="${fixY}" stroke="#334155" stroke-width="5" />
+          <!-- Крепление левой ветви к потолку -->
+          <circle cx="${movX - R}" cy="32" r="4" fill="#1e293b" />
+          <line x1="${movX - R}" y1="32" x2="${movX - R}" y2="${movY}" stroke="#0f172a" stroke-width="2.5" />
+          <!-- Средняя ветвь между подвижным и неподвижным блоками -->
+          <line x1="${movX + R}" y1="${movY}" x2="${fixX - R}" y2="${fixY}" stroke="#0f172a" stroke-width="2.5" />
+          <!-- Свободная правая ветвь вниз к ручке -->
+          <line x1="${fixX + R}" y1="${fixY}" x2="${fixX + R}" y2="${handleY}" stroke="#0f172a" stroke-width="2.5" />
+          <!-- Подвес груза к подвижному блоку -->
+          <line x1="${movX}" y1="${movY}" x2="${movX}" y2="${currentLoadTopY - 12}" stroke="#334155" stroke-width="4" />
+
+          ${drawWheel(movX, movY, R)}
+          ${drawWheel(fixX, fixY, R)}
+
+          ${drawForceVector(movX - R, movY - 12, movX - R, movY - 54, `T = ${formatSI(computed.tension, 'Н', 1)}`, '#16a34a', 'arrow-green', 'end', -10)}
+          ${drawForceVector(movX + R, movY - 12, movX + R, movY - 54, `T`, '#16a34a', 'arrow-green', 'end', -6)}
+          ${drawLoadBlock(movX, currentLoadTopY, state.mass, computed.loadWeight)}
+          ${drawPullHandle(fixX + R, handleY, 1, `F = ${formatSI(computed.pullForce, 'Н', 1)}`)}
+        `;
+      } else if (state.scheme === 'polyspast2') {
+        // Вертикальный полиспаст 2:1 (верхний неподвижный и нижний подвижный на одной вертикальной оси)
+        const cx = 310;
+        const fixY = 82;
+        const movY = currentLoadTopY - 46;
+        const rMov = 26;
+        const handleX = cx + R + 32;
+        const handleY = 140 + ropePullPx;
+
+        svgMarkup = `
+          <!-- Кронштейн верхнего блока -->
+          <line x1="${cx}" y1="32" x2="${cx}" y2="${fixY}" stroke="#334155" stroke-width="5" />
+          <!-- Ветвь 1: от крюка верхнего блока к левому краю нижнего -->
+          <line x1="${cx - rMov}" y1="${fixY + 12}" x2="${cx - rMov}" y2="${movY}" stroke="#0f172a" stroke-width="2.5" />
+          <!-- Ветвь 2: с правого края нижнего к левому/верхнему ручью верхнего -->
+          <line x1="${cx + rMov}" y1="${movY}" x2="${cx + R}" y2="${fixY}" stroke="#0f172a" stroke-width="2.5" />
+          <!-- Свободный конец под небольшим углом вправо для удобства тяги -->
+          <line x1="${cx + R}" y1="${fixY}" x2="${handleX}" y2="${handleY}" stroke="#0f172a" stroke-width="2.5" />
+          <line x1="${cx}" y1="${movY}" x2="${cx}" y2="${currentLoadTopY - 12}" stroke="#334155" stroke-width="4" />
+
+          ${drawWheel(cx, fixY, R, '1')}
+          ${drawWheel(cx, movY, rMov, '2')}
+
+          ${drawForceVector(cx - rMov, movY - 10, cx - rMov, movY - 50, `T = ${formatSI(computed.tension, 'Н', 1)}`, '#16a34a', 'arrow-green', 'end', -10)}
+          ${drawForceVector(cx + rMov, movY - 10, cx + rMov, movY - 50, `T = ${formatSI(computed.tension, 'Н', 1)}`, '#16a34a', 'arrow-green', 'start', 10)}
+          ${drawLoadBlock(cx, currentLoadTopY, state.mass, computed.loadWeight)}
+          ${drawPullHandle(handleX, handleY, 1, `F = ${formatSI(computed.pullForce, 'Н', 1)}`)}
+        `;
+      } else if (state.scheme === 'polyspast3') {
+        // Полиспаст 3:1 (3 ветви держат подвижную обойму)
+        const cx = 310;
+        const fixY = 82;
+        const movY = currentLoadTopY - 46;
+        const s1 = cx - 28;
+        const s2 = cx;
+        const s3 = cx + 28;
+        const handleX = cx + 82;
+        const handleY = 125 + ropePullPx;
+
+        svgMarkup = `
+          <!-- Верхняя неподвижная обойма -->
+          <line x1="${cx}" y1="32" x2="${cx}" y2="${fixY}" stroke="#334155" stroke-width="6" />
+          <!-- 3 удерживающие ветви между обоймами -->
+          <line x1="${s1}" y1="${fixY}" x2="${s1}" y2="${movY}" stroke="#0f172a" stroke-width="2.5" />
+          <line x1="${s2}" y1="${fixY}" x2="${s2}" y2="${movY}" stroke="#0f172a" stroke-width="2.5" />
+          <line x1="${s3}" y1="${fixY}" x2="${s3}" y2="${movY}" stroke="#0f172a" stroke-width="2.5" />
+          <!-- Свободный конец нити -->
+          <line x1="${s3}" y1="${fixY}" x2="${handleX}" y2="${handleY}" stroke="#0f172a" stroke-width="2.5" />
+
+          <!-- Обоймы блоков -->
+          <rect x="${cx - 38}" y="${fixY - 22}" width="76" height="44" rx="10" fill="#cbd5e1" stroke="#334155" stroke-width="2.5" />
+          ${drawWheel(cx, fixY, 20, '×2')}
+
+          <line x1="${cx}" y1="${movY}" x2="${cx}" y2="${currentLoadTopY - 12}" stroke="#334155" stroke-width="4" />
+          <rect x="${cx - 38}" y="${movY - 20}" width="76" height="40" rx="10" fill="#cbd5e1" stroke="#334155" stroke-width="2.5" />
+          ${drawWheel(cx, movY, 18)}
+
+          <!-- 3 вектора натяжения T -->
+          ${drawForceVector(s1, movY - 22, s1, movY - 58, `3 × T (${formatSI(computed.tension, 'Н', 1)})`, '#16a34a', 'arrow-green', 'end', -8)}
+          ${drawForceVector(s2, movY - 22, s2, movY - 58, '', '#16a34a', 'arrow-green')}
+          ${drawForceVector(s3, movY - 22, s3, movY - 58, '', '#16a34a', 'arrow-green')}
+
+          ${drawLoadBlock(cx, currentLoadTopY, state.mass, computed.loadWeight)}
+          ${drawPullHandle(handleX, handleY, 1, `F = ${formatSI(computed.pullForce, 'Н', 1)}`)}
+        `;
+      }
+
+      // Линейка отсчёта высоты подъёма груза h (серый пунктир по NFR-6)
+      const rulerMarkup = toggles.showArms ? `
+        <g>
+          <line x1="95" y1="${baseLoadTopY}" x2="265" y2="${baseLoadTopY}" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 4" />
+          <line x1="125" y1="${baseLoadTopY}" x2="125" y2="${currentLoadTopY}" stroke="#64748b" stroke-width="2" stroke-dasharray="4 3" />
+          <circle cx="125" cy="${baseLoadTopY}" r="3" fill="#64748b" />
+          <circle cx="125" cy="${currentLoadTopY}" r="3" fill="#64748b" />
+          ${toggles.showValues ? `
+            <text x="115" y="${(baseLoadTopY + currentLoadTopY) / 2 + 4}" text-anchor="end" fill="#475569" font-size="12" font-weight="bold">
+              h = ${formatSI(state.liftH, 'м', 2)}
+            </text>
+            <text x="580" y="65" text-anchor="end" fill="#475569" font-size="12" font-weight="bold">
+              Ход верёвки: s = ${computed.k}·h = ${formatSI(computed.ropePullDist, 'м', 2)}
+            </text>
+          ` : ''}
+        </g>
+      ` : '';
+
+      sceneContent.innerHTML = rulerMarkup + svgMarkup;
+    }
+
+    // =========================================================
+    // 4. ОБНОВЛЕНИЕ ФОРМУЛ, КНОПОК СХЕМ И ПОЛЗУНКОВ
+    // =========================================================
+    function renderUI(computed) {
+      // Подсветка активной кнопки схемы
+      document.querySelectorAll('.scheme-btn').forEach((btn) => {
+        const isActive = btn.dataset.scheme === state.scheme;
+        btn.className = `scheme-btn rounded-lg border px-3 py-2 text-xs sm:text-sm font-medium transition ${
+          isActive
+            ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+        }`;
+      });
+
+      // Формула силы натяжения
+      document.getElementById('val-tension').textContent = `F = T = ${formatSI(computed.tension, 'Н', 1)}`;
+      if (computed.effectivePulleyMass > 0) {
+        document.getElementById('formula-tension').textContent =
+          `(${formatSI(state.mass, '', 1)} + ${formatSI(computed.effectivePulleyMass, '', 1)}) · 10 / ${computed.k} = ${formatSI(computed.tension, 'Н', 1)}`;
+      } else {
+        document.getElementById('formula-tension').textContent =
+          `mg / ${computed.k} = ${formatSI(computed.loadWeight, 'Н', 0)} / ${computed.k} = ${formatSI(computed.tension, 'Н', 1)}`;
+      }
+
+      // Выигрыш в силе
+      document.getElementById('val-advantage').textContent = `×${formatSI(computed.actualAdvantage, '', 2)}`;
+      document.getElementById('formula-advantage').textContent =
+        computed.effectivePulleyMass > 0
+          ? `Идеальный: ×${computed.idealAdvantage} (снижен массой блока)`
+          : `Число несущих ветвей k = ${computed.idealAdvantage}`;
+
+      // Золотое правило механики
+      document.getElementById('val-rope-dist').textContent =
+        `s = ${formatSI(computed.ropePullDist, 'м', 2)} (при h = ${formatSI(state.liftH, 'м', 2)})`;
+      document.getElementById('formula-work').textContent =
+        `A = F·s = ${formatSI(computed.fullWork, 'Дж', 1)} (mgh = ${formatSI(computed.usefulWork, 'Дж', 1)})`;
+
+      // Подписи ползунков
+      document.getElementById('label-lift').textContent = formatSI(state.liftH, 'м', 2);
+      document.getElementById('label-mass').textContent = formatSI(state.mass, 'кг', 1);
+      document.getElementById('label-pulley-mass').textContent =
+        computed.meta.hasMovable ? formatSI(state.pulleyMass, 'кг', 1) : 'нет подв. блока';
+
+      document.getElementById('slider-lift').value = state.liftH;
+      document.getElementById('slider-mass').value = state.mass;
+      const pulleySlider = document.getElementById('slider-pulley-mass');
+      pulleySlider.value = state.pulleyMass;
+      pulleySlider.disabled = !computed.meta.hasMovable;
+      pulleySlider.classList.toggle('opacity-40', !computed.meta.hasMovable);
+    }
+
+    function renderAll() {
+      const computed = computePulleys(state);
+      renderScene(computed);
+      renderUI(computed);
+    }
+
+    // =========================================================
+    // 5. ОБРАБОТЧИКИ СОБЫТИЙ (ПЕРЕТАСКИВАНИЕ ВЕРЁВКИ И КОНТРОЛЫ)
+    // =========================================================
+    sceneContent.addEventListener('pointerdown', (e) => {
+      const handle = e.target.closest('#rope-handle');
+      if (!handle) return;
+      e.preventDefault();
+
+      const startY = e.clientY;
+      const startLift = state.liftH;
+      const meta = SCHEMES[state.scheme];
+
+      const onMove = (ev) => {
+        const rect = svgEl.getBoundingClientRect();
+        const scaleY = 430 / rect.height;
+        const dyPx = (ev.clientY - startY) * scaleY;
+
+        // Переводим смещение ручки верёвки в подъём груза с учётом направления тяги и кратности полиспаста k
+        const deltaRopeMeters = (dyPx * meta.pullDir) / PX_PER_METER;
+        const nextLift = startLift + deltaRopeMeters / meta.k;
+        state.liftH = Math.round(Math.max(0, Math.min(0.5, nextLift)) * 100) / 100;
+        renderAll();
+      };
+
+      const onUp = () => {
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+      };
+
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
     });
 
     // Переключение схем
-    document.querySelectorAll('.scheme-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.scheme = btn.dataset.scheme;
-        updateSchemeButtons();
-        updateVisuals();
+    document.getElementById('scheme-buttons').addEventListener('click', (e) => {
+      const btn = e.target.closest('.scheme-btn');
+      if (!btn) return;
+      state.scheme = btn.dataset.scheme;
+      renderAll();
+    });
+
+    // Ползунки
+    document.getElementById('slider-lift').addEventListener('input', (e) => {
+      state.liftH = Number(e.target.value);
+      renderAll();
+    });
+    document.getElementById('slider-mass').addEventListener('input', (e) => {
+      state.mass = Number(e.target.value);
+      renderAll();
+    });
+    document.getElementById('slider-pulley-mass').addEventListener('input', (e) => {
+      state.pulleyMass = Number(e.target.value);
+      renderAll();
+    });
+
+    // Чекбоксы
+    ['forces', 'arms', 'values'].forEach((key) => {
+      document.getElementById(`toggle-${key}`).addEventListener('change', (e) => {
+        if (key === 'forces') toggles.showForces = e.target.checked;
+        if (key === 'arms') toggles.showArms = e.target.checked;
+        if (key === 'values') toggles.showValues = e.target.checked;
+        renderAll();
       });
     });
 
-    function updateSchemeButtons() {
-      document.querySelectorAll('.scheme-btn').forEach(btn => {
-        if (btn.dataset.scheme === state.scheme) {
-          btn.className = 'scheme-btn rounded-lg border px-3 py-2 text-xs sm:text-sm font-medium transition bg-blue-600 text-white shadow-xs';
-        } else {
-          btn.className = 'scheme-btn rounded-lg border border-slate-200 dark:border-slate-800 px-3 py-2 text-xs sm:text-sm font-medium transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700';
-        }
-      });
-    }
-
-    // Синхронизация контролов
-    function syncInputs() {
-      sliderMass.value = state.mass;
-      sliderPulleyMass.value = state.pulleyMass;
-      sliderLiftH.value = state.liftH;
-      toggleArchimedes.checked = state.isArchimedes;
-      selectFluid.value = state.fluid;
-      sliderVolume.value = state.volumeLiters;
-
-      labelMass.textContent = `${state.mass.toFixed(1)} кг`;
-      labelPulleyMass.textContent = state.pulleyMass === 0 ? '0.0 кг (невесомый)' : `${state.pulleyMass.toFixed(1)} кг`;
-      labelLiftH.textContent = `${state.liftH.toFixed(2)} м`;
-      labelVolume.textContent = `${state.volumeLiters.toFixed(1)} л (${(state.volumeLiters / 1000).toFixed(3)} м³)`;
-
-      if (state.isArchimedes) archimedesControls.classList.remove('hidden');
-      else archimedesControls.classList.add('hidden');
-
-      updateSchemeButtons();
-    }
-
-    // Слушатели слайдеров
-    sliderMass.addEventListener('input', (e) => {
-      state.mass = parseFloat(e.target.value);
-      labelMass.textContent = `${state.mass.toFixed(1)} кг`;
-      updateVisuals();
+    // Сброс и Поделиться
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      state = structuredClone(DEFAULT_STATE);
+      window.history.replaceState({}, '', window.location.pathname);
+      renderAll();
     });
 
-    sliderPulleyMass.addEventListener('input', (e) => {
-      state.pulleyMass = parseFloat(e.target.value);
-      labelPulleyMass.textContent = state.pulleyMass === 0 ? '0.0 кг (невесомый)' : `${state.pulleyMass.toFixed(1)} кг`;
-      updateVisuals();
-    });
-
-    sliderLiftH.addEventListener('input', (e) => {
-      state.liftH = parseFloat(e.target.value);
-      labelLiftH.textContent = `${state.liftH.toFixed(2)} м`;
-      updateVisuals();
-    });
-
-    toggleArchimedes.addEventListener('change', (e) => {
-      state.isArchimedes = e.target.checked;
-      if (state.isArchimedes) archimedesControls.classList.remove('hidden');
-      else archimedesControls.classList.add('hidden');
-      updateVisuals();
-    });
-
-    selectFluid.addEventListener('change', (e) => {
-      state.fluid = e.target.value;
-      updateVisuals();
-    });
-
-    sliderVolume.addEventListener('input', (e) => {
-      state.volumeLiters = parseFloat(e.target.value);
-      labelVolume.textContent = `${state.volumeLiters.toFixed(1)} л (${(state.volumeLiters / 1000).toFixed(3)} м³)`;
-      updateVisuals();
-    });
-
-    [toggleForces, toggleArms, toggleValues].forEach(t => {
-      t.addEventListener('change', () => {
-        state.showForces = toggleForces.checked;
-        state.showArms = toggleArms.checked;
-        state.showValues = toggleValues.checked;
-        updateVisuals();
-      });
-    });
-
-    // Отрисовка
-    function updateVisuals() {
-      const comp = computePulleys(state);
-      const isMasked = quiz.isQuiz();
-
-      // Проверка испытаний
-      quiz.checkChallenges(state, comp);
-
-      // Визуализация гидростатики (сосуд)
-      const beakerGroup = document.getElementById('beaker-group');
-      if (state.isArchimedes) {
-        beakerGroup.classList.remove('hidden');
-        const fluidInfo = FLUIDS[state.fluid] || FLUIDS.water;
-        document.getElementById('fluid-level').setAttribute('fill', fluidInfo.color);
-        document.getElementById('fluid-label').textContent = fluidInfo.name;
-      } else {
-        beakerGroup.classList.add('hidden');
+    document.getElementById('btn-share').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      const prev = btn.textContent;
+      const encoded = encodeState(state);
+      const url = `${window.location.origin}${window.location.pathname}?state=${encoded}`;
+      window.history.replaceState({}, '', `?state=${encoded}`);
+      try {
+        await navigator.clipboard.writeText(url);
+        btn.textContent = 'Ссылка скопирована!';
+        setTimeout(() => (btn.textContent = prev), 2000);
+      } catch {
+        prompt('Скопируйте ссылку на состояние:', url);
       }
-
-      // Позиция груза (зависит от высоты liftH, 0.35 м = 100 px вверх)
-      const liftPx = state.liftH * 260;
-      const baseLoadY = 270;
-      const curLoadY = baseLoadY - liftPx;
-
-      const loadGroup = document.getElementById('load-group');
-      loadGroup.setAttribute('transform', `translate(0, ${-liftPx})`);
-      document.getElementById('load-label').textContent = `${state.mass.toFixed(1)} кг`;
-
-      // Генерация блоков и нитей в зависимости от схемы
-      const ropesGroup = document.getElementById('ropes-group');
-      const pulleysGroup = document.getElementById('pulleys-group');
-      const forcesGroup = document.getElementById('forces-group');
-      const heightsGroup = document.getElementById('heights-group');
-
-      ropesGroup.innerHTML = '';
-      pulleysGroup.innerHTML = '';
-      forcesGroup.innerHTML = '';
-      heightsGroup.innerHTML = '';
-
-      const pulR = 24; // радиус блока
-
-      if (state.scheme === 'fixed') {
-        // 1. Неподвижный блок по центру X=350, Y=80
-        pulleysGroup.innerHTML = `
-          <g>
-            <line x1="350" y1="44" x2="350" y2="80" stroke="#475569" stroke-width="4" />
-            <circle cx="350" cy="80" r="${pulR}" fill="#cbd5e1" stroke="#334155" stroke-width="2.5" class="dark:fill-slate-700 dark:stroke-slate-400" />
-            <circle cx="350" cy="80" r="4" fill="#1e293b" />
-          </g>
-        `;
-        // Нить: от груза (350 - R = 326) вверх вокруг блока к свободному концу (350 + R = 374)
-        const pullEndY = 80 + liftPx + 80;
-        ropesGroup.innerHTML = `
-          <path d="M 326 ${curLoadY} L 326 80 A ${pulR} ${pulR} 0 0 1 374 80 L 374 ${pullEndY}" fill="none" stroke="#334155" stroke-width="3" class="dark:stroke-slate-300" />
-        `;
-
-        if (state.showForces) {
-          // Сила тяги F тянем вниз
-          forcesGroup.innerHTML += `
-            <line x1="374" y1="${pullEndY}" x2="374" y2="${pullEndY + 50}" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow-down)" />
-            <text x="382" y="${pullEndY + 45}" font-size="11" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">
-              ${isMasked ? 'F = ? Н' : (state.showValues ? `F = ${comp.pullForce.toFixed(1)} Н` : 'F')}
-            </text>
-          `;
-        }
-      } else if (state.scheme === 'movable' || state.scheme === 'combo') {
-        // Подвижный блок на высоте curLoadY - 45
-        const movY = curLoadY - 45;
-        pulleysGroup.innerHTML = `
-          <!-- Крепление к потолку слева -->
-          <line x1="326" y1="44" x2="326" y2="52" stroke="#475569" stroke-width="3" />
-          <!-- Подвижный блок -->
-          <g>
-            <circle cx="350" cy="${movY}" r="${pulR}" fill="#94a3b8" stroke="#334155" stroke-width="2.5" class="dark:fill-slate-600 dark:stroke-slate-300" />
-            <circle cx="350" cy="${movY}" r="4" fill="#0f172a" />
-            <!-- Связка блока с грузом -->
-            <line x1="350" y1="${movY}" x2="350" y2="${curLoadY}" stroke="#475569" stroke-width="3" />
-          </g>
-        `;
-
-        if (state.scheme === 'combo') {
-          // Дополнительный неподвижный блок справа X=374, Y=80
-          pulleysGroup.innerHTML += `
-            <g>
-              <line x1="374" y1="44" x2="374" y2="80" stroke="#475569" stroke-width="4" />
-              <circle cx="374" cy="80" r="${pulR}" fill="#cbd5e1" stroke="#334155" stroke-width="2.5" class="dark:fill-slate-700 dark:stroke-slate-400" />
-              <circle cx="374" cy="80" r="4" fill="#1e293b" />
-            </g>
-          `;
-          const pullEndY = 80 + comp.ropeDist * 260 + 50;
-          ropesGroup.innerHTML = `
-            <path d="M 326 44 L 326 ${movY} A ${pulR} ${pulR} 0 0 0 374 ${movY} L 374 80 A ${pulR} ${pulR} 0 0 1 422 80 L 422 ${pullEndY}" fill="none" stroke="#334155" stroke-width="3" class="dark:stroke-slate-300" />
-          `;
-          if (state.showForces) {
-            forcesGroup.innerHTML += `
-              <line x1="422" y1="${pullEndY}" x2="422" y2="${pullEndY + 45}" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow-down)" />
-              <text x="430" y="${pullEndY + 40}" font-size="11" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">
-                ${isMasked ? 'F = ? Н' : (state.showValues ? `F = ${comp.pullForce.toFixed(1)} Н` : 'F')}
-              </text>
-            `;
-          }
-        } else {
-          // Просто подвижный блок: тянем правый конец вертикально вверх
-          const pullEndY = Math.max(50, movY - comp.ropeDist * 260);
-          ropesGroup.innerHTML = `
-            <path d="M 326 44 L 326 ${movY} A ${pulR} ${pulR} 0 0 0 374 ${movY} L 374 ${pullEndY}" fill="none" stroke="#334155" stroke-width="3" class="dark:stroke-slate-300" />
-          `;
-          if (state.showForces) {
-            forcesGroup.innerHTML += `
-              <line x1="374" y1="${pullEndY}" x2="374" y2="${pullEndY - 45}" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow-up)" />
-              <text x="382" y="${pullEndY - 25}" font-size="11" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">
-                ${isMasked ? 'F = ? Н' : (state.showValues ? `F = ${comp.pullForce.toFixed(1)} Н` : 'F')}
-              </text>
-            `;
-          }
-        }
-      } else {
-        // Полиспасты 2:1 и 3:1
-        const movY = curLoadY - 45;
-        pulleysGroup.innerHTML = `
-          <!-- Верхняя обойма -->
-          <circle cx="330" cy="80" r="${pulR}" fill="#cbd5e1" stroke="#334155" stroke-width="2.5" class="dark:fill-slate-700" />
-          <circle cx="370" cy="80" r="${pulR}" fill="#cbd5e1" stroke="#334155" stroke-width="2.5" class="dark:fill-slate-700" />
-          <!-- Нижняя обойма -->
-          <circle cx="350" cy="${movY}" r="${pulR}" fill="#94a3b8" stroke="#334155" stroke-width="2.5" class="dark:fill-slate-600" />
-          <line x1="350" y1="${movY}" x2="350" y2="${curLoadY}" stroke="#475569" stroke-width="3" />
-        `;
-        const pullEndY = 80 + comp.ropeDist * 260 + 50;
-        ropesGroup.innerHTML = `
-          <path d="M 330 44 L 330 ${movY} A ${pulR} ${pulR} 0 0 0 370 ${movY} L 370 80 A ${pulR} ${pulR} 0 0 1 410 80 L 410 ${pullEndY}" fill="none" stroke="#334155" stroke-width="3" class="dark:stroke-slate-300" />
-        `;
-        if (state.showForces) {
-          forcesGroup.innerHTML += `
-            <line x1="410" y1="${pullEndY}" x2="410" y2="${pullEndY + 45}" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow-down)" />
-            <text x="418" y="${pullEndY + 40}" font-size="11" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">
-              ${isMasked ? 'F = ? Н' : (state.showValues ? `F = ${comp.pullForce.toFixed(1)} Н` : 'F')}
-            </text>
-          `;
-        }
-      }
-
-      // Общие векторы на грузе: сила тяжести mg и выталкивающая сила Fa
-      if (state.showForces) {
-        // Сила тяжести
-        forcesGroup.innerHTML += `
-          <line x1="350" y1="${curLoadY + 30}" x2="350" y2="${curLoadY + 80}" stroke="#ef4444" stroke-width="3" marker-end="url(#arrow-down)" />
-          <text x="358" y="${curLoadY + 75}" font-size="11" font-weight="bold" fill="#dc2626" class="dark:fill-rose-400">
-            ${state.showValues ? `mg = ${comp.mg.toFixed(1)} Н` : 'mg'}
-          </text>
-        `;
-
-        // Сила Архимеда (вверх)
-        if (state.isArchimedes && comp.fa > 0) {
-          const faLen = Math.min(60, comp.fa * 1.5);
-          forcesGroup.innerHTML += `
-            <line x1="340" y1="${curLoadY + 20}" x2="340" y2="${curLoadY + 20 - faLen}" stroke="#059669" stroke-width="3" marker-end="url(#arrow-archimedes)" />
-            <text x="270" y="${curLoadY + 15 - faLen / 2}" font-size="11" font-weight="bold" fill="#047857" class="dark:fill-emerald-400">
-              ${state.showValues ? `F_A = ${comp.fa.toFixed(1)} Н` : 'F_A'}
-            </text>
-          `;
-        }
-      }
-
-      // Информационные карточки
-      document.getElementById('info-pull-force').textContent = isMasked ? '? Н' : `${comp.pullForce.toFixed(1)} Н`;
-      document.getElementById('info-tension').textContent = isMasked ? '? Н' : `${comp.tension.toFixed(1)} Н`;
-      document.getElementById('info-load-weight').textContent = `${comp.pEff.toFixed(1)} Н`;
-      document.getElementById('info-weight-subtext').textContent = state.isArchimedes ? `mg = ${comp.mg.toFixed(1)} Н, F_A = ${comp.fa.toFixed(1)} Н` : `mg = ${comp.mg.toFixed(1)} Н`;
-      document.getElementById('info-advantage-text').textContent = `Выигрыш ${comp.k}:1 (ветвей: ${comp.k})`;
-      document.getElementById('info-efficiency').textContent = `${comp.efficiency.toFixed(0)}%`;
-      document.getElementById('info-work-text').textContent = `Aпол = ${comp.usefulWork.toFixed(1)} Дж, Aзатр = ${comp.fullWork.toFixed(1)} Дж`;
-    }
-
-    // Drag and Drop для подъёма груза
-    let isDragging = false;
-    let startY = 0;
-    let initialH = 0;
-    const loadGroup = document.getElementById('load-group');
-
-    loadGroup.addEventListener('pointerdown', (e) => {
-      isDragging = true;
-      startY = e.clientY;
-      initialH = state.liftH;
-      e.target.setPointerCapture?.(e.pointerId);
     });
 
-    window.addEventListener('pointermove', (e) => {
-      if (!isDragging) return;
-      const dy = startY - e.clientY; // движение мыши вверх увеличивает h
-      const deltaH = dy / 260; // 260 px = 1 м
-      state.liftH = Math.max(0, Math.min(0.35, initialH + deltaH));
-      sliderLiftH.value = state.liftH;
-      labelLiftH.textContent = `${state.liftH.toFixed(2)} м`;
-      updateVisuals();
-    });
-
-    window.addEventListener('pointerup', () => {
-      isDragging = false;
-    });
-
-    window.addEventListener('themechanged', () => updateVisuals());
-
-    // Инициализация
-    syncInputs();
-    updateVisuals();
+    // Запуск
+    renderAll();
   </script>
 </body>
 </html>

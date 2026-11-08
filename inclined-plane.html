@@ -3,135 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Статика ЕГЭ 2027 — Тело на наклонной плоскости и график Fтр(α)</title>
+  <title>Статика ЕГЭ — Наклонная плоскость</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { extend: {} }
-    };
-  </script>
   <!-- KaTeX для формул -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
+  <style>
+    /* Отключаем выделение при перетаскивании */
+    .dragging {
+      user-select: none;
+    }
+  </style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-6 px-4 transition-colors duration-200">
+<body class="bg-slate-100 text-slate-900 min-h-screen py-6 px-4">
 
   <main class="max-w-4xl mx-auto flex flex-col gap-5">
     <!-- Навигация между HTML-файлами -->
-    <nav class="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 overflow-x-auto pb-1">
-      <a href="index.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition flex items-center gap-1 shadow-xs">
-        <span>🏠</span> <span>Все темы</span>
-      </a>
-      <a href="lever.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">1. Рычаг</a>
-      <a href="pulleys.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">2. Блоки</a>
-      <a href="inclined-plane.html" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white shadow-sm font-semibold">3. Плоскость</a>
-      <a href="threads.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">4. Нити</a>
-      <a href="beam.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">5. Балка</a>
-      <a href="ladder.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">6. Лестница (№26)</a>
+    <nav class="flex items-center gap-2 text-xs font-medium text-slate-600 overflow-x-auto pb-1">
+      <a href="lever.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">1. Рычаг</a>
+      <a href="pulleys.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">2. Блоки</a>
+      <a href="inclined-plane.html" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white shadow-sm">3. Наклонная плоскость</a>
+      <a href="threads.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">4. Нити</a>
+      <a href="beam.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">5. Балка</a>
     </nav>
 
     <!-- Шапка -->
-    <header class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+    <header class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
       <div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Топик 3 • Статика ЕГЭ</span>
-          <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-medium">Версия 2.0</span>
-        </div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Тело на наклонной плоскости и график Fтр(α)</h1>
+        <span class="text-xs font-semibold uppercase tracking-wider text-blue-600">Топик 3 • Статика ЕГЭ</span>
+        <h1 class="text-2xl font-bold text-slate-900">Тело на наклонной плоскости</h1>
       </div>
       <div class="flex items-center gap-2">
-        <button id="btn-theme-toggle" class="p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition text-base" title="Переключить тему">
-          🌙
-        </button>
-        <button id="btn-reset" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition">
+        <button id="btn-reset" class="rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 active:scale-95 transition">
           Сброс
         </button>
-        <button id="btn-share" class="rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-blue-700 active:scale-95 transition shadow-xs">
+        <button id="btn-share" class="rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-blue-700 active:scale-95 transition">
           Поделиться
         </button>
       </div>
     </header>
 
-    <!-- Переключатель режима: Песочница / Задача ЕГЭ -->
-    <div class="flex items-center justify-between bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <div class="flex items-center gap-2">
-        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Режим:</span>
-        <div class="inline-flex rounded-lg bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700">
-          <button id="btn-mode-sandbox" class="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs shadow-sm transition">
-            🔬 Песочница
-          </button>
-          <button id="btn-mode-quiz" class="px-3.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-300 font-medium text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-            🎯 Задача ЕГЭ
-          </button>
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-slate-500 dark:text-slate-400">Испытания:</span>
-        <span id="challenges-counter" class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">0/3</span>
-      </div>
-    </div>
-
-    <!-- Карточка задачи ЕГЭ -->
-    <div id="quiz-card" class="hidden bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950/40 border border-blue-200 dark:border-indigo-900/60 rounded-xl p-4 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="text-sm font-bold text-blue-900 dark:text-blue-300">🎯 Задание ЕГЭ (наклонная плоскость и трение):</span>
-        </div>
-        <button id="btn-quiz-new" class="text-xs px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-slate-700 transition">
-          🔄 Новые данные
-        </button>
-      </div>
-      <div id="quiz-prompt" class="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium"></div>
-      <div class="flex flex-wrap items-center gap-3 pt-1">
-        <div class="relative flex items-center">
-          <input type="text" id="quiz-input" placeholder="Введите ответ (Н)" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 outline-hidden w-44" />
-          <span class="ml-2 text-xs text-slate-500 dark:text-slate-400">Н</span>
-        </div>
-        <button id="btn-quiz-check" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs active:scale-95 transition">
-          Проверить ответ
-        </button>
-        <button id="btn-quiz-solution" class="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 text-xs font-medium transition">
-          Показать подсказку/решение
-        </button>
-      </div>
-      <div id="quiz-feedback"></div>
-      <div id="quiz-solution-text" class="hidden mt-2 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 space-y-1"></div>
-    </div>
-
-    <!-- Краткая теория -->
-    <details class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-3 shadow-sm">
-      <summary class="cursor-pointer font-semibold text-slate-800 dark:text-slate-200 select-none">
-        📖 Краткая теория: равновесие на наклонной плоскости и закон Амонтона — Кулона
+    <!-- Краткая теория (MDX + KaTeX) -->
+    <details class="bg-white rounded-xl border border-slate-200 px-4 py-3 shadow-sm">
+      <summary class="cursor-pointer font-semibold text-slate-800 select-none">
+        📖 Краткая теория: условие покоя на наклонной плоскости
       </summary>
-      <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300 space-y-2 leading-relaxed">
+      <div class="mt-3 pt-3 border-t border-slate-100 text-sm text-slate-700 space-y-2 leading-relaxed">
         <p>
-          На брусок действуют силы: сила тяжести $m\vec{g}$, нормальная реакция опоры $\vec{N}$ и сила трения $\vec{F}_{\text{тр}}$.
-          Вдоль плоскости: $F_{\parallel} = mg \sin\alpha$, перпендикулярно плоскости: $N = mg \cos\alpha$.
+          На брусок массы $m$ на наклонной плоскости с углом $\alpha$ действуют три силы: сила тяжести $m\vec{g}$, сила нормальной реакции опоры $\vec{N}$ и сила трения $\vec{F}_{\text{тр}}$.
         </p>
         <p>
-          <strong>График $F_{\text{тр}}(\alpha)$ в ЕГЭ:</strong><br/>
-          1) Ветвь покоя ($\alpha \le \alpha_{\text{кр}}$): $F_{\text{тр}} = mg\sin\alpha$ (растёт от $0$).<br/>
-          2) Ветвь скольжения ($\alpha > \alpha_{\text{кр}}$): $F_{\text{тр}} = \mu N = \mu mg \cos\alpha$ (убывает к $0$).<br/>
-          Пик графика достигается в критической точке $\tan\alpha_{\text{кр}} = \mu$, где $F_{\text{тр.макс}} = \mu mg \cos\alpha_{\text{кр}}$.
+          Разложим силу тяжести на две взаимно перпендикулярные проекции (вдоль плоскости $Ox$ и перпендикулярно ей $Oy$):
+          $$F_{\parallel} = mg \sin\alpha, \qquad N = F_{\perp} = mg \cos\alpha$$
+        </p>
+        <p>
+          Максимальная сила трения покоя равна $F_{\text{тр.макс}} = \mu N = \mu mg \cos\alpha$. Брусок <strong>покоится</strong>, пока скатывающая составляющая не превышает $F_{\text{тр.макс}}$:
+          $$mg \sin\alpha \le \mu mg \cos\alpha \iff \tan\alpha \le \mu \iff \alpha \le \arctan(\mu)$$
+        </p>
+        <p>
+          Заметьте: условие равновесия $\tan\alpha \le \mu$ <strong>не зависит от массы бруска $m$</strong>!
         </p>
       </div>
     </details>
 
-    <!-- Шаблон обоснования №26 (Критерии ФИПИ) -->
-    <div id="justification-container"></div>
-
     <!-- Панель статуса, чекбоксов и материалов -->
-    <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+    <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div class="flex items-center gap-2.5">
-        <span id="status-dot" class="inline-block h-3.5 w-3.5 rounded-full bg-green-600 transition-all shadow-xs"></span>
-        <span id="status-text" class="font-semibold text-slate-800 dark:text-slate-200 text-sm sm:text-base" role="status" aria-live="polite">Проверка...</span>
+        <span id="status-dot" class="inline-block h-3.5 w-3.5 rounded-full bg-green-600 transition-all shadow-sm"></span>
+        <span id="status-text" class="font-semibold text-slate-800 text-sm sm:text-base" role="status" aria-live="polite">Проверка...</span>
       </div>
 
-      <div class="flex flex-wrap items-center gap-4 text-sm text-slate-700 dark:text-slate-300">
+      <div class="flex flex-wrap items-center gap-4 text-sm text-slate-700">
         <label class="flex items-center gap-1.5 cursor-pointer select-none hover:text-blue-600 transition">
           <input type="checkbox" id="toggle-forces" checked class="accent-blue-600" /> Силы
         </label>
@@ -143,341 +88,182 @@
         </label>
       </div>
 
-      <button id="btn-critical" class="rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-emerald-700 active:scale-95 transition shadow-xs flex items-center gap-1.5">
-        <span>📐</span> <span>Критический угол (tg α = μ)</span>
+      <button id="btn-critical" class="rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-emerald-700 active:scale-95 transition shadow-sm flex items-center gap-1.5">
+        <span>📐</span> <span>Критический угол (tan α = μ)</span>
       </button>
     </div>
 
-    <!-- Быстрые материалы -->
-    <div class="flex flex-wrap items-center gap-2 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-slate-900 dark:to-amber-950/30 border border-amber-200/80 dark:border-amber-900/60 rounded-xl px-4 py-2.5 text-xs text-slate-700 dark:text-slate-300">
-      <span class="font-bold text-amber-950 dark:text-amber-300 flex items-center gap-1">🧪 Материал поверхности:</span>
-      <button class="mat-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 hover:bg-amber-600 hover:text-white transition shadow-2xs font-medium" data-mu="0.05">
-        🧊 Лёд (μ = 0.05)
+    <!-- Быстрые материалы и пресеты ЕГЭ -->
+    <div class="flex flex-wrap items-center gap-2 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 rounded-xl px-4 py-2.5 text-xs text-slate-700">
+      <span class="font-bold text-amber-950 flex items-center gap-1">🧪 Материал поверхности:</span>
+      <button class="mat-btn px-2.5 py-1 rounded-md bg-white border border-amber-200 text-amber-900 hover:bg-amber-600 hover:text-white transition shadow-2xs font-medium" data-mu="0.05">
+        🧊 Лёд (μ = 0,05)
       </button>
-      <button class="mat-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 hover:bg-amber-600 hover:text-white transition shadow-2xs font-medium" data-mu="0.30">
-        🪵 Дерево по дереву (μ = 0.30)
+      <button class="mat-btn px-2.5 py-1 rounded-md bg-white border border-amber-200 text-amber-900 hover:bg-amber-600 hover:text-white transition shadow-2xs font-medium" data-mu="0.35">
+        🪵 Дерево по дереву (μ = 0,35)
       </button>
-      <button class="mat-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 hover:bg-amber-600 hover:text-white transition shadow-2xs font-medium" data-mu="0.58">
-        📐 Резина по бетону (μ = 0.58)
-      </button>
-      <button class="mat-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 hover:bg-amber-600 hover:text-white transition shadow-2xs font-medium" data-mu="0.80">
-        🛞 Высокое сцепление (μ = 0.80)
+      <button class="mat-btn px-2.5 py-1 rounded-md bg-white border border-amber-200 text-amber-900 hover:bg-amber-600 hover:text-white transition shadow-2xs font-medium" data-mu="0.70">
+        🛞 Резина по асфальту (μ = 0,70)
       </button>
     </div>
 
-    <!-- Внешняя сила Fвнеш (Задание №26) -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <label class="flex items-center gap-2 cursor-pointer select-none">
-          <input type="checkbox" id="toggle-external" class="w-4 h-4 accent-blue-600" />
-          <span class="font-bold text-slate-800 dark:text-slate-200 text-sm">Внешняя сила удержания / тяги $F_{\text{внеш}}$ вдоль плоскости</span>
-        </label>
-        <span id="badge-external" class="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">0.0 Н</span>
-      </div>
-      <div id="external-slider-wrap" class="hidden flex items-center gap-4">
-        <span class="text-xs font-mono text-slate-500">-30 Н (вниз)</span>
-        <input type="range" id="slider-f-ext" min="-30" max="60" step="1" value="0" class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600" />
-        <span class="text-xs font-mono text-slate-500">+60 Н (вверх)</span>
-      </div>
-    </div>
+    <!-- SVG-сцена -->
+    <div class="overflow-hidden rounded-xl border border-slate-200 bg-gradient-to-b from-slate-50 to-slate-100 shadow-inner touch-pan-y">
+      <svg id="scene" viewBox="0 0 700 390" class="w-full h-auto select-none touch-none" role="img" aria-label="Симулятор наклонной плоскости">
+        <defs>
+          <!-- Тени -->
+          <filter id="block-shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="3" flood-opacity="0.25" />
+          </filter>
 
-    <!-- Панель испытаний темы -->
-    <div class="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-slate-900/50 p-3.5 space-y-2">
-      <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-amber-950 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-          <span>🏆</span> <span>Испытания темы: Наклонная плоскость и трение</span>
+          <!-- Деревянный градиент бруска в покое -->
+          <linearGradient id="block-wood" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#d97706" />
+            <stop offset="50%" stop-color="#b45309" />
+            <stop offset="100%" stop-color="#78350f" />
+          </linearGradient>
+
+          <!-- Скользящий градиент бруска -->
+          <linearGradient id="block-sliding" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ef4444" />
+            <stop offset="50%" stop-color="#dc2626" />
+            <stop offset="100%" stop-color="#991b1b" />
+          </linearGradient>
+
+          <!-- Синяя стрелка для основных сил -->
+          <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#2563eb" />
+          </marker>
+          <!-- Оранжевая стрелка для силы трения -->
+          <marker id="arrow-orange" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#ea580c" />
+          </marker>
+          <!-- Зеленая стрелка для реакции N -->
+          <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#16a34a" />
+          </marker>
+          <!-- Серая стрелка для проекций -->
+          <marker id="arrow-gray" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+            <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#64748b" />
+          </marker>
+          <!-- Красная стрелка ускорения -->
+          <marker id="arrow-accel" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#dc2626" />
+          </marker>
+        </defs>
+
+        <!-- Горизонтальная поверхность с отделкой -->
+        <line x1="50" y1="330" x2="650" y2="330" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+        <line x1="50" y1="333" x2="650" y2="333" stroke="#cbd5e1" stroke-width="1.5" stroke-linecap="round" />
+
+        <!-- Клин наклонной плоскости и дуга угла α -->
+        <g id="wedge-group"></g>
+
+        <!-- Брусок и векторы сил -->
+        <g id="block-group"></g>
+      </svg>
+      <div class="bg-slate-100/90 backdrop-blur px-4 py-2 text-xs text-slate-500 flex justify-between flex-wrap gap-2 border-t border-slate-200">
+        <span class="flex items-center gap-1.5">
+          <span class="inline-block w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+          Совет: потяните за круглую синюю ручку на вершине клина вверх/вниз, чтобы менять угол $\alpha$ прямо на чертеже.
         </span>
-        <span class="text-[11px] text-slate-500 dark:text-slate-400">Выполняйте условия в песочнице</span>
-      </div>
-      <div id="challenges-list" class="grid grid-cols-1 md:grid-cols-3 gap-2"></div>
-    </div>
-
-    <!-- Основной интерактивный холст SVG + График Fтр(α) -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      <!-- 2/3 колонки: Сама наклонная плоскость -->
-      <div class="lg:col-span-2 relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 shadow-sm overflow-hidden flex flex-col justify-between">
-        <div class="text-[11px] font-medium text-slate-600 dark:text-slate-400 flex items-center justify-between mb-2">
-          <span>👆 Перетаскивайте вершину клина, чтобы менять угол α</span>
-          <span id="canvas-status-badge" class="font-bold text-emerald-600 dark:text-emerald-400">● Брусок покоится</span>
-        </div>
-
-        <svg id="scene" viewBox="0 0 540 360" class="w-full h-auto select-none rounded-lg bg-slate-50/60 dark:bg-slate-950/70 border border-slate-100 dark:border-slate-800/80 cursor-default">
-          <defs>
-            <pattern id="grid-pattern" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" class="text-slate-200 dark:text-slate-800/60" stroke-width="0.75" />
-            </pattern>
-            <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" />
-            </marker>
-            <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
-            </marker>
-            <marker id="arrow-red" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
-            </marker>
-            <marker id="arrow-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#d97706" />
-            </marker>
-          </defs>
-
-          <!-- Фоновая сетка -->
-          <rect width="100%" height="100%" fill="url(#grid-pattern)" />
-
-          <!-- Земля под клином -->
-          <line x1="40" y1="330" x2="500" y2="330" stroke="#94a3b8" stroke-width="2" class="dark:stroke-slate-600" />
-
-          <!-- Клин (треугольник наклонной плоскости) -->
-          <polygon id="wedge-polygon" points="80,330 460,330 460,180" fill="#e2e8f0" stroke="#475569" stroke-width="2.5" class="dark:fill-slate-800 dark:stroke-slate-500" />
-
-          <!-- Дуга угла α -->
-          <path id="wedge-arc" d="" fill="rgba(59, 130, 246, 0.15)" stroke="#2563eb" stroke-width="1.5" />
-          <text id="wedge-arc-label" x="125" y="322" font-size="12" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">α = 25°</text>
-
-          <!-- Проекции силы тяжести (пунктир) -->
-          <g id="proj-group">
-            <line id="proj-par" x1="0" y1="0" x2="0" y2="0" stroke="#f59e0b" stroke-dasharray="3 3" stroke-width="2" marker-end="url(#arrow-amber)" />
-            <line id="proj-perp" x1="0" y1="0" x2="0" y2="0" stroke="#60a5fa" stroke-dasharray="3 3" stroke-width="2" marker-end="url(#arrow-blue)" />
-            <line id="proj-box-1" x1="0" y1="0" x2="0" y2="0" stroke="#94a3b8" stroke-dasharray="2 2" stroke-width="1" />
-            <line id="proj-box-2" x1="0" y1="0" x2="0" y2="0" stroke="#94a3b8" stroke-dasharray="2 2" stroke-width="1" />
-          </g>
-
-          <!-- Брусок -->
-          <g id="block-group">
-            <rect id="block-rect" x="-35" y="-45" width="70" height="45" rx="4" fill="#cbd5e1" stroke="#334155" stroke-width="2.5" class="dark:fill-slate-700 dark:stroke-slate-400 shadow-md" />
-            <circle cx="0" cy="-22" r="3.5" fill="#ef4444" />
-            <text id="block-mass-label" x="0" y="-18" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a" class="dark:fill-slate-100">5.0 кг</text>
-          </g>
-
-          <!-- Векторы сил -->
-          <g id="forces-layer">
-            <!-- Сила тяжести mg (вертикально вниз) -->
-            <line id="vec-mg" x1="0" y1="0" x2="0" y2="0" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow-red)" />
-            <text id="label-mg" x="0" y="0" font-size="11" font-weight="bold" fill="#b91c1c" class="dark:fill-rose-400">mg</text>
-
-            <!-- Сила реакции опоры N (перпендикулярно плоскости) -->
-            <line id="vec-n" x1="0" y1="0" x2="0" y2="0" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow-blue)" />
-            <text id="label-n" x="0" y="0" font-size="11" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">N</text>
-
-            <!-- Сила трения Fтр (вдоль плоскости) -->
-            <line id="vec-ftr" x1="0" y1="0" x2="0" y2="0" stroke="#059669" stroke-width="3" marker-end="url(#arrow-green)" />
-            <text id="label-ftr" x="0" y="0" font-size="11" font-weight="bold" fill="#047857" class="dark:fill-emerald-400">Fтр</text>
-
-            <!-- Внешняя сила Fвнеш -->
-            <line id="vec-fext" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow-blue)" class="hidden" />
-            <text id="label-fext" x="0" y="0" font-size="11" font-weight="bold" fill="#6d28d9" class="dark:fill-purple-400 hidden">Fвнеш</text>
-          </g>
-
-          <!-- Интерактивная ручка вершины клина -->
-          <g id="wedge-handle" class="cursor-ns-resize">
-            <circle cx="460" cy="180" r="22" fill="transparent" />
-            <circle id="wedge-handle-vis" cx="460" cy="180" r="7.5" fill="#3b82f6" stroke="#ffffff" stroke-width="2.5" class="shadow-md" />
-          </g>
-        </svg>
-      </div>
-
-      <!-- 1/3 колонки: Интерактивный живой график Fтр(α) из ЕГЭ -->
-      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">График Fтр(α) (ЕГЭ):</span>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold">№4 и №26</span>
-          </div>
-          <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2 leading-relaxed">
-            При росте угла $\alpha$ сила трения покоя сначала возрастает, а после критической точки $\tan\alpha = \mu$ переходит в скольжение и убывает.
-          </p>
-
-          <svg id="chart-svg" viewBox="0 0 240 180" class="w-full h-auto bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-100 dark:border-slate-800">
-            <!-- Оси координат -->
-            <line x1="30" y1="150" x2="225" y2="150" stroke="#94a3b8" stroke-width="1.5" />
-            <line x1="30" y1="150" x2="30" y2="15" stroke="#94a3b8" stroke-width="1.5" />
-            <text x="220" y="162" font-size="9" fill="#94a3b8">α</text>
-            <text x="12" y="22" font-size="9" fill="#94a3b8">Fтр</text>
-
-            <!-- Кривая силы трения: ветвь покоя и ветвь скольжения -->
-            <path id="chart-curve-rest" d="" fill="none" stroke="#059669" stroke-width="2.5" />
-            <path id="chart-curve-slide" d="" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="3 3" />
-
-            <!-- Вертикальная линия критического угла -->
-            <line id="chart-crit-line" x1="0" y1="15" x2="0" y2="150" stroke="#cbd5e1" stroke-dasharray="2 2" stroke-width="1" />
-            <text id="chart-crit-label" x="0" y="162" font-size="8" text-anchor="middle" fill="#64748b">αкр</text>
-
-            <!-- Текущая рабочая точка (α, Fтр) -->
-            <circle id="chart-live-dot" cx="30" cy="150" r="5" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5" class="shadow-sm" />
-          </svg>
-        </div>
-
-        <div class="mt-3 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs font-mono space-y-1">
-          <div class="flex justify-between">
-            <span class="text-slate-500">Угол α:</span>
-            <span id="chart-info-alpha" class="font-bold text-blue-600 dark:text-blue-400">25°</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-slate-500">Критич. угол αкр:</span>
-            <span id="chart-info-crit" class="font-bold text-emerald-600 dark:text-emerald-400">26.6°</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-slate-500">Сила Fтр:</span>
-            <span id="chart-info-ftr" class="font-bold text-amber-600 dark:text-amber-400">20.7 Н</span>
-          </div>
-        </div>
+        <span class="font-mono">$g = 10\text{ м/с}^2$</span>
       </div>
     </div>
 
-    <!-- Информационная таблица сил -->
-    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-      <div class="bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/60 rounded-xl p-3 shadow-sm">
-        <span class="text-xs font-bold text-emerald-800 dark:text-emerald-300 block mb-0.5">Сила трения Fтр</span>
-        <div class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400" id="info-ftr-val">20.7 Н</div>
-        <span class="text-[11px] text-slate-500 font-mono" id="info-ftr-mode">Покой: Fтр = mg·sinα</span>
+    <!-- Блок живых формул (FR-W-5) -->
+    <div class="grid gap-4 md:grid-cols-3">
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="text-xs font-medium uppercase text-slate-500">Скатывающая сила ($mg\sin\alpha$)</div>
+        <div id="val-f-pull" class="mt-1 font-mono text-xl font-bold text-slate-900">0,0 Н</div>
+        <div id="formula-f-pull" class="mt-1 text-xs text-slate-500 font-mono">mg · sin(α)</div>
       </div>
 
-      <div class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/60 rounded-xl p-3 shadow-sm">
-        <span class="text-xs font-bold text-blue-800 dark:text-blue-300 block mb-0.5">Реакция опоры N</span>
-        <div class="text-xl font-extrabold text-blue-600 dark:text-blue-400" id="info-n-val">44.4 Н</div>
-        <span class="text-[11px] text-slate-500 font-mono">N = mg·cosα</span>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="text-xs font-medium uppercase text-slate-500">Сила трения ($F_{\text{тр}}$ и $F_{\text{тр.макс}}$)</div>
+        <div id="val-f-fric" class="mt-1 font-mono text-xl font-bold text-slate-900">0,0 Н</div>
+        <div id="formula-f-fric" class="mt-1 text-xs text-slate-500 font-mono">Fтр.макс = μN</div>
       </div>
 
-      <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/60 rounded-xl p-3 shadow-sm">
-        <span class="text-xs font-bold text-amber-800 dark:text-amber-300 block mb-0.5">Предел трения покоя</span>
-        <div class="text-xl font-extrabold text-amber-600 dark:text-amber-400" id="info-ftr-max">22.2 Н</div>
-        <span class="text-[11px] text-slate-500 font-mono">Fтр.макс = μN</span>
-      </div>
-
-      <div class="bg-white dark:bg-slate-900 border border-red-200 dark:border-red-900/60 rounded-xl p-3 shadow-sm">
-        <span class="text-xs font-bold text-red-800 dark:text-red-300 block mb-0.5">Скатывающая сила</span>
-        <div class="text-xl font-extrabold text-red-600 dark:text-rose-400" id="info-fpar-val">20.7 Н</div>
-        <span class="text-[11px] text-slate-500 font-mono">F∥ = mg·sinα</span>
+      <div id="card-status" class="rounded-xl border p-4 shadow-sm transition-colors">
+        <div class="text-xs font-medium uppercase opacity-75">Порог скольжения ($\tan\alpha$ vs $\mu$)</div>
+        <div id="val-tan" class="mt-1 font-mono text-xl font-bold">tan α = 0,00</div>
+        <div id="val-crit-angle" class="mt-1 text-xs opacity-85">αкр = 0,0°</div>
       </div>
     </div>
 
-    <!-- Ползунки управления -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-4">
-      <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm flex items-center gap-1.5">
-        <span>⚙️</span> <span>Параметры:</span>
-      </h3>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-            <span>Угол наклона α:</span>
-            <span id="label-alpha" class="font-bold text-blue-600 dark:text-blue-400">25°</span>
-          </div>
-          <input type="range" id="slider-alpha" min="5" max="65" step="1" value="25" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+    <!-- Ползунки параметров: α, m, μ -->
+    <div class="grid gap-4 sm:grid-cols-3">
+      <!-- Угол наклона α -->
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex justify-between items-center">
+          <label for="slider-alpha" class="font-semibold text-slate-800 text-sm">Угол наклона α</label>
+          <span id="label-alpha" class="font-mono font-bold text-blue-600">25,0°</span>
         </div>
-
-        <div>
-          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-            <span>Коэффициент трения μ:</span>
-            <span id="label-mu" class="font-bold text-emerald-600 dark:text-emerald-400">0.50</span>
-          </div>
-          <input type="range" id="slider-mu" min="0.0" max="0.9" step="0.02" value="0.50" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-600" />
+        <input id="slider-alpha" type="range" min="0" max="60" step="0.5" value="25" class="accent-blue-600 cursor-pointer" />
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>0°</span>
+          <span>30°</span>
+          <span>60°</span>
         </div>
+      </div>
 
-        <div>
-          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-            <span>Масса бруска m:</span>
-            <span id="label-mass" class="font-bold text-slate-700 dark:text-slate-300">5.0 кг</span>
-          </div>
-          <input type="range" id="slider-mass" min="0.5" max="15.0" step="0.5" value="5.0" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-slate-600" />
+      <!-- Масса бруска m -->
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex justify-between items-center">
+          <label for="slider-mass" class="font-semibold text-slate-800 text-sm">Масса груза m</label>
+          <span id="label-mass" class="font-mono font-bold text-slate-900">5,0 кг</span>
+        </div>
+        <input id="slider-mass" type="range" min="0.5" max="20" step="0.5" value="5" class="accent-slate-700 cursor-pointer" />
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>0,5 кг</span>
+          <span>10 кг</span>
+          <span>20 кг</span>
+        </div>
+      </div>
+
+      <!-- Коэффициент трения μ -->
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex justify-between items-center">
+          <label for="slider-mu" class="font-semibold text-slate-800 text-sm">Коэфф. трения μ</label>
+          <span id="label-mu" class="font-mono font-bold text-slate-900">0,50</span>
+        </div>
+        <input id="slider-mu" type="range" min="0" max="0.9" step="0.01" value="0.5" class="accent-emerald-600 cursor-pointer" />
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>0 (лёд)</span>
+          <span>0,45</span>
+          <span>0,90</span>
         </div>
       </div>
     </div>
   </main>
 
-  <script type="module">
-    import { initTheme, toggleTheme } from './assets/js/theme.js';
-    import { initShareButton, formatSI, encodeState, loadStateFromUrl } from './assets/js/widget-utils.js';
-    import { renderJustificationBlock, initJustificationButtons } from './assets/js/justification.js';
-    import { createQuizManager } from './assets/js/quiz-engine.js';
-    import { playSuccessSound } from './assets/js/sound-effects.js';
+  <script>
+    // =========================================================
+    // 1. КОНСТАНТЫ И ЧИСТАЯ ФИЗИКА (inclinedPlanePhysics)
+    // =========================================================
+    const G = 10; // м/с²
+    const EPSILON = 1e-4;
 
-    const G = 9.8;
-    const ORIGIN_X = 80;
+    // Геометрия клина на SVG
+    const ORIGIN_X = 110; // левый нижний угол (вершина угла α)
     const ORIGIN_Y = 330;
-    const WEDGE_BASE_LEN = 380; // длина основания клина
+    const SLOPE_LEN = 350; // длина гипотенузы (350 px предотвращает клиппинг вершины при α=60°)
 
-    const state = {
+    const DEFAULT_STATE = {
       alphaDeg: 25,
-      mu: 0.50,
-      mass: 5.0,
-      hasExternal: false,
-      fExt: 0,
-      showForces: true,
-      showProjections: true,
-      showValues: true
+      mass: 5,
+      mu: 0.5
     };
 
-    // Загрузка состояния из URL
-    const loadedState = loadStateFromUrl();
-    if (loadedState) {
-      if (typeof loadedState.alphaDeg === 'number') state.alphaDeg = loadedState.alphaDeg;
-      if (typeof loadedState.mu === 'number') state.mu = loadedState.mu;
-      if (typeof loadedState.mass === 'number') state.mass = loadedState.mass;
-      if (typeof loadedState.hasExternal === 'boolean') state.hasExternal = loadedState.hasExternal;
-      if (typeof loadedState.fExt === 'number') state.fExt = loadedState.fExt;
+    let state = loadStateFromUrl() || structuredClone(DEFAULT_STATE);
+    let toggles = { showForces: true, showProjections: true, showValues: true };
+
+    function formatSI(value, unit = '', digits = 1) {
+      const str = Number(value).toFixed(digits).replace('.', ',');
+      return unit ? `${str} ${unit}` : str;
     }
 
-    // Инициализация темы и обоснования
-    initTheme();
-    document.getElementById('btn-theme-toggle')?.addEventListener('click', toggleTheme);
-
-    const justContainer = document.getElementById('justification-container');
-    if (justContainer) {
-      justContainer.innerHTML = renderJustificationBlock('inclined');
-      initJustificationButtons();
-    }
-
-    // Квиз-движок
-    const quiz = createQuizManager({
-      topicId: 'inclined',
-      generateTask: () => {
-        const m = [2, 4, 5, 8][Math.floor(Math.random() * 4)];
-        const aDeg = [30, 45][Math.floor(Math.random() * 2)];
-        const aRad = (aDeg * Math.PI) / 180;
-        const mu = 0.6;
-        // Проверяем покой: tg(30°) = 0.577 <= 0.6 (покой!), tg(45°) = 1.0 > 0.6 (скольжение)
-        const isRest = Math.tan(aRad) <= mu;
-        const target = isRest ? (m * G * Math.sin(aRad)) : (mu * m * G * Math.cos(aRad));
-        const rounded = Math.round(target * 10) / 10;
-
-        return {
-          prompt: `Брусок массой <b>m = ${m} кг</b> находится на наклонной плоскости с углом наклона <b>α = ${aDeg}°</b>. Коэффициент трения между бруском и плоскостью равен <b>μ = ${mu}</b>. Определите модуль действующей на брусок силы трения. ($g = 9.8\\text{ м/с}^2$, ответ округлите до десятых).`,
-          answer: rounded,
-          tolerance: 0.3,
-          solution: `<b>Решение:</b><br/>
-            Сравним $\\tan\\alpha$ и $\\mu$: $\\tan(${aDeg}^\\circ) = ${Math.tan(aRad).toFixed(3)}$.<br/>
-            ${isRest
-              ? `Так как $\\tan\\alpha \\le \\mu$, брусок находится в <b>покое</b>. Сила трения покоя равна скатывающей компоненте:<br/>
-                 $F_{\\text{тр}} = mg \\sin\\alpha = ${m} \\cdot 9.8 \\cdot \\sin(${aDeg}^\\circ) \\approx ${rounded}\\text{ Н}$.`
-              : `Так как $\\tan\\alpha > \\mu$, брусок <b>соскальзывает</b>. Сила трения равна максимальной силе трения скольжения:<br/>
-                 $F_{\\text{тр}} = \\mu N = \\mu mg \\cos\\alpha = ${mu} \\cdot ${m} \\cdot 9.8 \\cdot \\cos(${aDeg}^\\circ) \\approx ${rounded}\\text{ Н}$.`}`
-        };
-      },
-      challenges: [
-        {
-          id: 0,
-          title: 'Критический угол (tg α = μ)',
-          hint: 'Установите критический угол',
-          isCompleted: (st, comp) => Math.abs(st.alphaDeg - comp.criticalAngleDeg) < 1.0
-        },
-        {
-          id: 1,
-          title: 'Пик силы трения (Fтр max)',
-          hint: 'Максимум силы трения',
-          isCompleted: (st, comp) => Math.abs(comp.fFriction - comp.fFrictionMax) < 0.2 && comp.isResting
-        },
-        {
-          id: 2,
-          title: 'Удержание внешней силой',
-          hint: 'Удержите брусок при α > αкр силой Fвнеш',
-          isCompleted: (st, comp) => st.hasExternal && st.alphaDeg > comp.criticalAngleDeg + 3 && comp.isResting
-        }
-      ],
-      onModeChange: () => updateVisuals(),
-      onTaskSolved: () => playSuccessSound()
-    });
-    quiz.init();
-
-    // Расчёт физики
     function computeInclinedPlane(st) {
       const alphaRad = (st.alphaDeg * Math.PI) / 180;
       const mg = st.mass * G;
@@ -485,400 +271,417 @@
       const cosA = Math.cos(alphaRad);
       const tanA = Math.tan(alphaRad);
 
-      const fParallel = mg * sinA;
-      const normalForce = mg * cosA;
-      const fFrictionMax = st.mu * normalForce;
+      const fParallel = mg * sinA;         // скатывающая проекция mg*sin(α)
+      const normalForce = mg * cosA;       // реакция опоры N = mg*cos(α)
+      const fFrictionMax = st.mu * normalForce; // максимальная сила трения покоя μN
+
+      // Если mg*sin(α) <= μ*mg*cos(α), брусок покоится
+      const isResting = fParallel <= fFrictionMax + EPSILON;
+      const fFriction = isResting ? fParallel : fFrictionMax;
+      const netForce = isResting ? 0 : fParallel - fFrictionMax;
+      const acceleration = netForce / st.mass;
       const criticalAngleDeg = (Math.atan(st.mu) * 180) / Math.PI;
 
-      // Учёт внешней силы Fext (вдоль плоскости вверх)
-      const effectivePullDown = st.hasExternal ? (fParallel - st.fExt) : fParallel;
-
-      let isResting = false;
-      let fFriction = 0;
-
-      if (Math.abs(effectivePullDown) <= fFrictionMax + 1e-4) {
-        isResting = true;
-        fFriction = Math.abs(effectivePullDown);
-      } else {
-        isResting = false;
-        fFriction = fFrictionMax;
-      }
-
       return {
-        alphaRad, mg, sinA, cosA, tanA, fParallel, normalForce, fFrictionMax,
-        criticalAngleDeg, effectivePullDown, isResting, fFriction
+        alphaRad,
+        mg,
+        fParallel,
+        normalForce,
+        fFrictionMax,
+        fFriction,
+        isResting,
+        netForce,
+        acceleration,
+        tanA,
+        criticalAngleDeg
       };
     }
 
-    // DOM Элементы
-    const sliderAlpha = document.getElementById('slider-alpha');
-    const sliderMu = document.getElementById('slider-mu');
-    const sliderMass = document.getElementById('slider-mass');
-    const labelAlpha = document.getElementById('label-alpha');
-    const labelMu = document.getElementById('label-mu');
-    const labelMass = document.getElementById('label-mass');
-
-    const toggleForces = document.getElementById('toggle-forces');
-    const toggleProjections = document.getElementById('toggle-projections');
-    const toggleValues = document.getElementById('toggle-values');
-    const toggleExternal = document.getElementById('toggle-external');
-    const externalWrap = document.getElementById('external-slider-wrap');
-    const sliderFExt = document.getElementById('slider-f-ext');
-    const badgeExternal = document.getElementById('badge-external');
-
-    // Кнопка «Поделиться»
-    initShareButton(document.getElementById('btn-share'), () => ({
-      alphaDeg: state.alphaDeg,
-      mu: state.mu,
-      mass: state.mass,
-      hasExternal: state.hasExternal,
-      fExt: state.fExt
-    }));
-
-    // Кнопка сброса
-    document.getElementById('btn-reset')?.addEventListener('click', () => {
-      state.alphaDeg = 25;
-      state.mu = 0.50;
-      state.mass = 5.0;
-      state.hasExternal = false;
-      state.fExt = 0;
-      syncInputs();
-      updateVisuals();
-    });
-
-    // Кнопка критического угла
-    document.getElementById('btn-critical')?.addEventListener('click', () => {
-      const crit = (Math.atan(state.mu) * 180) / Math.PI;
-      state.alphaDeg = Math.round(crit);
-      syncInputs();
-      updateVisuals();
-    });
-
-    // Материалы
-    document.querySelectorAll('.mat-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.mu = parseFloat(btn.dataset.mu);
-        syncInputs();
-        updateVisuals();
-      });
-    });
-
-    // Синхронизация контролов
-    function syncInputs() {
-      sliderAlpha.value = state.alphaDeg;
-      sliderMu.value = state.mu;
-      sliderMass.value = state.mass;
-      toggleExternal.checked = state.hasExternal;
-      sliderFExt.value = state.fExt;
-
-      labelAlpha.textContent = `${state.alphaDeg}°`;
-      labelMu.textContent = state.mu.toFixed(2);
-      labelMass.textContent = `${state.mass.toFixed(1)} кг`;
-      badgeExternal.textContent = `${state.fExt > 0 ? '+' : ''}${state.fExt.toFixed(1)} Н`;
-
-      if (state.hasExternal) externalWrap.classList.remove('hidden');
-      else externalWrap.classList.add('hidden');
+    // =========================================================
+    // 2. СЕРИАЛИЗАЦИЯ СОСТОЯНИЯ В URL (?state=base64url)
+    // =========================================================
+    function encodeState(st) {
+      const json = JSON.stringify(st);
+      return btoa(encodeURIComponent(json)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     }
 
-    sliderAlpha.addEventListener('input', (e) => {
-      state.alphaDeg = parseInt(e.target.value, 10);
-      labelAlpha.textContent = `${state.alphaDeg}°`;
-      updateVisuals();
-    });
+    function loadStateFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('state');
+      if (!raw) return null;
+      try {
+        const base64 = raw.replace(/-/g, '+').replace(/_/g, '/');
+        const parsed = JSON.parse(decodeURIComponent(atob(base64)));
+        if (
+          typeof parsed.alphaDeg !== 'number' ||
+          typeof parsed.mass !== 'number' ||
+          typeof parsed.mu !== 'number'
+        ) return null;
+        return {
+          alphaDeg: Math.max(0, Math.min(60, parsed.alphaDeg)),
+          mass: Math.max(0.5, Math.min(20, parsed.mass)),
+          mu: Math.max(0, Math.min(0.9, parsed.mu))
+        };
+      } catch {
+        return null;
+      }
+    }
 
-    sliderMu.addEventListener('input', (e) => {
-      state.mu = parseFloat(e.target.value);
-      labelMu.textContent = state.mu.toFixed(2);
-      updateVisuals();
-    });
+    // =========================================================
+    // 3. ОТРИСОВКА SVG-СЦЕНЫ И ВЕКТОРОВ СИЛ
+    // =========================================================
+    const svgEl = document.getElementById('scene');
+    const wedgeGroup = document.getElementById('wedge-group');
+    const blockGroup = document.getElementById('block-group');
 
-    sliderMass.addEventListener('input', (e) => {
-      state.mass = parseFloat(e.target.value);
-      labelMass.textContent = `${state.mass.toFixed(1)} кг`;
-      updateVisuals();
-    });
+    // Масштабирование длины векторов (чтобы при любых массах стрелки красиво читались)
+    function forceToPx(forceN) {
+      if (forceN < 0.2) return 0;
+      return Math.min(130, 28 + forceN * 0.65);
+    }
 
-    toggleExternal.addEventListener('change', (e) => {
-      state.hasExternal = e.target.checked;
-      if (state.hasExternal) externalWrap.classList.remove('hidden');
-      else externalWrap.classList.add('hidden');
-      updateVisuals();
-    });
+    function renderScene(computed) {
+      const { alphaRad, isResting } = computed;
+      const cosA = Math.cos(alphaRad);
+      const sinA = Math.sin(alphaRad);
 
-    sliderFExt.addEventListener('input', (e) => {
-      state.fExt = parseFloat(e.target.value);
-      badgeExternal.textContent = `${state.fExt > 0 ? '+' : ''}${state.fExt.toFixed(1)} Н`;
-      updateVisuals();
-    });
+      // Вершина наклонной плоскости
+      const topX = ORIGIN_X + SLOPE_LEN * cosA;
+      const topY = ORIGIN_Y - SLOPE_LEN * sinA;
 
-    [toggleForces, toggleProjections, toggleValues].forEach(t => {
-      t.addEventListener('change', () => {
-        state.showForces = toggleForces.checked;
-        state.showProjections = toggleProjections.checked;
-        state.showValues = toggleValues.checked;
-        updateVisuals();
-      });
-    });
-
-    // Отрисовка
-    function updateVisuals() {
-      const comp = computeInclinedPlane(state);
-      const isMasked = quiz.isQuiz();
-
-      // Проверка испытаний
-      quiz.checkChallenges(state, comp);
-
-      // Геометрия клина
-      const hWedge = WEDGE_BASE_LEN * Math.tan(comp.alphaRad);
-      const topX = ORIGIN_X + WEDGE_BASE_LEN;
-      const topY = ORIGIN_Y - hWedge;
-
-      const wedge = document.getElementById('wedge-polygon');
-      wedge.setAttribute('points', `${ORIGIN_X},${ORIGIN_Y} ${topX},${ORIGIN_Y} ${topX},${topY}`);
+      const statusColor = isResting ? '#16a34a' : '#dc2626';
 
       // Дуга угла α
-      const rArc = 45;
-      const arc = document.getElementById('wedge-arc');
-      const arcEndX = ORIGIN_X + rArc * Math.cos(comp.alphaRad);
-      const arcEndY = ORIGIN_Y - rArc * Math.sin(comp.alphaRad);
-      arc.setAttribute('d', `M ${ORIGIN_X + rArc} ${ORIGIN_Y} A ${rArc} ${rArc} 0 0 0 ${arcEndX} ${arcEndY} L ${ORIGIN_X} ${ORIGIN_Y} Z`);
-      document.getElementById('wedge-arc-label').textContent = `α = ${state.alphaDeg}°`;
+      const arcR = 58;
+      const arcEndX = ORIGIN_X + arcR * cosA;
+      const arcEndY = ORIGIN_Y - arcR * sinA;
+      const arcSvg = state.alphaDeg >= 3 ? `
+        <path d="M ${ORIGIN_X + arcR} ${ORIGIN_Y} A ${arcR} ${arcR} 0 0 0 ${arcEndX} ${arcEndY}"
+              fill="none" stroke="#475569" stroke-width="2" />
+        <text x="${ORIGIN_X + (arcR + 22) * Math.cos(alphaRad / 2)}"
+              y="${ORIGIN_Y - (arcR + 22) * Math.sin(alphaRad / 2) + 4}"
+              text-anchor="middle" fill="#1e293b" font-size="13" font-weight="bold">
+          α = ${formatSI(state.alphaDeg, '°', 1)}
+        </text>
+      ` : '';
 
-      // Ручка на вершине клина
-      document.getElementById('wedge-handle-vis').setAttribute('cx', topX);
-      document.getElementById('wedge-handle-vis').setAttribute('cy', topY);
-      document.getElementById('wedge-handle').querySelector('circle').setAttribute('cx', topX);
-      document.getElementById('wedge-handle').querySelector('circle').setAttribute('cy', topY);
+      // 1. Отрисовка клина и интерактивной ручки изменения угла
+      wedgeGroup.innerHTML = `
+        <polygon points="${ORIGIN_X},${ORIGIN_Y} ${topX},${ORIGIN_Y} ${topX},${topY}"
+                 fill="#e2e8f0" stroke="#64748b" stroke-width="2" />
+        <!-- Рабочая поверхность склона, подсвечиваемая цветом равновесия -->
+        <line x1="${ORIGIN_X}" y1="${ORIGIN_Y}" x2="${topX}" y2="${topY}"
+              stroke="${statusColor}" stroke-width="4" stroke-linecap="round" />
+        ${arcSvg}
 
-      // Положение бруска (на середине гипотенузы)
-      const midDist = Math.hypot(WEDGE_BASE_LEN, hWedge) * 0.52;
-      const blockX = ORIGIN_X + midDist * Math.cos(comp.alphaRad);
-      const blockY = ORIGIN_Y - midDist * Math.sin(comp.alphaRad);
+        <!-- Drag-ручка вершины клина >= 44x44 px (FR-W-11) -->
+        <g id="angle-handle" class="cursor-ns-resize">
+          <circle cx="${topX}" cy="${topY}" r="24" fill="transparent" />
+          <circle cx="${topX}" cy="${topY}" r="8" fill="#fff" stroke="#2563eb" stroke-width="3" />
+        </g>
+      `;
 
-      const blockGroup = document.getElementById('block-group');
-      blockGroup.setAttribute('transform', `translate(${blockX}, ${blockY}) rotate(${-state.alphaDeg})`);
-      document.getElementById('block-mass-label').textContent = `${state.mass.toFixed(1)} кг`;
+      // 2. Положение бруска на склоне
+      // Если скользит (FR-W-10) — сдвигаем брусок чуть ниже по склону (но без уезжания за сцену)
+      const slideOffset = isResting ? 0 : 42;
+      const distAlongSlope = SLOPE_LEN * 0.56 - slideOffset;
 
-      // Векторы сил
-      const scale = 2.0;
-      const forcesLayer = document.getElementById('forces-layer');
-      forcesLayer.style.display = state.showForces ? 'inline' : 'none';
+      // Точка соприкосновения середины основания бруска со склоном
+      const contactX = ORIGIN_X + distAlongSlope * cosA;
+      const contactY = ORIGIN_Y - distAlongSlope * sinA;
 
-      // mg
-      const mgLen = Math.min(120, comp.mg * scale);
-      const vMg = document.getElementById('vec-mg');
-      const lMg = document.getElementById('label-mg');
-      vMg.setAttribute('x1', blockX);
-      vMg.setAttribute('y1', blockY - 22);
-      vMg.setAttribute('x2', blockX);
-      vMg.setAttribute('y2', blockY - 22 + mgLen);
-      lMg.setAttribute('x', blockX + 6);
-      lMg.setAttribute('y', blockY - 22 + mgLen + 14);
-      lMg.textContent = state.showValues ? `mg = ${comp.mg.toFixed(1)} Н` : 'mg';
+      const blockW = 68;
+      const blockH = 44;
 
-      // N (перпендикулярно вверх-влево)
-      const nLen = Math.min(120, comp.normalForce * scale);
-      const nDirX = -Math.sin(comp.alphaRad);
-      const nDirY = -Math.cos(comp.alphaRad);
-      const vN = document.getElementById('vec-n');
-      const lN = document.getElementById('label-n');
-      vN.setAttribute('x1', blockX);
-      vN.setAttribute('y1', blockY - 22);
-      vN.setAttribute('x2', blockX + nLen * nDirX);
-      vN.setAttribute('y2', blockY - 22 + nLen * nDirY);
-      lN.setAttribute('x', blockX + nLen * nDirX - 10);
-      lN.setAttribute('y', blockY - 22 + nLen * nDirY - 6);
-      lN.textContent = state.showValues ? `N = ${comp.normalForce.toFixed(1)} Н` : 'N';
+      // Единичные векторы в экранных координатах SVG (ось Y направлена вниз):
+      // Вдоль склона вверх: (+cosA, -sinA)
+      // Вдоль склона вниз:  (-cosA, +sinA)
+      // Перпендикулярно склону вверх (нормаль N): (-sinA, -cosA)
+      // Перпендикулярно склону вниз (mg cos α):   (+sinA, +cosA)
 
-      // Ftr (вдоль плоскости вверх)
-      const trLen = Math.min(120, comp.fFriction * scale);
-      const trDirX = Math.cos(comp.alphaRad);
-      const trDirY = -Math.sin(comp.alphaRad);
-      const vTr = document.getElementById('vec-ftr');
-      const lTr = document.getElementById('label-ftr');
-      vTr.setAttribute('x1', blockX);
-      vTr.setAttribute('y1', blockY);
-      vTr.setAttribute('x2', blockX + trLen * trDirX);
-      vTr.setAttribute('y2', blockY + trLen * trDirY);
-      lTr.setAttribute('x', blockX + trLen * trDirX + 8);
-      lTr.setAttribute('y', blockY + trLen * trDirY - 6);
-      lTr.textContent = isMasked ? 'Fтр = ? Н' : (state.showValues ? `Fтр = ${comp.fFriction.toFixed(1)} Н` : 'Fтр');
+      // Центр масс бруска
+      const cmX = contactX - (blockH / 2) * sinA;
+      const cmY = contactY - (blockH / 2) * cosA;
 
-      // Fext
-      const vExt = document.getElementById('vec-fext');
-      const lExt = document.getElementById('label-fext');
-      if (state.hasExternal && Math.abs(state.fExt) > 0.1) {
-        vExt.classList.remove('hidden');
-        lExt.classList.remove('hidden');
-        const extLen = Math.min(100, Math.abs(state.fExt) * scale);
-        const sign = state.fExt >= 0 ? 1 : -1;
-        vExt.setAttribute('x1', blockX);
-        vExt.setAttribute('y1', blockY - 22);
-        vExt.setAttribute('x2', blockX + sign * extLen * trDirX);
-        vExt.setAttribute('y2', blockY - 22 + sign * extLen * trDirY);
-        lExt.setAttribute('x', blockX + sign * extLen * trDirX + 6);
-        lExt.setAttribute('y', blockY - 22 + sign * extLen * trDirY - 6);
-        lExt.textContent = `Fвнеш = ${state.fExt.toFixed(1)} Н`;
-      } else {
-        vExt.classList.add('hidden');
-        lExt.classList.add('hidden');
-      }
+      const lenMg = forceToPx(computed.mg);
+      const lenN = forceToPx(computed.normalForce);
+      const lenFric = forceToPx(computed.fFriction);
+      const lenPar = forceToPx(computed.fParallel);
 
-      // Проекции
-      const projGroup = document.getElementById('proj-group');
-      projGroup.style.display = state.showProjections ? 'inline' : 'none';
-      if (state.showProjections) {
-        const parLen = comp.fParallel * scale;
-        const perpLen = comp.normalForce * scale;
-        const pPar = document.getElementById('proj-par');
-        const pPerp = document.getElementById('proj-perp');
-        const pB1 = document.getElementById('proj-box-1');
-        const pB2 = document.getElementById('proj-box-2');
+      // Конец вектора mg (строго вертикально вниз)
+      const mgEndX = cmX;
+      const mgEndY = cmY + lenMg;
 
-        // Вдоль плоскости вниз (скатывающая)
-        const parEndX = blockX - parLen * trDirX;
-        const parEndY = (blockY - 22) - parLen * trDirY;
-        pPar.setAttribute('x1', blockX);
-        pPar.setAttribute('y1', blockY - 22);
-        pPar.setAttribute('x2', parEndX);
-        pPar.setAttribute('y2', parEndY);
+      // Конец вектора N (перпендикулярно склону вверх)
+      const nEndX = cmX - lenN * sinA;
+      const nEndY = cmY - lenN * cosA;
 
-        // Перпендикулярно вниз
-        const perpEndX = blockX - perpLen * nDirX;
-        const perpEndY = (blockY - 22) - perpLen * nDirY;
-        pPerp.setAttribute('x1', blockX);
-        pPerp.setAttribute('y1', blockY - 22);
-        pPerp.setAttribute('x2', perpEndX);
-        pPerp.setAttribute('y2', perpEndY);
+      // Конец вектора Fтр (вдоль склона вверх)
+      const fricEndX = cmX + lenFric * cosA;
+      const fricEndY = cmY - lenFric * sinA;
 
-        pB1.setAttribute('x1', parEndX);
-        pB1.setAttribute('y1', parEndY);
-        pB1.setAttribute('x2', blockX);
-        pB1.setAttribute('y2', blockY - 22 + mgLen);
+      // Конец проекции mg*sin(α) (вдоль склона вниз)
+      const parEndX = cmX - lenPar * cosA;
+      const parEndY = cmY + lenPar * sinA;
 
-        pB2.setAttribute('x1', perpEndX);
-        pB2.setAttribute('y1', perpEndY);
-        pB2.setAttribute('x2', blockX);
-        pB2.setAttribute('y2', blockY - 22 + mgLen);
-      }
+      // Конец проекции mg*cos(α) (перпендикулярно склону вниз)
+      const perpEndX = cmX + lenN * sinA;
+      const perpEndY = cmY + lenN * cosA;
 
-      // Рендер живого графика Fтр(α)
-      renderFrictionChart(comp);
+      // Векторы проекций (серый пунктир по NFR-6)
+      const projectionsSvg = toggles.showProjections ? `
+        <g>
+          <!-- Прямоугольник разложения вектора mg -->
+          <line x1="${mgEndX}" y1="${mgEndY}" x2="${parEndX}" y2="${parEndY}"
+                stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+          <line x1="${mgEndX}" y1="${mgEndY}" x2="${perpEndX}" y2="${perpEndY}"
+                stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
 
-      // Информационные карточки
-      document.getElementById('info-ftr-val').textContent = isMasked ? '? Н' : `${comp.fFriction.toFixed(1)} Н`;
-      document.getElementById('info-n-val').textContent = `${comp.normalForce.toFixed(1)} Н`;
-      document.getElementById('info-ftr-max').textContent = `${comp.fFrictionMax.toFixed(1)} Н`;
-      document.getElementById('info-fpar-val').textContent = `${comp.fParallel.toFixed(1)} Н`;
-      document.getElementById('info-ftr-mode').textContent = comp.isResting ? 'Покой: Fтр = mg·sinα' : 'Скольжение: Fтр = μN';
+          <!-- Вектор mg*sin(α) -->
+          ${lenPar > 4 ? `
+            <line x1="${cmX}" y1="${cmY}" x2="${parEndX}" y2="${parEndY}"
+                  stroke="#64748b" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrow-gray)" />
+            ${toggles.showValues ? `
+              <text x="${parEndX - 8}" y="${parEndY - 8}" text-anchor="end" fill="#475569" font-size="11" font-weight="600">
+                mg·sinα = ${formatSI(computed.fParallel, 'Н', 1)}
+              </text>
+            ` : ''}
+          ` : ''}
 
-      const statusDot = document.getElementById('status-dot');
-      const statusText = document.getElementById('status-text');
-      const canvasBadge = document.getElementById('canvas-status-badge');
+          <!-- Вектор mg*cos(α) -->
+          ${lenN > 4 ? `
+            <line x1="${cmX}" y1="${cmY}" x2="${perpEndX}" y2="${perpEndY}"
+                  stroke="#64748b" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrow-gray)" />
+            ${toggles.showValues ? `
+              <text x="${perpEndX + 10}" y="${perpEndY + 4}" fill="#475569" font-size="11" font-weight="600">
+                mg·cosα = ${formatSI(computed.normalForce, 'Н', 1)}
+              </text>
+            ` : ''}
+          ` : ''}
+        </g>
+      ` : '';
 
-      if (comp.isResting) {
-        statusDot.className = 'inline-block h-3.5 w-3.5 rounded-full bg-emerald-600 animate-pulse';
-        statusText.textContent = `Брусок покоится (Fтр = ${comp.fFriction.toFixed(1)} Н ≤ Fтр.макс = ${comp.fFrictionMax.toFixed(1)} Н)`;
-        canvasBadge.className = 'font-bold text-emerald-600 dark:text-emerald-400';
-        canvasBadge.textContent = '● Брусок покоится';
-      } else {
-        statusDot.className = 'inline-block h-3.5 w-3.5 rounded-full bg-red-600';
-        statusText.textContent = `Брусок соскальзывает! (Fскат = ${comp.fParallel.toFixed(1)} Н > Fтр.макс = ${comp.fFrictionMax.toFixed(1)} Н)`;
-        canvasBadge.className = 'font-bold text-red-600 dark:text-rose-400';
-        canvasBadge.textContent = '● Соскальзывание вниз';
-      }
+      // Основные векторы сил (синий цвет по NFR-6)
+      const forcesSvg = toggles.showForces ? `
+        <g>
+          <!-- Сила тяжести mg -->
+          <line x1="${cmX}" y1="${cmY}" x2="${mgEndX}" y2="${mgEndY}"
+                stroke="#2563eb" stroke-width="3" marker-end="url(#arrow-blue)" />
+          ${toggles.showValues ? `
+            <text x="${mgEndX - 8}" y="${mgEndY + 14}" text-anchor="end" fill="#1d4ed8" font-size="12" font-weight="bold">
+              mg = ${formatSI(computed.mg, 'Н', 0)}
+            </text>
+          ` : ''}
+
+          <!-- Сила реакции опоры N (зеленый вектор) -->
+          ${lenN > 4 ? `
+            <line x1="${cmX}" y1="${cmY}" x2="${nEndX}" y2="${nEndY}"
+                  stroke="#16a34a" stroke-width="3" marker-end="url(#arrow-green)" />
+            ${toggles.showValues ? `
+              <rect x="${nEndX - 24}" y="${nEndY - 18}" width="48" height="15" rx="3" fill="#ffffff" opacity="0.9" />
+              <text x="${nEndX}" y="${nEndY - 6}" text-anchor="middle" fill="#15803d" font-size="11" font-weight="bold">
+                N = ${formatSI(computed.normalForce, 'Н', 1)}
+              </text>
+            ` : ''}
+          ` : ''}
+
+          <!-- Сила трения Fтр (оранжевый вектор) -->
+          ${lenFric > 4 ? `
+            <line x1="${cmX}" y1="${cmY}" x2="${fricEndX}" y2="${fricEndY}"
+                  stroke="#ea580c" stroke-width="3" marker-end="url(#arrow-orange)" />
+            ${toggles.showValues ? `
+              <rect x="${fricEndX + 6}" y="${fricEndY - 14}" width="60" height="15" rx="3" fill="#ffffff" opacity="0.9" />
+              <text x="${fricEndX + 8}" y="${fricEndY - 2}" fill="#c2410c" font-size="11" font-weight="bold">
+                Fтр = ${formatSI(computed.fFriction, 'Н', 1)}
+              </text>
+            ` : ''}
+          ` : ''}
+        </g>
+      ` : '';
+
+      // Вектор ускорения при скольжении
+      const accelSvg = !isResting && computed.acceleration > 0.05 ? `
+        <g opacity="0.95">
+          <!-- Стрелка ускорения чуть выше бруска -->
+          <line x1="${cmX - 25 * cosA - 32 * sinA}" y1="${cmY + 25 * sinA - 32 * cosA}"
+                x2="${cmX - 65 * cosA - 32 * sinA}" y2="${cmY + 65 * sinA - 32 * cosA}"
+                stroke="#dc2626" stroke-width="3.5" marker-end="url(#arrow-accel)" />
+          <rect x="${cmX - 62 * cosA - 48 * sinA}" y="${cmY + 62 * sinA - 48 * cosA}" width="68" height="16" rx="4" fill="#fef2f2" stroke="#fca5a5" stroke-width="1" />
+          <text x="${cmX - 28 * cosA - 48 * sinA}" y="${cmY + 28 * sinA - 36 * cosA}"
+                text-anchor="middle" fill="#b91c1c" font-size="11" font-weight="bold">
+            a = ${formatSI(computed.acceleration, 'м/с²', 1)}
+          </text>
+        </g>
+      ` : '';
+
+      blockGroup.innerHTML = `
+        <!-- Повернутый по склону прямоугольник бруска с текстурой -->
+        <g transform="translate(${contactX}, ${contactY}) rotate(${-state.alphaDeg})" filter="url(#block-shadow)">
+          <rect x="${-blockW / 2}" y="${-blockH}" width="${blockW}" height="${blockH}" rx="7"
+                fill="url(${isResting ? '#block-wood' : '#block-sliding'})"
+                stroke="${statusColor}" stroke-width="2.5" />
+          <!-- Текстурные полоски дерева -->
+          <line x1="${-blockW / 2 + 6}" y1="${-blockH + 12}" x2="${blockW / 2 - 6}" y2="${-blockH + 12}" stroke="#ffffff" stroke-width="1" opacity="0.15" />
+          <line x1="${-blockW / 2 + 6}" y1="${-blockH + 26}" x2="${blockW / 2 - 6}" y2="${-blockH + 26}" stroke="#ffffff" stroke-width="1" opacity="0.15" />
+          <text x="0" y="${-blockH / 2 + 4}" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">
+            ${formatSI(state.mass, 'кг', 1)}
+          </text>
+        </g>
+        ${projectionsSvg}
+        ${forcesSvg}
+        ${accelSvg}
+        <circle cx="${cmX}" cy="${cmY}" r="4" fill="#ffffff" stroke="#1e293b" stroke-width="2" />
+      `;
     }
 
-    // Построение интерактивного графика Fтр(α)
-    function renderFrictionChart(comp) {
-      const critA = comp.criticalAngleDeg;
-      const mg = state.mass * G;
-      const maxFtr = Math.max(10, mg * 0.7);
+    function renderFormulasAndControls(computed) {
+      // Статус
+      const dot = document.getElementById('status-dot');
+      const text = document.getElementById('status-text');
+      dot.className = `inline-block h-3.5 w-3.5 rounded-full ${computed.isResting ? 'bg-green-600' : 'bg-red-600'}`;
+      text.textContent = computed.isResting
+        ? 'Покоится в равновесии (mg·sin α ≤ μN)'
+        : `Скользит вниз! Ускорение a = ${formatSI(computed.acceleration, 'м/с²', 2)}`;
 
-      const chartW = 180;
-      const chartH = 120;
-      const origX = 30;
-      const origY = 150;
+      // Карточки живых формул
+      document.getElementById('val-f-pull').textContent = formatSI(computed.fParallel, 'Н', 1);
+      document.getElementById('formula-f-pull').textContent =
+        `${formatSI(computed.mg, 'Н', 0)} · sin(${formatSI(state.alphaDeg, '°', 1)}) = ${formatSI(computed.fParallel, 'Н', 1)}`;
 
-      // Масштаб: α от 0° до 70° отображается на chartW px
-      const aMax = 70;
-      const toPxX = (a) => origX + (a / aMax) * chartW;
-      const toPxY = (f) => origY - (f / maxFtr) * chartH;
+      document.getElementById('val-f-fric').textContent =
+        `${formatSI(computed.fFriction, 'Н', 1)} (макс. ${formatSI(computed.fFrictionMax, 'Н', 1)})`;
+      document.getElementById('formula-f-fric').textContent =
+        `μN = ${formatSI(state.mu, '', 2)} · ${formatSI(computed.normalForce, 'Н', 1)} = ${formatSI(computed.fFrictionMax, 'Н', 1)}`;
 
-      // Ветвь покоя (α от 0 до critA): Fтр = mg * sin(α)
-      let restPath = `M ${toPxX(0)} ${toPxY(0)}`;
-      const stepA = 1.0;
-      const endRest = Math.min(aMax, critA);
-      for (let a = stepA; a <= endRest; a += stepA) {
-        const rad = (a * Math.PI) / 180;
-        const f = mg * Math.sin(rad);
-        restPath += ` L ${toPxX(a)} ${toPxY(f)}`;
-      }
-      document.getElementById('chart-curve-rest').setAttribute('d', restPath);
+      const cardStatus = document.getElementById('card-status');
+      cardStatus.className = `rounded-xl border p-4 shadow-sm ${
+        computed.isResting
+          ? 'bg-green-50 border-green-200 text-green-900'
+          : 'bg-red-50 border-red-200 text-red-900'
+      }`;
+      const cmpSign = computed.isResting ? '≤' : '>';
+      document.getElementById('val-tan').textContent =
+        `tan α = ${formatSI(computed.tanA, '', 2)} ${cmpSign} μ (${formatSI(state.mu, '', 2)})`;
+      document.getElementById('val-crit-angle').textContent =
+        `Критический угол αкр = arctan(${formatSI(state.mu, '', 2)}) = ${formatSI(computed.criticalAngleDeg, '°', 1)}`;
 
-      // Ветвь скольжения (α от critA до aMax): Fтр = μ * mg * cos(α)
-      let slidePath = `M ${toPxX(endRest)} ${toPxY(state.mu * mg * Math.cos((endRest * Math.PI) / 180))}`;
-      for (let a = endRest + stepA; a <= aMax; a += stepA) {
-        const rad = (a * Math.PI) / 180;
-        const f = state.mu * mg * Math.cos(rad);
-        slidePath += ` L ${toPxX(a)} ${toPxY(f)}`;
-      }
-      document.getElementById('chart-curve-slide').setAttribute('d', slidePath);
+      // Синхронизация подписей и ползунков
+      document.getElementById('label-alpha').textContent = formatSI(state.alphaDeg, '°', 1);
+      document.getElementById('label-mass').textContent = formatSI(state.mass, 'кг', 1);
+      document.getElementById('label-mu').textContent = formatSI(state.mu, '', 2);
 
-      // Вертикальная линия αкр
-      const critLine = document.getElementById('chart-crit-line');
-      const critLab = document.getElementById('chart-crit-label');
-      const critPxX = toPxX(critA);
-      critLine.setAttribute('x1', critPxX);
-      critLine.setAttribute('x2', critPxX);
-      critLab.setAttribute('x', critPxX);
-      critLab.textContent = `${Math.round(critA)}°`;
-
-      // Текущая точка (state.alphaDeg, comp.fFriction)
-      const liveDot = document.getElementById('chart-live-dot');
-      const liveX = toPxX(state.alphaDeg);
-      const liveY = toPxY(comp.fFriction);
-      liveDot.setAttribute('cx', liveX);
-      liveDot.setAttribute('cy', liveY);
-
-      document.getElementById('chart-info-alpha').textContent = `${state.alphaDeg}°`;
-      document.getElementById('chart-info-crit').textContent = `${critA.toFixed(1)}°`;
-      document.getElementById('chart-info-ftr').textContent = `${comp.fFriction.toFixed(1)} Н`;
+      document.getElementById('slider-alpha').value = state.alphaDeg;
+      document.getElementById('slider-mass').value = state.mass;
+      document.getElementById('slider-mu').value = state.mu;
     }
 
-    // Drag and Drop вершины клина
-    let isDraggingWedge = false;
-    const wedgeHandle = document.getElementById('wedge-handle');
-    const svgEl = document.getElementById('scene');
+    function renderAll() {
+      const computed = computeInclinedPlane(state);
+      renderScene(computed);
+      renderFormulasAndControls(computed);
+    }
 
-    wedgeHandle.addEventListener('pointerdown', (e) => {
-      isDraggingWedge = true;
-      e.target.setPointerCapture?.(e.pointerId);
+    // =========================================================
+    // 4. ИНТЕРАКТИВНОСТЬ: ПЕРЕТАСКИВАНИЕ УГЛА НА SVG И ПОЛЗУНКИ
+    // =========================================================
+    wedgeGroup.addEventListener('pointerdown', (e) => {
+      const handle = e.target.closest('#angle-handle');
+      if (!handle) return;
+      e.preventDefault();
+
+      const onMove = (ev) => {
+        const rect = svgEl.getBoundingClientRect();
+        const scaleX = 700 / rect.width;
+        const scaleY = 390 / rect.height;
+        const svgX = (ev.clientX - rect.left) * scaleX;
+        const svgY = (ev.clientY - rect.top) * scaleY;
+
+        const dx = Math.max(10, svgX - ORIGIN_X);
+        const dy = Math.max(0, ORIGIN_Y - svgY);
+        const rawDeg = (Math.atan2(dy, dx) * 180) / Math.PI;
+        const clamped = Math.max(0, Math.min(60, rawDeg));
+        state.alphaDeg = Math.round(clamped * 2) / 2; // шаг 0.5°
+        renderAll();
+      };
+
+      const onUp = () => {
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+      };
+
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
     });
 
-    window.addEventListener('pointermove', (e) => {
-      if (!isDraggingWedge) return;
-      const rect = svgEl.getBoundingClientRect();
-      const scaleY = 360 / rect.height;
-      const svgY = (e.clientY - rect.top) * scaleY;
-
-      const dy = Math.max(30, Math.min(280, ORIGIN_Y - svgY));
-      const rad = Math.atan2(dy, WEDGE_BASE_LEN);
-      state.alphaDeg = Math.max(5, Math.min(65, Math.round((rad * 180) / Math.PI)));
-      sliderAlpha.value = state.alphaDeg;
-      labelAlpha.textContent = `${state.alphaDeg}°`;
-      updateVisuals();
+    document.getElementById('slider-alpha').addEventListener('input', (e) => {
+      state.alphaDeg = Number(e.target.value);
+      renderAll();
     });
 
-    window.addEventListener('pointerup', () => {
-      isDraggingWedge = false;
+    document.getElementById('slider-mass').addEventListener('input', (e) => {
+      state.mass = Number(e.target.value);
+      renderAll();
     });
 
-    window.addEventListener('themechanged', () => updateVisuals());
+    document.getElementById('slider-mu').addEventListener('input', (e) => {
+      state.mu = Number(e.target.value);
+      renderAll();
+    });
 
-    // Инициализация
-    syncInputs();
-    updateVisuals();
+    // Кнопка «Критический угол»
+    document.getElementById('btn-critical').addEventListener('click', () => {
+      const crit = (Math.atan(state.mu) * 180) / Math.PI;
+      state.alphaDeg = Math.min(60, Math.round(crit * 2) / 2);
+      renderAll();
+    });
+
+    // Сброс
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      state = structuredClone(DEFAULT_STATE);
+      window.history.replaceState({}, '', window.location.pathname);
+      renderAll();
+    });
+
+    // Поделиться
+    document.getElementById('btn-share').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      const prev = btn.textContent;
+      const encoded = encodeState(state);
+      const url = `${window.location.origin}${window.location.pathname}?state=${encoded}`;
+      window.history.replaceState({}, '', `?state=${encoded}`);
+      try {
+        await navigator.clipboard.writeText(url);
+        btn.textContent = 'Ссылка скопирована!';
+        setTimeout(() => (btn.textContent = prev), 2000);
+      } catch {
+        prompt('Скопируйте ссылку на состояние:', url);
+      }
+    });
+
+    // Переключатели видимости
+    document.getElementById('toggle-forces').addEventListener('change', (e) => {
+      toggles.showForces = e.target.checked;
+      renderAll();
+    });
+    document.getElementById('toggle-projections').addEventListener('change', (e) => {
+      toggles.showProjections = e.target.checked;
+      renderAll();
+    });
+    document.getElementById('toggle-values').addEventListener('change', (e) => {
+      toggles.showValues = e.target.checked;
+      renderAll();
+    });
+
+    // Кнопки материалов
+    document.querySelectorAll('.mat-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.mu = Number(btn.dataset.mu);
+        renderAll();
+      });
+    });
+
+    // Первичная отрисовка
+    renderAll();
   </script>
 </body>
 </html>

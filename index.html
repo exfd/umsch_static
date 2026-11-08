@@ -3,254 +3,195 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Статика ЕГЭ 2027 — Интерактивный тренажёр и банк задач</title>
+  <title>Статика — ЕГЭ по физике | Интерактивные симуляторы и теория</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { extend: {} }
-    };
-  </script>
   <!-- KaTeX для формул в описании топиков -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-8 px-4 flex flex-col justify-between transition-colors duration-200">
+<body class="bg-slate-100 text-slate-900 min-h-screen py-8 px-4 flex flex-col justify-between">
 
   <main class="max-w-5xl mx-auto w-full flex flex-col gap-8">
     <!-- Шапка / Герой-секция -->
-    <header class="flex flex-col md:flex-row items-center justify-between gap-6 bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <div class="space-y-3 max-w-2xl text-center md:text-left">
-        <div class="flex items-center justify-center md:justify-start gap-2">
-          <span class="inline-block px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wide">
-            Физика • ЕГЭ 2027
-          </span>
-          <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-semibold">
-            Версия 2.0
-          </span>
-        </div>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
-          Статика руками: тренажёр задач ЕГЭ
+    <header class="text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+      <div class="space-y-3 max-w-2xl">
+        <span class="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold uppercase tracking-wide">
+          Физика • Интерактивный курс
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          Статика руками: силы, моменты и равновесие
         </h1>
-        <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed">
-          Интерактивные физические модели для подготовки к заданиям №2, №4, №22 и расчётной задаче высокой сложности №26. Перетаскивайте опоры и векторы, проверяйте формулы в реальном времени и копируйте официальные шаблоны обоснований ФИПИ на 4 балла.
+        <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+          Изучайте ключевые темы раздела «Статика» с помощью наглядных интерактивных моделей. Перетаскивайте грузы и опоры, меняйте углы и массы — все силы, плечи и условия равновесия рассчитываются мгновенно в реальном времени.
         </p>
       </div>
-
-      <!-- Правая колонка шапки: прогресс и переключатель темы -->
-      <div class="w-full md:w-auto flex flex-col items-end gap-3 shrink-0">
-        <div class="flex items-center gap-2">
-          <button id="btn-theme-toggle" class="p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition text-lg" title="Переключить тему">
-            🌙
-          </button>
-        </div>
-
-        <!-- Виджет общего прогресса ученика -->
-        <div class="w-full md:w-64 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-xl p-4 space-y-2 text-xs">
-          <div class="flex items-center justify-between font-bold text-slate-800 dark:text-slate-200">
-            <span class="flex items-center gap-1.5">
-              <span>🏆</span> <span>Прогресс курса:</span>
-            </span>
-            <span id="progress-percent" class="text-blue-600 dark:text-blue-400">0%</span>
-          </div>
-          <!-- Полоса прогресса -->
-          <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-blue-600 to-emerald-500 rounded-full transition-all duration-500" style="width: 0%"></div>
-          </div>
-          <div class="flex justify-between text-[11px] text-slate-500 dark:text-slate-400 pt-0.5">
-            <span>Испытания: <b id="progress-challenges" class="text-slate-700 dark:text-slate-300">0/18</b></span>
-            <span>Задачи: <b id="progress-tasks" class="text-slate-700 dark:text-slate-300">0 решено</b></span>
-          </div>
-        </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-left shrink-0 space-y-2 text-xs sm:text-sm text-slate-700">
+        <div class="font-semibold text-slate-900">⚡ Возможности симуляторов:</div>
+        <div class="flex items-center gap-2">🔹 Точные физические формулы и расчёты</div>
+        <div class="flex items-center gap-2">🔹 Наглядная визуализация сил и моментов</div>
+        <div class="flex items-center gap-2">🔹 Интерактивные эксперименты руками</div>
+        <div class="flex items-center gap-2">🔹 Удобный доступ со смартфонов и ПК</div>
       </div>
     </header>
 
-    <!-- Сетка карточек 6 модулей курса -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Каталог тренажёров и моделей</h2>
-        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">6 тем • ЕГЭ по физике</span>
+    <!-- Сетка карточек 5 топиков (соответствует п. 4 ТЗ) -->
+    <section>
+      <div class="mb-4 flex items-center justify-between">
+        <h2 class="text-xl font-bold text-slate-900">Каталог симуляторов и теории</h2>
+        <span class="text-xs font-medium text-slate-500">5 топиков • Все модели доступны сразу</span>
       </div>
 
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         
-        <!-- Карточка 1: Рычаг и косые силы -->
-        <a href="lever.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-          <div class="space-y-3">
+        <!-- Карточка 1: Рычаг -->
+        <a href="lever.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+          <div class="space-y-4">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2.5 py-0.5 rounded-full">Топик 1</span>
-              <span class="rounded-full bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">⚖️ Баланс</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">Топик 1 • Рычаг</span>
+              <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">⚖️ Баланс</span>
             </div>
             <!-- Мини-иллюстрация -->
-            <div class="h-20 bg-gradient-to-b from-slate-50 to-blue-50/50 dark:from-slate-800/40 dark:to-blue-950/20 rounded-xl flex items-center justify-center p-2 border border-slate-100 dark:border-slate-800">
+            <div class="h-20 bg-gradient-to-b from-slate-50 to-blue-50/50 rounded-xl flex items-center justify-center p-2 border border-slate-100">
               <svg viewBox="0 0 160 50" class="w-full h-full max-h-16">
                 <line x1="10" y1="42" x2="150" y2="42" stroke="#cbd5e1" stroke-width="2" />
                 <polygon points="80,24 70,42 90,42" fill="#3b82f6" />
                 <rect x="25" y="22" width="110" height="6" rx="2" fill="#334155" />
                 <rect x="40" y="10" width="16" height="12" rx="2" fill="#64748b" />
-                <line x1="120" y1="22" x2="135" y2="38" stroke="#2563eb" stroke-width="2" />
+                <rect x="110" y="14" width="12" height="8" rx="2" fill="#64748b" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
-              Правило моментов. Рычаг и косые силы
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition">
+              Правило моментов. Рычаг
             </h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Истинное плечо силы $d = l\sin\alpha$, проекция перпендикуляра с прямым углом $\square$, баланс моментов и золотое правило механики.
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Точка опоры и грузы перетаскиваются мышью или пальцем. Визуализация моментов $M_1, M_2$, круговых стрелок вращения и правила Архимеда.
             </p>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
-            <span id="badge-ch-lever" class="text-slate-500 dark:text-slate-400 font-normal">🏆 Испытания: 0/3</span>
-            <span class="transition transform group-hover:translate-x-1.5 font-bold">Открыть →</span>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-100 text-sm font-semibold text-blue-600">
+            <span>Открыть симулятор</span>
+            <span class="transition transform group-hover:translate-x-1.5">→</span>
           </div>
         </a>
 
-        <!-- Карточка 2: Блоки и гидростатика -->
-        <a href="pulleys.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-          <div class="space-y-3">
+        <!-- Карточка 2: Блоки -->
+        <a href="pulleys.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+          <div class="space-y-4">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2.5 py-0.5 rounded-full">Топик 2</span>
-              <span class="rounded-full bg-sky-50 dark:bg-sky-950/60 px-2.5 py-0.5 text-[11px] font-semibold text-sky-700 dark:text-sky-300">🌊 Архимед</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">Топик 2 • 5 схем</span>
+              <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-semibold text-indigo-700">⚙️ Механика</span>
             </div>
             <!-- Мини-иллюстрация -->
-            <div class="h-20 bg-gradient-to-b from-slate-50 to-indigo-50/50 dark:from-slate-800/40 dark:to-indigo-950/20 rounded-xl flex items-center justify-center p-2 border border-slate-100 dark:border-slate-800">
+            <div class="h-20 bg-gradient-to-b from-slate-50 to-indigo-50/50 rounded-xl flex items-center justify-center p-2 border border-slate-100">
               <svg viewBox="0 0 160 50" class="w-full h-full max-h-16">
                 <line x1="30" y1="6" x2="130" y2="6" stroke="#475569" stroke-width="2" />
-                <circle cx="80" cy="20" r="10" fill="#e2e8f0" stroke="#334155" stroke-width="2" />
-                <rect x="70" y="32" width="20" height="14" fill="#38bdf8" fill-opacity="0.5" />
-                <rect x="74" y="28" width="12" height="12" rx="2" fill="#64748b" />
+                <circle cx="80" cy="20" r="12" fill="#e2e8f0" stroke="#334155" stroke-width="2" />
+                <line x1="68" y1="20" x2="68" y2="44" stroke="#0f172a" stroke-width="1.8" />
+                <line x1="92" y1="20" x2="92" y2="44" stroke="#0f172a" stroke-width="1.8" />
+                <rect x="60" y="36" width="16" height="10" rx="2" fill="#64748b" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
-              Блоки, полиспасты и гидростатика
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition">
+              Блоки и полиспасты
             </h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Неподвижные, подвижные блоки, полиспасты до 3:1 и погружение груза в сосуд с жидкостью по закону Архимеда ($F_A = \rho_{\text{ж}} g V$).
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Неподвижный, подвижный блоки и полиспасты. Вращающиеся шкивы со спицами, выигрыш в силе и золотое правило механики.
             </p>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
-            <span id="badge-ch-pulleys" class="text-slate-500 dark:text-slate-400 font-normal">🏆 Испытания: 0/3</span>
-            <span class="transition transform group-hover:translate-x-1.5 font-bold">Открыть →</span>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-100 text-sm font-semibold text-blue-600">
+            <span>Открыть симулятор</span>
+            <span class="transition transform group-hover:translate-x-1.5">→</span>
           </div>
         </a>
 
-        <!-- Карточка 3: Наклонная плоскость и Fтр(α) -->
-        <a href="inclined-plane.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-          <div class="space-y-3">
+        <!-- Карточка 3: Наклонная плоскость -->
+        <a href="inclined-plane.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+          <div class="space-y-4">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2.5 py-0.5 rounded-full">Топик 3</span>
-              <span class="rounded-full bg-amber-50 dark:bg-amber-950/60 px-2.5 py-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-300">📈 График</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">Топик 3 • Трение</span>
+              <span class="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">📐 Векторы</span>
             </div>
             <!-- Мини-иллюстрация -->
-            <div class="h-20 bg-gradient-to-b from-slate-50 to-amber-50/50 dark:from-slate-800/40 dark:to-amber-950/20 rounded-xl flex items-center justify-center p-2 border border-slate-100 dark:border-slate-800">
+            <div class="h-20 bg-gradient-to-b from-slate-50 to-amber-50/50 rounded-xl flex items-center justify-center p-2 border border-slate-100">
               <svg viewBox="0 0 160 50" class="w-full h-full max-h-16">
-                <polygon points="20,44 140,44 140,16" fill="#e2e8f0" stroke="#475569" stroke-width="1.5" />
-                <rect x="75" y="24" width="16" height="10" rx="1.5" fill="#64748b" transform="rotate(-13 75 24)" />
+                <polygon points="30,44 130,44 130,12" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5" />
+                <g transform="translate(85, 27) rotate(-18)">
+                  <rect x="-10" y="-12" width="20" height="12" rx="2" fill="#d97706" />
+                </g>
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
-              Наклонная плоскость и график Fтр(α)
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition">
+              Наклонная плоскость
             </h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Поведение силы трения покоя $mg\sin\alpha$ и скольжения $\mu mg\cos\alpha$, критический угол $\tan\alpha = \mu$ и внешняя сила удержания.
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Выбор материалов (лёд, дерево, резина), угол $\alpha$, параллелограмм проекций и условие начала скольжения ($\tan\alpha > \mu$).
             </p>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
-            <span id="badge-ch-inclined" class="text-slate-500 dark:text-slate-400 font-normal">🏆 Испытания: 0/3</span>
-            <span class="transition transform group-hover:translate-x-1.5 font-bold">Открыть →</span>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-100 text-sm font-semibold text-blue-600">
+            <span>Открыть симулятор</span>
+            <span class="transition transform group-hover:translate-x-1.5">→</span>
           </div>
         </a>
 
-        <!-- Карточка 4: Равновесие на нитях и кронштейн -->
-        <a href="threads.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-          <div class="space-y-3">
+        <!-- Карточка 4: Равновесие на нитях -->
+        <a href="threads.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+          <div class="space-y-4">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2.5 py-0.5 rounded-full">Топик 4</span>
-              <span class="rounded-full bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-700 dark:text-indigo-300">📐 Векторы</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">Топик 4 • Нити</span>
+              <span class="rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-semibold text-teal-700">🔺 Треугольник сил</span>
             </div>
             <!-- Мини-иллюстрация -->
-            <div class="h-20 bg-gradient-to-b from-slate-50 to-indigo-50/50 dark:from-slate-800/40 dark:to-indigo-950/20 rounded-xl flex items-center justify-center p-2 border border-slate-100 dark:border-slate-800">
+            <div class="h-20 bg-gradient-to-b from-slate-50 to-teal-50/50 rounded-xl flex items-center justify-center p-2 border border-slate-100">
               <svg viewBox="0 0 160 50" class="w-full h-full max-h-16">
-                <line x1="20" y1="8" x2="140" y2="8" stroke="#475569" stroke-width="2" />
-                <line x1="40" y1="8" x2="80" y2="34" stroke="#0f172a" stroke-width="2" />
-                <line x1="120" y1="8" x2="80" y2="34" stroke="#0f172a" stroke-width="2" />
-                <circle cx="80" cy="34" r="3" fill="#f59e0b" />
-                <rect x="74" y="38" width="12" height="8" rx="1.5" fill="#64748b" />
+                <line x1="30" y1="8" x2="130" y2="8" stroke="#475569" stroke-width="2" />
+                <line x1="50" y1="8" x2="80" y2="30" stroke="#0284c7" stroke-width="2" />
+                <line x1="110" y1="8" x2="80" y2="30" stroke="#0284c7" stroke-width="2" />
+                <circle cx="80" cy="30" r="3" fill="#10b981" />
+                <rect x="73" y="34" width="14" height="10" rx="2" fill="#64748b" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
-              Равновесие узла на нитях и кронштейн
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition">
+              Груз на двух нитях
             </h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Проекции сил натяжения $\vec{T}_1, \vec{T}_2$, замкнутый треугольник сил, горизонтальное смещение узла и кронштейн со сжатой распоркой.
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Интерактивный замкнутый треугольник сил $\vec{T}_1 + \vec{T}_2 + m\vec{g} = \vec{0}$, цветовая шкала перегрузки и пресеты подвесов.
             </p>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
-            <span id="badge-ch-threads" class="text-slate-500 dark:text-slate-400 font-normal">🏆 Испытания: 0/3</span>
-            <span class="transition transform group-hover:translate-x-1.5 font-bold">Открыть →</span>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-100 text-sm font-semibold text-blue-600">
+            <span>Открыть симулятор</span>
+            <span class="transition transform group-hover:translate-x-1.5">→</span>
           </div>
         </a>
 
-        <!-- Карточка 5: Балка на двух опорах -->
-        <a href="beam.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-          <div class="space-y-3">
+        <!-- Карточка 5: Балка на опорах -->
+        <a href="beam.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-500 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 md:col-span-2 lg:col-span-1">
+          <div class="space-y-4">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2.5 py-0.5 rounded-full">Топик 5</span>
-              <span class="rounded-full bg-cyan-50 dark:bg-cyan-950/60 px-2.5 py-0.5 text-[11px] font-semibold text-cyan-700 dark:text-cyan-300">🎯 Ось вращения</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">Топик 5 • Реакции опор</span>
+              <span class="rounded-full bg-cyan-50 px-2.5 py-1 text-[11px] font-semibold text-cyan-700">🌉 Мосты</span>
             </div>
             <!-- Мини-иллюстрация -->
-            <div class="h-20 bg-gradient-to-b from-slate-50 to-cyan-50/50 dark:from-slate-800/40 dark:to-cyan-950/20 rounded-xl flex items-center justify-center p-2 border border-slate-100 dark:border-slate-800">
+            <div class="h-20 bg-gradient-to-b from-slate-50 to-cyan-50/50 rounded-xl flex items-center justify-center p-2 border border-slate-100">
               <svg viewBox="0 0 160 50" class="w-full h-full max-h-16">
-                <line x1="10" y1="42" x2="150" y2="42" stroke="#cbd5e1" stroke-width="2" />
-                <polygon points="40,28 32,42 48,42" fill="#3b82f6" />
-                <polygon points="120,28 112,42 128,42" fill="#0d9488" />
-                <rect x="20" y="24" width="120" height="6" rx="2" fill="#334155" />
-                <rect x="70" y="14" width="14" height="10" rx="2" fill="#64748b" />
+                <line x1="20" y1="44" x2="140" y2="44" stroke="#cbd5e1" stroke-width="2" />
+                <polygon points="45,30 38,44 52,44" fill="#16a34a" />
+                <polygon points="115,30 108,44 122,44" fill="#16a34a" />
+                <rect x="25" y="26" width="110" height="5" rx="2" fill="#334155" />
+                <rect x="75" y="16" width="14" height="10" rx="2" fill="#3b82f6" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
-              Балка на двух опорах и выбор оси
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition">
+              Балка на двух опорах
             </h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Расчёт реакций $R_1, R_2$, динамический выбор оси вращения (опора A, B, центр C, точка груза D) и предупреждение об отрыве от опоры.
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Реакции $R_1, R_2$, уравнение моментов относительно опоры и эффект опрокидывания консольной балки при критическом выходе груза.
             </p>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
-            <span id="badge-ch-beam" class="text-slate-500 dark:text-slate-400 font-normal">🏆 Испытания: 0/3</span>
-            <span class="transition transform group-hover:translate-x-1.5 font-bold">Открыть →</span>
-          </div>
-        </a>
-
-        <!-- Карточка 6: Лестница у гладкой стены (№26) -->
-        <a href="ladder.html" class="group flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950 px-2.5 py-0.5 rounded-full">Топик 6</span>
-              <span class="rounded-full bg-rose-100 dark:bg-rose-950/60 px-2.5 py-0.5 text-[11px] font-bold text-rose-700 dark:text-rose-300">🔥 Задача №26</span>
-            </div>
-            <!-- Мини-иллюстрация -->
-            <div class="h-20 bg-gradient-to-b from-slate-50 to-rose-50/50 dark:from-slate-800/40 dark:to-rose-950/20 rounded-xl flex items-center justify-center p-2 border border-slate-100 dark:border-slate-800">
-              <svg viewBox="0 0 160 50" class="w-full h-full max-h-16">
-                <!-- стена и пол -->
-                <line x1="30" y1="6" x2="30" y2="44" stroke="#475569" stroke-width="2" />
-                <line x1="30" y1="44" x2="140" y2="44" stroke="#475569" stroke-width="2" />
-                <!-- наклонная лестница -->
-                <line x1="30" y1="12" x2="110" y2="44" stroke="#334155" stroke-width="3" stroke-linecap="round" />
-                <circle cx="70" cy="28" r="3" fill="#ef4444" />
-              </svg>
-            </div>
-            <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
-              Лестница у стены (Задача №26 ЕГЭ)
-            </h3>
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Все 5 сил, подъём человека $s$, гладкая стена и шероховатый пол. Порог соскальзывания и критерии обоснования ФИПИ на 4 балла.
-            </p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
-            <span id="badge-ch-ladder" class="text-slate-500 dark:text-slate-400 font-normal">🏆 Испытания: 0/3</span>
-            <span class="transition transform group-hover:translate-x-1.5 font-bold">Открыть →</span>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-100 text-sm font-semibold text-blue-600">
+            <span>Открыть симулятор</span>
+            <span class="transition transform group-hover:translate-x-1.5">→</span>
           </div>
         </a>
 
@@ -258,53 +199,9 @@
     </section>
   </main>
 
-  <!-- Подвал сайта -->
-  <footer class="mt-12 text-center text-xs text-slate-500 dark:text-slate-500 py-6 border-t border-slate-200 dark:border-slate-800">
-    <p>Интерактивный тренажёр по физике «Статика ЕГЭ 2027» • Разработано для наглядного понимания физики</p>
+  <footer class="mt-12 max-w-5xl mx-auto w-full text-center text-xs text-slate-500 py-6 border-t border-slate-200">
+    <p>Интерактивные симуляторы по физике «Статика» • Наглядные эксперименты, силы и моменты</p>
   </footer>
 
-  <script type="module">
-    import { initTheme, toggleTheme } from './assets/js/theme.js';
-    import { getProgress } from './assets/js/progress.js';
-
-    initTheme();
-    document.getElementById('btn-theme-toggle')?.addEventListener('click', toggleTheme);
-
-    function updateProgressUI() {
-      const p = getProgress();
-      const topicKeys = ['lever', 'pulleys', 'inclined', 'threads', 'beam', 'ladder'];
-      let totalChallenges = 0;
-
-      topicKeys.forEach(t => {
-        const arr = p.challenges[t] || [false, false, false];
-        const done = arr.filter(Boolean).length;
-        totalChallenges += done;
-
-        const badge = document.getElementById(`badge-ch-${t}`);
-        if (badge) {
-          badge.textContent = `🏆 Испытания: ${done}/3`;
-          if (done === 3) {
-            badge.className = 'text-emerald-600 dark:text-emerald-400 font-bold';
-          }
-        }
-      });
-
-      const maxChallenges = 18;
-      const pct = Math.round((totalChallenges / maxChallenges) * 100);
-
-      const pctEl = document.getElementById('progress-percent');
-      const barFill = document.getElementById('progress-bar-fill');
-      const chEl = document.getElementById('progress-challenges');
-      const tasksEl = document.getElementById('progress-tasks');
-
-      if (pctEl) pctEl.textContent = `${pct}%`;
-      if (barFill) barFill.style.width = `${pct}%`;
-      if (chEl) chEl.textContent = `${totalChallenges}/${maxChallenges}`;
-      if (tasksEl) tasksEl.textContent = `${p.solvedTasksCount} решено`;
-    }
-
-    updateProgressUI();
-    window.addEventListener('storage', updateProgressUI);
-  </script>
 </body>
 </html>

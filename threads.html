@@ -3,113 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Статика ЕГЭ 2027 — Равновесие груза на двух нитях</title>
+  <title>Статика ЕГЭ — Равновесие груза на двух нитях</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {}
-      }
-    };
-  </script>
   <!-- KaTeX для формул -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-6 px-4 transition-colors duration-200">
+<body class="bg-slate-100 text-slate-900 min-h-screen py-6 px-4">
 
   <main class="max-w-4xl mx-auto flex flex-col gap-5">
     <!-- Навигация между HTML-файлами -->
-    <nav class="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 overflow-x-auto pb-1">
-      <a href="index.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition flex items-center gap-1 shadow-xs">
-        <span>🏠</span> <span>Все темы</span>
-      </a>
-      <a href="lever.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">1. Рычаг</a>
-      <a href="pulleys.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">2. Блоки</a>
-      <a href="inclined-plane.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">3. Плоскость</a>
-      <a href="threads.html" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white shadow-sm font-semibold">4. Нити</a>
-      <a href="beam.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">5. Балка</a>
-      <a href="ladder.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">6. Лестница (№26)</a>
+    <nav class="flex items-center gap-2 text-xs font-medium text-slate-600 overflow-x-auto pb-1">
+      <a href="lever.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">1. Рычаг</a>
+      <a href="pulleys.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">2. Блоки</a>
+      <a href="inclined-plane.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">3. Наклонная плоскость</a>
+      <a href="threads.html" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white shadow-sm">4. Нити</a>
+      <a href="beam.html" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 transition">5. Балка</a>
     </nav>
 
     <!-- Шапка -->
-    <header class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+    <header class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
       <div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Топик 4 • Статика ЕГЭ</span>
-          <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-medium">Версия 2.0</span>
-        </div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Равновесие узла на нитях и кронштейн</h1>
+        <span class="text-xs font-semibold uppercase tracking-wider text-blue-600">Топик 4 • Статика ЕГЭ</span>
+        <h1 class="text-2xl font-bold text-slate-900">Равновесие груза на двух нитях</h1>
       </div>
       <div class="flex items-center gap-2">
-        <button id="btn-theme-toggle" class="p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition text-base" title="Переключить тему">
-          🌙
-        </button>
-        <button id="btn-reset" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition">
+        <button id="btn-reset" class="rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 active:scale-95 transition">
           Сброс
         </button>
-        <button id="btn-share" class="rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-blue-700 active:scale-95 transition shadow-xs">
+        <button id="btn-share" class="rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-blue-700 active:scale-95 transition">
           Поделиться
         </button>
       </div>
     </header>
 
-    <!-- Переключатель режима: Песочница / Задача ЕГЭ -->
-    <div class="flex items-center justify-between bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <div class="flex items-center gap-2">
-        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Режим:</span>
-        <div class="inline-flex rounded-lg bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700">
-          <button id="btn-mode-sandbox" class="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs shadow-sm transition">
-            🔬 Песочница
-          </button>
-          <button id="btn-mode-quiz" class="px-3.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-300 font-medium text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-            🎯 Задача ЕГЭ
-          </button>
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-slate-500 dark:text-slate-400">Испытания:</span>
-        <span id="challenges-counter" class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">0/3</span>
-      </div>
-    </div>
-
-    <!-- Интерактивная карточка задачи ЕГЭ (скрыта в режиме песочницы) -->
-    <div id="quiz-card" class="hidden bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950/40 border border-blue-200 dark:border-indigo-900/60 rounded-xl p-4 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="text-sm font-bold text-blue-900 dark:text-blue-300">🎯 Задание ЕГЭ (расчёт натяжения нити):</span>
-        </div>
-        <button id="btn-quiz-new" class="text-xs px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-slate-700 transition">
-          🔄 Новые данные
-        </button>
-      </div>
-      <div id="quiz-prompt" class="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium"></div>
-      <div class="flex flex-wrap items-center gap-3 pt-1">
-        <div class="relative flex items-center">
-          <input type="text" id="quiz-input" placeholder="Введите ответ (Н)" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 outline-hidden w-44" />
-          <span class="ml-2 text-xs text-slate-500 dark:text-slate-400">Н</span>
-        </div>
-        <button id="btn-quiz-check" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs active:scale-95 transition">
-          Проверить ответ
-        </button>
-        <button id="btn-quiz-solution" class="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 text-xs font-medium transition">
-          Показать подсказку/решение
-        </button>
-      </div>
-      <div id="quiz-feedback"></div>
-      <div id="quiz-solution-text" class="hidden mt-2 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 space-y-1"></div>
-    </div>
-
     <!-- Краткая теория -->
-    <details class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-3 shadow-sm">
-      <summary class="cursor-pointer font-semibold text-slate-800 dark:text-slate-200 select-none">
-        📖 Краткая теория: равновесие узла и кронштейна
+    <details class="bg-white rounded-xl border border-slate-200 px-4 py-3 shadow-sm">
+      <summary class="cursor-pointer font-semibold text-slate-800 select-none">
+        📖 Краткая теория: равновесие узла на нерастяжимых нитях
       </summary>
-      <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300 space-y-2 leading-relaxed">
+      <div class="mt-3 pt-3 border-t border-slate-100 text-sm text-slate-700 space-y-2 leading-relaxed">
         <p>
           Узел, в котором сходятся три нити, покоится, если геометрическая сумма приложенных к нему сил равна нулю:
           $$\vec{T}_1 + \vec{T}_2 + m\vec{g} = \vec{0}$$
@@ -121,22 +57,19 @@
         <p>
           Отсюда силы натяжения выражаются через углы:
           $$T_1 = \frac{mg \cos\alpha_2}{\sin(\alpha_1 + \alpha_2)}, \qquad T_2 = \frac{mg \cos\alpha_1}{\sin(\alpha_1 + \alpha_2)}$$
-          В частном <strong>симметричном случае</strong> ($\alpha_1 = \alpha_2 = \alpha$): $T_1 = T_2 = \dfrac{mg}{2\sin\alpha}$. При малых углах ($\alpha \to 0^\circ$) натяжение возрастает многократно!
+          В частном <strong>симметричном случае</strong> ($\alpha_1 = \alpha_2 = \alpha$): $T_1 = T_2 = \dfrac{mg}{2\sin\alpha}$. При малых углах ($\alpha \to 0^\circ$) натяжение возрастает многократно и нить может порваться!
         </p>
       </div>
     </details>
 
-    <!-- Шаблон обоснования №26 (Критерии ФИПИ) -->
-    <div id="justification-container"></div>
-
     <!-- Панель статуса, чекбоксов и кнопки симметрии -->
-    <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+    <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div class="flex items-center gap-2.5">
         <span id="status-dot" class="inline-block h-3.5 w-3.5 rounded-full bg-green-600"></span>
-        <span id="status-text" class="font-semibold text-slate-800 dark:text-slate-200 text-sm sm:text-base" role="status" aria-live="polite">Проверка...</span>
+        <span id="status-text" class="font-semibold text-slate-800 text-sm sm:text-base" role="status" aria-live="polite">Проверка...</span>
       </div>
 
-      <div class="flex flex-wrap items-center gap-4 text-sm text-slate-700 dark:text-slate-300">
+      <div class="flex flex-wrap items-center gap-4 text-sm text-slate-700">
         <label class="flex items-center gap-1.5 cursor-pointer select-none">
           <input type="checkbox" id="toggle-forces" checked class="accent-blue-600" /> Силы ($T_1, T_2, mg$)
         </label>
@@ -146,800 +79,625 @@
         <label class="flex items-center gap-1.5 cursor-pointer select-none">
           <input type="checkbox" id="toggle-values" checked class="accent-blue-600" /> Числа
         </label>
-        <label class="flex items-center gap-1.5 cursor-pointer select-none font-medium text-blue-600 dark:text-blue-400">
-          <input type="checkbox" id="toggle-bracket" class="accent-blue-600" /> Режим кронштейна (распорка)
-        </label>
       </div>
 
-      <button id="btn-symmetric" class="rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-emerald-700 active:scale-95 transition shadow-xs flex items-center gap-1.5">
+      <button id="btn-symmetric" class="rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-emerald-700 active:scale-95 transition shadow-sm flex items-center gap-1.5">
         <span>⚖️</span> <span>Симметрично (α₁ = α₂)</span>
       </button>
     </div>
 
     <!-- Быстрые пресеты задач ЕГЭ -->
-    <div class="flex flex-wrap items-center gap-2 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/60 rounded-xl px-4 py-2.5 text-xs text-slate-700 dark:text-slate-300">
-      <span class="font-bold text-emerald-950 dark:text-emerald-300 flex items-center gap-1">🎯 Пресеты ЕГЭ:</span>
-      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="chandelier">
+    <div class="flex flex-wrap items-center gap-2 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/80 rounded-xl px-4 py-2.5 text-xs text-slate-700">
+      <span class="font-bold text-emerald-950 flex items-center gap-1">🎯 Пресеты ЕГЭ:</span>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white border border-emerald-200 text-emerald-800 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="chandelier">
         💡 Симметричный подвес (60°)
       </button>
-      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="pythagoras">
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white border border-emerald-200 text-emerald-800 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="pythagoras">
         📐 Прямой угол (α₁ + α₂ = 90°)
       </button>
-      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="bracket">
-        🏗️ Кронштейн со сжатой распоркой
-      </button>
-      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="danger">
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white border border-emerald-200 text-emerald-800 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="danger">
         ⚠️ Опасное натяжение (тупой угол)
       </button>
     </div>
 
-    <!-- Панель испытаний темы -->
-    <div class="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-slate-900/50 p-3.5 space-y-2">
-      <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-amber-950 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-          <span>🏆</span> <span>Испытания темы: Нити и узлы</span>
-        </span>
-        <span class="text-[11px] text-slate-500 dark:text-slate-400">Выполняйте условия в песочнице</span>
-      </div>
-      <div id="challenges-list" class="grid grid-cols-1 md:grid-cols-3 gap-2"></div>
-    </div>
-
-    <!-- Основной интерактивный холст SVG -->
-    <div class="relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 shadow-sm overflow-hidden">
-      <div class="text-[11px] font-medium text-slate-600 dark:text-slate-400 flex items-center justify-between mb-2">
-        <span class="flex items-center gap-1">
-          <span>👆</span> <span>Перетаскивайте синие ручки на потолке или узел по горизонтали</span>
-        </span>
-        <span id="canvas-status-badge" class="font-bold text-emerald-600 dark:text-emerald-400">● Статическое равновесие</span>
-      </div>
-
-      <svg id="scene-svg" viewBox="0 0 700 420" class="w-full h-auto select-none rounded-lg bg-slate-50/60 dark:bg-slate-950/70 border border-slate-100 dark:border-slate-800/80 cursor-default">
+    <!-- SVG-сцена -->
+    <div class="overflow-hidden rounded-xl border border-slate-200 bg-gradient-to-b from-slate-50 to-slate-100 shadow-inner touch-pan-y">
+      <svg id="scene" viewBox="0 0 700 410" class="w-full h-auto select-none touch-none" role="img" aria-label="Симулятор груза на двух нитях">
         <defs>
-          <!-- Сетка чертежа -->
-          <pattern id="grid-pattern" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" class="text-slate-200 dark:text-slate-800/60" stroke-width="0.75" />
-          </pattern>
-          <pattern id="hatch-ceiling" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="0" y2="8" stroke="currentColor" class="text-slate-400 dark:text-slate-600" stroke-width="1.5" />
-          </pattern>
-          <pattern id="hatch-wall" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="0" y2="8" stroke="currentColor" class="text-slate-400 dark:text-slate-600" stroke-width="1.5" />
-          </pattern>
-          <!-- Маркеры наконечников стрелок -->
-          <marker id="arrow-red" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
-          </marker>
-          <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <filter id="load-shadow" x="-20%" y="-10%" width="140%" height="130%">
+            <feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-opacity="0.25" />
+          </filter>
+          <linearGradient id="load-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#475569" />
+            <stop offset="45%" stop-color="#334155" />
+            <stop offset="100%" stop-color="#1e293b" />
+          </linearGradient>
+          <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
             <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" />
           </marker>
-          <!-- BUG-01 FIX: Добавлен маркер arrow-green -->
-          <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+          <marker id="arrow-red" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
           </marker>
-          <marker id="arrow-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="#d97706" />
+          <marker id="arrow-gray" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
           </marker>
+          <pattern id="ceiling-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="12" stroke="#94a3b8" stroke-width="2" />
+          </pattern>
         </defs>
 
-        <!-- Фоновая сетка -->
-        <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+        <!-- Потолок -->
+        <rect x="40" y="26" width="620" height="14" fill="url(#ceiling-hatch)" />
+        <line x1="40" y1="40" x2="660" y2="40" stroke="#475569" stroke-width="3" />
 
-        <!-- Потолок / Опоры -->
-        <rect id="ceiling-rect" x="40" y="40" width="620" height="14" fill="#cbd5e1" class="dark:fill-slate-700" />
-        <rect id="ceiling-hatch" x="40" y="26" width="620" height="14" fill="url(#hatch-ceiling)" />
-        <line id="ceiling-line" x1="40" y1="54" x2="660" y2="54" stroke="#475569" stroke-width="2" class="dark:stroke-slate-500" />
-
-        <!-- Стена для режима кронштейна (по умолчанию скрыта) -->
-        <g id="bracket-wall-group" class="hidden">
-          <rect x="26" y="40" width="14" height="280" fill="url(#hatch-wall)" />
-          <line x1="40" y1="40" x2="40" y2="320" stroke="#475569" stroke-width="2" class="dark:stroke-slate-500" />
-        </g>
-
-        <!-- Горизонтальная опорная пунктирная линия через узел -->
-        <line id="knot-horizontal-line" x1="50" y1="210" x2="650" y2="210" stroke="#94a3b8" stroke-dasharray="4 4" stroke-width="1.2" class="dark:stroke-slate-600" />
-
-        <!-- Пунктирные проекции на оси координат -->
-        <g id="projections-group" opacity="1">
-          <!-- Проекции T1 -->
-          <line id="proj-t1-x" x1="350" y1="210" x2="250" y2="210" stroke="#93c5fd" stroke-dasharray="3 3" stroke-width="1.5" />
-          <line id="proj-t1-y" x1="350" y1="210" x2="350" y2="150" stroke="#93c5fd" stroke-dasharray="3 3" stroke-width="1.5" />
-          <!-- Проекции T2 -->
-          <line id="proj-t2-x" x1="350" y1="210" x2="450" y2="210" stroke="#86efac" stroke-dasharray="3 3" stroke-width="1.5" />
-          <line id="proj-t2-y" x1="350" y1="210" x2="350" y2="150" stroke="#86efac" stroke-dasharray="3 3" stroke-width="1.5" />
-        </g>
-
-        <!-- Дуги углов α1 и α2 с потолком / горизонтом -->
-        <g id="angles-group">
-          <path id="arc-alpha1" d="" fill="rgba(59, 130, 246, 0.15)" stroke="#2563eb" stroke-width="1.5" />
-          <text id="label-alpha1" x="0" y="0" font-size="12" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">α₁</text>
-          <path id="arc-alpha2" d="" fill="rgba(16, 185, 129, 0.15)" stroke="#059669" stroke-width="1.5" />
-          <text id="label-alpha2" x="0" y="0" font-size="12" font-weight="bold" fill="#047857" class="dark:fill-emerald-400">α₂</text>
-        </g>
-
-        <!-- Сами нити / распорка -->
-        <line id="thread-left" x1="200" y1="54" x2="350" y2="210" stroke="#334155" stroke-width="3" stroke-linecap="round" class="dark:stroke-slate-300" />
-        <line id="thread-right" x1="500" y1="54" x2="350" y2="210" stroke="#334155" stroke-width="3" stroke-linecap="round" class="dark:stroke-slate-300" />
-        <line id="thread-vertical" x1="350" y1="210" x2="350" y2="280" stroke="#334155" stroke-width="3.5" class="dark:stroke-slate-300" />
-
-        <!-- Груз (прямоугольник с массой) -->
-        <g id="weight-group" transform="translate(320, 280)">
-          <rect id="weight-rect" width="60" height="50" rx="6" fill="#cbd5e1" stroke="#475569" stroke-width="2" class="dark:fill-slate-800 dark:stroke-slate-600 shadow-sm" />
-          <!-- Кольцо подвеса -->
-          <circle cx="30" cy="0" r="5" fill="none" stroke="#475569" stroke-width="2" class="dark:stroke-slate-400" />
-          <text id="weight-label" x="30" y="30" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e293b" class="dark:fill-slate-200">5.0 кг</text>
-        </g>
-
-        <!-- Векторы сил (T1, T2, mg) -->
-        <g id="forces-group">
-          <!-- Сила натяжения левой нити T1 -->
-          <line id="vec-t1" x1="350" y1="210" x2="250" y2="108" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow-blue)" />
-          <text id="vec-t1-label" x="240" y="100" font-size="12" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">T₁ = ?</text>
-
-          <!-- Сила натяжения правой нити T2 -->
-          <line id="vec-t2" x1="350" y1="210" x2="450" y2="108" stroke="#059669" stroke-width="3" marker-end="url(#arrow-green)" />
-          <text id="vec-t2-label" x="460" y="100" font-size="12" font-weight="bold" fill="#047857" class="dark:fill-emerald-400">T₂ = ?</text>
-
-          <!-- Сила тяжести mg -->
-          <line id="vec-mg" x1="350" y1="210" x2="350" y2="310" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow-red)" />
-          <text id="vec-mg-label" x="360" y="325" font-size="12" font-weight="bold" fill="#b91c1c" class="dark:fill-rose-400">mg = ?</text>
-        </g>
-
-        <!-- Векторный замкнутый треугольник сил (мини-вставка справа внизу) -->
-        <g id="vector-triangle-group" transform="translate(520, 240)">
-          <rect width="165" height="155" rx="8" fill="#ffffff" fill-opacity="0.92" stroke="#e2e8f0" stroke-width="1.5" class="dark:fill-slate-900/90 dark:stroke-slate-700 shadow-md" />
-          <text x="10" y="18" font-size="11" font-weight="bold" fill="#475569" class="dark:fill-slate-300">Векторный замкнутый △:</text>
-          <text x="10" y="32" font-size="10" fill="#64748b" class="dark:fill-slate-400">T⃗₁ + T⃗₂ + mg⃗ = 0⃗</text>
-
-          <path id="poly-triangle" d="" fill="none" stroke="#94a3b8" stroke-dasharray="3 3" />
-          <line id="tri-vec-mg" x1="0" y1="0" x2="0" y2="0" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow-red)" />
-          <line id="tri-vec-t1" x1="0" y1="0" x2="0" y2="0" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)" />
-          <line id="tri-vec-t2" x1="0" y1="0" x2="0" y2="0" stroke="#059669" stroke-width="2" marker-end="url(#arrow-green)" />
-        </g>
-
-        <!-- Интерактивные точки (ручки) с touch-hitbox >= 44x44 px -->
-        <!-- Левая опора A -->
-        <g id="handle-left" class="cursor-ew-resize">
-          <circle cx="200" cy="54" r="22" fill="transparent" class="touch-manipulation" />
-          <circle id="vis-handle-left" cx="200" cy="54" r="8" fill="#2563eb" stroke="#ffffff" stroke-width="2.5" class="shadow-md" />
-          <text x="200" y="42" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af" class="dark:fill-blue-300">A</text>
-        </g>
-
-        <!-- Правая опора B -->
-        <g id="handle-right" class="cursor-ew-resize">
-          <circle cx="500" cy="54" r="22" fill="transparent" class="touch-manipulation" />
-          <circle id="vis-handle-right" cx="500" cy="54" r="8" fill="#059669" stroke="#ffffff" stroke-width="2.5" class="shadow-md" />
-          <text x="500" y="42" text-anchor="middle" font-size="11" font-weight="bold" fill="#065f46" class="dark:fill-emerald-300">B</text>
-        </g>
-
-        <!-- Центральный узел O (можно перетаскивать по горизонтали) -->
-        <g id="handle-knot" class="cursor-ew-resize">
-          <circle cx="350" cy="210" r="24" fill="transparent" class="touch-manipulation" />
-          <circle id="vis-handle-knot" cx="350" cy="210" r="7.5" fill="#f59e0b" stroke="#ffffff" stroke-width="2" />
-          <text x="350" y="202" text-anchor="middle" font-size="11" font-weight="bold" fill="#b45309" class="dark:fill-amber-300">Узел O</text>
-        </g>
+        <!-- Динамическая сцена -->
+        <g id="scene-content"></g>
       </svg>
+      <div class="bg-slate-100 px-4 py-2 text-xs text-slate-500 flex justify-between flex-wrap gap-2 border-t border-slate-200">
+        <span>💡 Совет: перетаскивайте <strong>точки крепления A и B</strong> на потолке влево-вправо, а также <strong>узел O</strong> вверх-вниз!</span>
+        <span>Предел прочности нити $T_{\text{макс}} = 120\text{ Н}$ ($g = 10\text{ м/с}^2$)</span>
+      </div>
     </div>
 
-    <!-- Информационная таблица сил и проекций -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      <!-- Блок T1 -->
-      <div class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/60 rounded-xl p-3.5 shadow-sm">
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-bold text-blue-800 dark:text-blue-300">Нить 1 (слева): T₁</span>
-          <span id="badge-t1" class="text-[11px] font-semibold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">Натяжение</span>
-        </div>
-        <div class="text-xl font-extrabold text-blue-600 dark:text-blue-400" id="info-t1-val">34.6 Н</div>
-        <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 space-y-0.5 font-mono">
-          <div>Угол α₁ = <span id="info-a1-deg" class="font-semibold text-slate-700 dark:text-slate-300">45°</span></div>
-          <div>T₁x = <span id="info-t1x">24.5 Н</span>, T₁y = <span id="info-t1y">24.5 Н</span></div>
-        </div>
+    <!-- Блок живых формул (FR-W-5) -->
+    <div class="grid gap-4 md:grid-cols-3">
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="text-xs font-medium uppercase text-slate-500">Левая нить ($T_1$, угол $\alpha_1$)</div>
+        <div id="val-t1" class="mt-1 font-mono text-xl font-bold text-slate-900">0,0 Н</div>
+        <div id="formula-t1" class="mt-1 text-xs text-slate-500 font-mono">T₁·cos(α₁) = 0,0 Н</div>
       </div>
 
-      <!-- Блок T2 -->
-      <div class="bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/60 rounded-xl p-3.5 shadow-sm">
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-bold text-emerald-800 dark:text-emerald-300">Нить 2 (справа): T₂</span>
-          <span id="badge-t2" class="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">Натяжение</span>
-        </div>
-        <div class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400" id="info-t2-val">34.6 Н</div>
-        <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 space-y-0.5 font-mono">
-          <div>Угол α₂ = <span id="info-a2-deg" class="font-semibold text-slate-700 dark:text-slate-300">45°</span></div>
-          <div>T₂x = <span id="info-t2x">24.5 Н</span>, T₂y = <span id="info-t2y">24.5 Н</span></div>
-        </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="text-xs font-medium uppercase text-slate-500">Правая нить ($T_2$, угол $\alpha_2$)</div>
+        <div id="val-t2" class="mt-1 font-mono text-xl font-bold text-slate-900">0,0 Н</div>
+        <div id="formula-t2" class="mt-1 text-xs text-slate-500 font-mono">T₂·cos(α₂) = 0,0 Н</div>
       </div>
 
-      <!-- Блок груза mg -->
-      <div class="bg-white dark:bg-slate-900 border border-red-200 dark:border-red-900/60 rounded-xl p-3.5 shadow-sm">
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-bold text-red-800 dark:text-red-300">Груз: mg</span>
-          <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300">g = 9.8 м/с²</span>
-        </div>
-        <div class="text-xl font-extrabold text-red-600 dark:text-rose-400" id="info-mg-val">49.0 Н</div>
-        <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 space-y-0.5 font-mono">
-          <div>Масса m = <span id="info-m-val" class="font-semibold text-slate-700 dark:text-slate-300">5.0 кг</span></div>
-          <div>ΣFx = 0.00 Н, ΣFy = 0.00 Н</div>
-        </div>
+      <div id="card-balance" class="rounded-xl border p-4 shadow-sm transition-colors">
+        <div class="text-xs font-medium uppercase opacity-75">Баланс по вертикали ($Oy$)</div>
+        <div id="val-vertical" class="mt-1 font-mono text-lg font-bold">T₁sinα₁ + T₂sinα₂ = mg</div>
+        <div id="formula-vertical" class="mt-1 text-xs opacity-85 font-mono">0 + 0 = 0 Н</div>
       </div>
     </div>
 
     <!-- Ползунки управления параметрами -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-4">
-      <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm flex items-center gap-1.5">
-        <span>⚙️</span> <span>Параметры системы:</span>
-      </h3>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Масса груза m -->
-        <div class="space-y-1">
-          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300">
-            <span>Масса груза m:</span>
-            <span id="slider-mass-label" class="font-bold text-blue-600 dark:text-blue-400">5.0 кг</span>
-          </div>
-          <input type="range" id="slider-mass" min="0.5" max="25" step="0.5" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- Крепление левой нити x1 -->
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex justify-between items-center">
+          <label for="slider-x1" class="font-semibold text-slate-800 text-sm">Точка A (левая)</label>
+          <span id="label-x1" class="font-mono font-bold text-blue-600">-0,50 м</span>
         </div>
+        <input id="slider-x1" type="range" min="-0.95" max="-0.10" step="0.05" value="-0.5" class="accent-blue-600 cursor-pointer" />
+      </div>
 
-        <!-- Горизонтальное смещение узла O -->
-        <div class="space-y-1">
-          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300">
-            <span>Смещение узла O (по горизонтали):</span>
-            <span id="slider-knot-label" class="font-bold text-amber-600 dark:text-amber-400">0 мм</span>
-          </div>
-          <input type="range" id="slider-knot" min="-120" max="120" step="5" value="0" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-600" />
+      <!-- Крепление правой нити x2 -->
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex justify-between items-center">
+          <label for="slider-x2" class="font-semibold text-slate-800 text-sm">Точка B (правая)</label>
+          <span id="label-x2" class="font-mono font-bold text-blue-600">0,40 м</span>
         </div>
+        <input id="slider-x2" type="range" min="0.10" max="0.95" step="0.05" value="0.4" class="accent-blue-600 cursor-pointer" />
+      </div>
 
-        <!-- Положение левой опоры x_A -->
-        <div class="space-y-1">
-          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300">
-            <span>Положение точки A (слева):</span>
-            <span id="slider-xa-label" class="font-bold text-blue-600 dark:text-blue-400">x = 200</span>
-          </div>
-          <input type="range" id="slider-xa" min="60" max="320" step="5" value="200" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+      <!-- Провис узла h -->
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex justify-between items-center">
+          <label for="slider-sag" class="font-semibold text-slate-800 text-sm">Провис узла h</label>
+          <span id="label-sag" class="font-mono font-bold text-slate-900">0,45 м</span>
         </div>
+        <input id="slider-sag" type="range" min="0.10" max="0.75" step="0.05" value="0.45" class="accent-slate-700 cursor-pointer" />
+      </div>
 
-        <!-- Положение правой опоры x_B -->
-        <div class="space-y-1">
-          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300">
-            <span>Положение точки B (справа):</span>
-            <span id="slider-xb-label" class="font-bold text-emerald-600 dark:text-emerald-400">x = 500</span>
-          </div>
-          <input type="range" id="slider-xb" min="380" max="640" step="5" value="500" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-600" />
+      <!-- Масса груза m -->
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex justify-between items-center">
+          <label for="slider-mass" class="font-semibold text-slate-800 text-sm">Масса груза m</label>
+          <span id="label-mass" class="font-mono font-bold text-emerald-700">6,0 кг</span>
         </div>
+        <input id="slider-mass" type="range" min="0.5" max="15" step="0.5" value="6" class="accent-emerald-600 cursor-pointer" />
       </div>
     </div>
   </main>
 
-  <script type="module">
-    import { initTheme, toggleTheme } from './assets/js/theme.js';
-    import { initShareButton, formatSI, encodeState, loadStateFromUrl } from './assets/js/widget-utils.js';
-    import { renderJustificationBlock, initJustificationButtons } from './assets/js/justification.js';
-    import { createQuizManager } from './assets/js/quiz-engine.js';
-    import { playSuccessSound } from './assets/js/sound-effects.js';
+  <script>
+    // =========================================================
+    // 1. КОНСТАНТЫ И РАСЧЁТНОЕ ЯДРО (threadsPhysics)
+    // =========================================================
+    const G = 10; // м/с²
+    const MAX_TENSION = 120; // Н (порог прочности нитей для индикации перегрузки)
 
-    // Константы
-    const G = 9.8;
-    const Y_CEILING = 54;
-    const Y_KNOT = 210;
-    const DEFAULT_KNOT_X = 350;
+    const SVG_WIDTH = 700;
+    const CENTER_X = SVG_WIDTH / 2; // x = 0 м (положение узла по горизонтали)
+    const CEILING_Y = 40;
+    const PX_PER_METER = 270; // 1 м = 270 px
 
-    // Состояние виджета
-    const state = {
-      mass: 5.0,
-      xA: 200,
-      xB: 500,
-      knotX: 350,
-      showForces: true,
-      showProjections: true,
-      showValues: true,
-      isBracketMode: false
+    const DEFAULT_STATE = {
+      leftX: -0.55, // координата левого крепления A (м, отрицательная)
+      rightX: 0.35, // координата правого крепления B (м, положительная)
+      sagY: 0.45,   // глубина узла O ниже потолка (м)
+      mass: 6       // масса груза (кг)
     };
 
-    // Загрузка начального состояния из URL
-    const loadedState = loadStateFromUrl();
-    if (loadedState) {
-      if (typeof loadedState.mass === 'number') state.mass = loadedState.mass;
-      if (typeof loadedState.xA === 'number') state.xA = loadedState.xA;
-      if (typeof loadedState.xB === 'number') state.xB = loadedState.xB;
-      if (typeof loadedState.knotX === 'number') state.knotX = loadedState.knotX;
-      if (typeof loadedState.isBracketMode === 'boolean') state.isBracketMode = loadedState.isBracketMode;
+    let state = loadStateFromUrl() || structuredClone(DEFAULT_STATE);
+    let toggles = { showForces: true, showProjections: true, showValues: true };
+
+    function formatSI(value, unit = '', digits = 1) {
+      const str = Number(value).toFixed(digits).replace('.', ',');
+      return unit ? `${str} ${unit}` : str;
     }
 
-    // Рендер блока обоснования
-    const justContainer = document.getElementById('justification-container');
-    if (justContainer) {
-      justContainer.innerHTML = renderJustificationBlock('threads');
-      initJustificationButtons();
+    function computeThreads(st) {
+      const mg = st.mass * G;
+      const distLeftX = Math.abs(st.leftX);
+      const distRightX = Math.abs(st.rightX);
+
+      // Углы нитей с горизонталью (потолком): tan(α1) = h / |x1|, tan(α2) = h / |x2|
+      const alpha1Rad = Math.atan2(st.sagY, distLeftX);
+      const alpha2Rad = Math.atan2(st.sagY, distRightX);
+
+      const alpha1Deg = (alpha1Rad * 180) / Math.PI;
+      const alpha2Deg = (alpha2Rad * 180) / Math.PI;
+
+      // Решение системы:
+      // T1 * cos(a1) = T2 * cos(a2)
+      // T1 * sin(a1) + T2 * sin(a2) = mg
+      const sinSum = Math.max(1e-4, Math.sin(alpha1Rad + alpha2Rad));
+      const t1 = (mg * Math.cos(alpha2Rad)) / sinSum;
+      const t2 = (mg * Math.cos(alpha1Rad)) / sinSum;
+
+      const t1x = t1 * Math.cos(alpha1Rad);
+      const t1y = t1 * Math.sin(alpha1Rad);
+      const t2x = t2 * Math.cos(alpha2Rad);
+      const t2y = t2 * Math.sin(alpha2Rad);
+
+      const isOverloaded = t1 > MAX_TENSION || t2 > MAX_TENSION;
+
+      return {
+        mg,
+        alpha1Rad,
+        alpha2Rad,
+        alpha1Deg,
+        alpha2Deg,
+        t1,
+        t2,
+        t1x,
+        t1y,
+        t2x,
+        t2y,
+        isOverloaded
+      };
     }
 
-    // Инициализация темы
-    initTheme();
-    document.getElementById('btn-theme-toggle')?.addEventListener('click', toggleTheme);
+    // =========================================================
+    // 2. СЕРИАЛИЗАЦИЯ СОСТОЯНИЯ В URL (?state=base64url)
+    // =========================================================
+    function encodeState(st) {
+      const json = JSON.stringify(st);
+      return btoa(encodeURIComponent(json)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
 
-    // Панель испытаний и квиза
-    const quiz = createQuizManager({
-      topicId: 'threads',
-      generateTask: () => {
-        // Случайная задача ЕГЭ №2 или №26
-        const m = [2, 4, 5, 8, 10][Math.floor(Math.random() * 5)];
-        const aDeg = [30, 45, 60][Math.floor(Math.random() * 3)];
-        const aRad = (aDeg * Math.PI) / 180;
-        const target = (m * G) / (2 * Math.sin(aRad));
-        const rounded = Math.round(target * 10) / 10;
-
+    function loadStateFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('state');
+      if (!raw) return null;
+      try {
+        const base64 = raw.replace(/-/g, '+').replace(/_/g, '/');
+        const parsed = JSON.parse(decodeURIComponent(atob(base64)));
+        if (
+          typeof parsed.leftX !== 'number' ||
+          typeof parsed.rightX !== 'number' ||
+          typeof parsed.sagY !== 'number' ||
+          typeof parsed.mass !== 'number'
+        ) return null;
         return {
-          prompt: `Груз массой <b>m = ${m} кг</b> подвешен симметрично на двух одинаковых лёгких нитях, составляющих одинаковые углы <b>α = ${aDeg}°</b> с горизонталью. Определите силу натяжения каждой нити $T$. (Примите $g = 9.8\\text{ м/с}^2$, округлите до десятых).`,
-          answer: rounded,
-          tolerance: 0.3,
-          solution: `<b>Решение:</b><br/>В силу симметрии $T_1 = T_2 = T$. Проекция второго закона Ньютона на вертикальную ось $Oy$:<br/>
-            $2 T \\sin\\alpha - mg = 0 \\implies T = \\frac{mg}{2\\sin\\alpha}$.<br/>
-            Подстановка: $T = \\frac{${m} \\cdot 9.8}{2 \\cdot \\sin(${aDeg}^\\circ)} \\approx ${rounded}\\text{ Н}$.`
+          leftX: Math.max(-0.95, Math.min(-0.1, parsed.leftX)),
+          rightX: Math.max(0.1, Math.min(0.95, parsed.rightX)),
+          sagY: Math.max(0.1, Math.min(0.75, parsed.sagY)),
+          mass: Math.max(0.5, Math.min(15, parsed.mass))
         };
-      },
-      challenges: [
-        {
-          id: 0,
-          title: 'Симметричный подвес (α₁ = α₂)',
-          hint: 'Установите равные углы',
-          isCompleted: (st, comp) => Math.abs(comp.alpha1Deg - comp.alpha2Deg) < 1.0
-        },
-        {
-          id: 1,
-          title: 'Критическое натяжение (T > 2·mg)',
-          hint: 'Уменьшите углы к потолку',
-          isCompleted: (st, comp) => comp.T1 > 2.0 * comp.mg || comp.T2 > 2.0 * comp.mg
-        },
-        {
-          id: 2,
-          title: 'Прямоугольный узел (α₁ + α₂ = 90°)',
-          hint: 'Нити взаимно перпендикулярны',
-          isCompleted: (st, comp) => Math.abs(comp.alpha1Deg + comp.alpha2Deg - 90) < 1.5
+      } catch {
+        return null;
+      }
+    }
+
+    // =========================================================
+    // 3. ОТРИСОВКА SVG-СЦЕНЫ
+    // =========================================================
+    const svgEl = document.getElementById('scene');
+    const sceneContent = document.getElementById('scene-content');
+
+    function forceToPx(f) {
+      if (f < 0.5) return 0;
+      return Math.min(125, 24 + f * 0.65);
+    }
+
+    function renderScene(computed) {
+      const ax = CENTER_X + state.leftX * PX_PER_METER;
+      const ay = CEILING_Y;
+
+      const bx = CENTER_X + state.rightX * PX_PER_METER;
+      const by = CEILING_Y;
+
+      const knotX = CENTER_X;
+      const knotY = CEILING_Y + state.sagY * PX_PER_METER;
+
+      const leftOver = computed.t1 > MAX_TENSION;
+      const rightOver = computed.t2 > MAX_TENSION;
+
+      // Масштаб векторов натяжения вдоль нитей
+      const lenT1 = forceToPx(computed.t1);
+      const lenT2 = forceToPx(computed.t2);
+      const lenMg = forceToPx(computed.mg);
+
+      const t1EndX = knotX - lenT1 * Math.cos(computed.alpha1Rad);
+      const t1EndY = knotY - lenT1 * Math.sin(computed.alpha1Rad);
+
+      const t2EndX = knotX + lenT2 * Math.cos(computed.alpha2Rad);
+      const t2EndY = knotY - lenT2 * Math.sin(computed.alpha2Rad);
+
+      const t1xPx = lenT1 * Math.cos(computed.alpha1Rad);
+      const t1yPx = lenT1 * Math.sin(computed.alpha1Rad);
+      const t2xPx = lenT2 * Math.cos(computed.alpha2Rad);
+      const t2yPx = lenT2 * Math.sin(computed.alpha2Rad);
+
+      // Дуги углов α1 и α2 у потолка и пунктирная горизонталь через узел O
+      const arcR = 42;
+      const a1ArcX = ax + arcR * Math.cos(computed.alpha1Rad);
+      const a1ArcY = ay + arcR * Math.sin(computed.alpha1Rad);
+
+      const a2ArcX = bx - arcR * Math.cos(computed.alpha2Rad);
+      const a2ArcY = by + arcR * Math.sin(computed.alpha2Rad);
+
+      const projectionsSvg = toggles.showProjections ? `
+        <g>
+          <!-- Оси Ox и Oy через узел O -->
+          <line x1="${knotX - 140}" y1="${knotY}" x2="${knotX + 140}" y2="${knotY}"
+                stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 4" />
+          <line x1="${knotX}" y1="${CEILING_Y}" x2="${knotX}" y2="${knotY}"
+                stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 4" />
+
+          <!-- Прямоугольники проекций T1 и T2 -->
+          ${toggles.showForces ? `
+            <line x1="${t1EndX}" y1="${t1EndY}" x2="${knotX - t1xPx}" y2="${knotY}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" />
+            <line x1="${t1EndX}" y1="${t1EndY}" x2="${knotX}" y2="${knotY - t1yPx}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" />
+            <line x1="${t2EndX}" y1="${t2EndY}" x2="${knotX + t2xPx}" y2="${knotY}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" />
+            <line x1="${t2EndX}" y1="${t2EndY}" x2="${knotX}" y2="${knotY - t2yPx}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" />
+
+            <!-- Горизонтальные проекции T1x и T2x (взаимно компенсируются) -->
+            <line x1="${knotX}" y1="${knotY}" x2="${knotX - t1xPx}" y2="${knotY}"
+                  stroke="#64748b" stroke-width="2" stroke-dasharray="4 2" marker-end="url(#arrow-gray)" />
+            <line x1="${knotX}" y1="${knotY}" x2="${knotX + t2xPx}" y2="${knotY}"
+                  stroke="#64748b" stroke-width="2" stroke-dasharray="4 2" marker-end="url(#arrow-gray)" />
+          ` : ''}
+
+          <!-- Дуги углов α1 и α2 у креплений на потолке -->
+          <path d="M ${ax + arcR} ${ay} A ${arcR} ${arcR} 0 0 1 ${a1ArcX} ${a1ArcY}"
+                fill="none" stroke="#475569" stroke-width="2" />
+          <path d="M ${bx - arcR} ${by} A ${arcR} ${arcR} 0 0 0 ${a2ArcX} ${a2ArcY}"
+                fill="none" stroke="#475569" stroke-width="2" />
+
+          ${toggles.showValues ? `
+            <text x="${ax + arcR + 24}" y="${ay + 20}" text-anchor="middle" fill="#334155" font-size="12" font-weight="bold">
+              α₁ = ${formatSI(computed.alpha1Deg, '°', 1)}
+            </text>
+            <text x="${bx - arcR - 24}" y="${by + 20}" text-anchor="middle" fill="#334155" font-size="12" font-weight="bold">
+              α₂ = ${formatSI(computed.alpha2Deg, '°', 1)}
+            </text>
+          ` : ''}
+        </g>
+      ` : '';
+
+      // Цвет нитей в зависимости от нагрузки
+      const getThreadColor = (t) => {
+        if (t > MAX_TENSION) return '#dc2626';
+        if (t > 70) return '#ea580c';
+        return '#334155';
+      };
+      const color1 = getThreadColor(computed.t1);
+      const color2 = getThreadColor(computed.t2);
+
+      // Сами нити OA и OB с реалистичной толщиной
+      const threadsSvg = `
+        <line x1="${knotX}" y1="${knotY}" x2="${ax}" y2="${ay}"
+              stroke="${color1}" stroke-width="${leftOver ? 4 : 2.8}" stroke-linecap="round" />
+        <line x1="${knotX}" y1="${knotY}" x2="${bx}" y2="${by}"
+              stroke="${color2}" stroke-width="${rightOver ? 4 : 2.8}" stroke-linecap="round" />
+      `;
+
+      // Груз на вертикальном подвесе под узлом O с реалистичным металлическим градиентом
+      const boxW = 58;
+      const boxH = 42;
+      const boxTopY = knotY + 26;
+      const loadSvg = `
+        <line x1="${knotX}" y1="${knotY}" x2="${knotX}" y2="${boxTopY}" stroke="#334155" stroke-width="2.5" />
+        <rect x="${knotX - boxW / 2}" y="${boxTopY}" width="${boxW}" height="${boxH}" rx="6"
+              fill="url(#load-grad)" stroke="#1e293b" stroke-width="2" filter="url(#load-shadow)" />
+        <text x="${knotX}" y="${boxTopY + boxH / 2 + 4}" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">
+          ${formatSI(state.mass, 'кг', 1)}
+        </text>
+      `;
+
+      // Векторы сил T1, T2 и mg
+      const forcesSvg = toggles.showForces ? `
+        <g>
+          <!-- Вектор T1 -->
+          <line x1="${knotX}" y1="${knotY}" x2="${t1EndX}" y2="${t1EndY}"
+                stroke="${leftOver ? '#dc2626' : '#2563eb'}" stroke-width="3.2"
+                marker-end="url(#${leftOver ? 'arrow-red' : 'arrow-blue'})" />
+          ${toggles.showValues ? `
+            <rect x="${t1EndX - 72}" y="${t1EndY - 18}" width="68" height="16" rx="3" fill="#ffffff" opacity="0.9" />
+            <text x="${t1EndX - 38}" y="${t1EndY - 6}" text-anchor="middle"
+                  fill="${leftOver ? '#dc2626' : '#1d4ed8'}" font-size="11" font-weight="bold">
+              T₁ = ${formatSI(computed.t1, 'Н', 1)}
+            </text>
+          ` : ''}
+
+          <!-- Вектор T2 -->
+          <line x1="${knotX}" y1="${knotY}" x2="${t2EndX}" y2="${t2EndY}"
+                stroke="${rightOver ? '#dc2626' : '#2563eb'}" stroke-width="3.2"
+                marker-end="url(#${rightOver ? 'arrow-red' : 'arrow-blue'})" />
+          ${toggles.showValues ? `
+            <rect x="${t2EndX + 4}" y="${t2EndY - 18}" width="68" height="16" rx="3" fill="#ffffff" opacity="0.9" />
+            <text x="${t2EndX + 38}" y="${t2EndY - 6}" text-anchor="middle"
+                  fill="${rightOver ? '#dc2626' : '#1d4ed8'}" font-size="11" font-weight="bold">
+              T₂ = ${formatSI(computed.t2, 'Н', 1)}
+            </text>
+          ` : ''}
+
+          <!-- Вектор mg (приложен к узлу вниз) -->
+          <line x1="${knotX}" y1="${knotY}" x2="${knotX}" y2="${knotY + lenMg}"
+                stroke="#2563eb" stroke-width="3.2" marker-end="url(#arrow-blue)" />
+          ${toggles.showValues ? `
+            <rect x="${knotX + 10}" y="${knotY + lenMg - 4}" width="64" height="16" rx="3" fill="#ffffff" opacity="0.9" />
+            <text x="${knotX + 42}" y="${knotY + lenMg + 8}" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="bold">
+              mg = ${formatSI(computed.mg, 'Н', 0)}
+            </text>
+          ` : ''}
+        </g>
+      ` : '';
+
+      // Мини-планшет: замкнутый векторный треугольник сил для задач ЕГЭ (T1 + T2 + mg = 0)
+      const triangleScale = 0.55;
+      const triOriginX = 610;
+      const triOriginY = 85;
+
+      // Вершины векторного треугольника:
+      // O -> mg вниз -> P1 -> T2 вверх/вправо -> P2 -> T1 влево/вверх замыкает в O
+      const pMgY = triOriginY + Math.min(80, computed.mg * triangleScale);
+      const pT2X = triOriginX + computed.t2x * triangleScale;
+      const pT2Y = pMgY - computed.t2y * triangleScale;
+
+      const vectorTriangleSvg = `
+        <g opacity="0.95">
+          <!-- Карточка-подложка -->
+          <rect x="525" y="48" width="165" height="110" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" filter="url(#load-shadow)" />
+          <text x="607" y="63" text-anchor="middle" fill="#334155" font-size="9" font-weight="bold">
+            Векторный треугольник: ΣF⃗ = 0
+          </text>
+          
+          <!-- Вектор mg вниз -->
+          <line x1="${triOriginX}" y1="${triOriginY}" x2="${triOriginX}" y2="${pMgY}"
+                stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)" />
+          <text x="${triOriginX - 6}" y="${(triOriginY + pMgY) / 2}" text-anchor="end" fill="#2563eb" font-size="8.5" font-weight="bold">mg</text>
+
+          <!-- Вектор T2 -->
+          <line x1="${triOriginX}" y1="${pMgY}" x2="${pT2X}" y2="${pT2Y}"
+                stroke="${rightOver ? '#dc2626' : '#059669'}" stroke-width="2.5" marker-end="url(#${rightOver ? 'arrow-red' : 'arrow-green'})" />
+          <text x="${(triOriginX + pT2X) / 2 + 6}" y="${(pMgY + pT2Y) / 2 + 4}" fill="${rightOver ? '#dc2626' : '#059669'}" font-size="8.5" font-weight="bold">T₂</text>
+
+          <!-- Вектор T1 (замыкающий треугольник в точку начала O) -->
+          <line x1="${pT2X}" y1="${pT2Y}" x2="${triOriginX}" y2="${triOriginY}"
+                stroke="${leftOver ? '#dc2626' : '#0284c7'}" stroke-width="2.5" marker-end="url(#${leftOver ? 'arrow-red' : 'arrow-blue'})" />
+          <text x="${(pT2X + triOriginX) / 2}" y="${(pT2Y + triOriginY) / 2 - 4}" text-anchor="middle" fill="${leftOver ? '#dc2626' : '#0284c7'}" font-size="8.5" font-weight="bold">T₁</text>
+        </g>
+      `;
+
+      // Интерактивные точки захвата A, B (на потолке) и O (узел) >= 44x44 px
+      const handlesSvg = `
+        <!-- Левое крепление A -->
+        <g class="cursor-ew-resize" data-drag="left">
+          <circle cx="${ax}" cy="${ay}" r="24" fill="transparent" />
+          <circle cx="${ax}" cy="${ay}" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3" />
+          <text x="${ax}" y="${ay - 12}" text-anchor="middle" fill="#1e293b" font-size="11" font-weight="bold">A</text>
+        </g>
+
+        <!-- Правое крепление B -->
+        <g class="cursor-ew-resize" data-drag="right">
+          <circle cx="${bx}" cy="${by}" r="24" fill="transparent" />
+          <circle cx="${bx}" cy="${by}" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3" />
+          <text x="${bx}" y="${by - 12}" text-anchor="middle" fill="#1e293b" font-size="11" font-weight="bold">B</text>
+        </g>
+
+        <!-- Центральный узел O -->
+        <g class="cursor-ns-resize" data-drag="knot">
+          <circle cx="${knotX}" cy="${knotY}" r="24" fill="transparent" />
+          <circle cx="${knotX}" cy="${knotY}" r="8" fill="${computed.isOverloaded ? '#dc2626' : '#10b981'}" stroke="#ffffff" stroke-width="3" />
+          <circle cx="${knotX}" cy="${knotY}" r="3" fill="#ffffff" />
+        </g>
+      `;
+
+      sceneContent.innerHTML = projectionsSvg + threadsSvg + loadSvg + forcesSvg + vectorTriangleSvg + handlesSvg;
+    }
+
+    // =========================================================
+    // 4. ОБНОВЛЕНИЕ ФОРМУЛ И ПОЛЗУНКОВ
+    // =========================================================
+    function renderUI(computed) {
+      const dot = document.getElementById('status-dot');
+      const text = document.getElementById('status-text');
+
+      dot.className = `inline-block h-3.5 w-3.5 rounded-full ${computed.isOverloaded ? 'bg-red-600' : 'bg-green-600'}`;
+      text.textContent = computed.isOverloaded
+        ? `Перегрузка нити! Натяжение превысило предел прочности (${MAX_TENSION} Н)`
+        : 'Узел в статическом равновесии (ΣFx = 0, ΣFy = 0)';
+
+      document.getElementById('val-t1').textContent = `T₁ = ${formatSI(computed.t1, 'Н', 1)} (α₁ = ${formatSI(computed.alpha1Deg, '°', 1)})`;
+      document.getElementById('formula-t1').textContent =
+        `T₁x = T₁·cos(${formatSI(computed.alpha1Deg, '°', 0)}) = ${formatSI(computed.t1x, 'Н', 1)}`;
+
+      document.getElementById('val-t2').textContent = `T₂ = ${formatSI(computed.t2, 'Н', 1)} (α₂ = ${formatSI(computed.alpha2Deg, '°', 1)})`;
+      document.getElementById('formula-t2').textContent =
+        `T₂x = T₂·cos(${formatSI(computed.alpha2Deg, '°', 0)}) = ${formatSI(computed.t2x, 'Н', 1)}`;
+
+      const cardBalance = document.getElementById('card-balance');
+      cardBalance.className = `rounded-xl border p-4 shadow-sm ${
+        computed.isOverloaded
+          ? 'bg-red-50 border-red-200 text-red-900'
+          : 'bg-green-50 border-green-200 text-green-900'
+      }`;
+      document.getElementById('val-vertical').textContent =
+        `T₁y + T₂y = ${formatSI(computed.mg, 'Н', 0)}`;
+      document.getElementById('formula-vertical').textContent =
+        `${formatSI(computed.t1y, 'Н', 1)} + ${formatSI(computed.t2y, 'Н', 1)} = ${formatSI(computed.mg, 'Н', 1)}`;
+
+      // Подписи и ползунки
+      document.getElementById('label-x1').textContent = formatSI(state.leftX, 'м', 2);
+      document.getElementById('label-x2').textContent = formatSI(state.rightX, 'м', 2);
+      document.getElementById('label-sag').textContent = formatSI(state.sagY, 'м', 2);
+      document.getElementById('label-mass').textContent = formatSI(state.mass, 'кг', 1);
+
+      document.getElementById('slider-x1').value = state.leftX;
+      document.getElementById('slider-x2').value = state.rightX;
+      document.getElementById('slider-sag').value = state.sagY;
+      document.getElementById('slider-mass').value = state.mass;
+    }
+
+    function renderAll() {
+      const computed = computeThreads(state);
+      renderScene(computed);
+      renderUI(computed);
+    }
+
+    // =========================================================
+    // 5. ИНТЕРАКТИВНОСТЬ: DRAG-AND-DROP И СОБЫТИЯ
+    // =========================================================
+    sceneContent.addEventListener('pointerdown', (e) => {
+      const dragNode = e.target.closest('[data-drag]');
+      if (!dragNode) return;
+      e.preventDefault();
+      const dragType = dragNode.dataset.drag;
+
+      const onMove = (ev) => {
+        const rect = svgEl.getBoundingClientRect();
+        const scaleX = SVG_WIDTH / rect.width;
+        const scaleY = 410 / rect.height;
+        const svgX = (ev.clientX - rect.left) * scaleX;
+        const svgY = (ev.clientY - rect.top) * scaleY;
+
+        if (dragType === 'left') {
+          const m = (svgX - CENTER_X) / PX_PER_METER;
+          state.leftX = Math.round(Math.max(-0.95, Math.min(-0.1, m)) * 20) / 20;
+        } else if (dragType === 'right') {
+          const m = (svgX - CENTER_X) / PX_PER_METER;
+          state.rightX = Math.round(Math.max(0.1, Math.min(0.95, m)) * 20) / 20;
+        } else if (dragType === 'knot') {
+          const h = (svgY - CEILING_Y) / PX_PER_METER;
+          state.sagY = Math.round(Math.max(0.1, Math.min(0.75, h)) * 20) / 20;
         }
-      ],
-      onModeChange: (m) => {
-        updateVisuals();
-      },
-      onTaskSolved: () => {
-        playSuccessSound();
+        renderAll();
+      };
+
+      const onUp = () => {
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+      };
+
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+    });
+
+    // Ползунки
+    document.getElementById('slider-x1').addEventListener('input', (e) => {
+      state.leftX = Number(e.target.value);
+      renderAll();
+    });
+    document.getElementById('slider-x2').addEventListener('input', (e) => {
+      state.rightX = Number(e.target.value);
+      renderAll();
+    });
+    document.getElementById('slider-sag').addEventListener('input', (e) => {
+      state.sagY = Number(e.target.value);
+      renderAll();
+    });
+    document.getElementById('slider-mass').addEventListener('input', (e) => {
+      state.mass = Number(e.target.value);
+      renderAll();
+    });
+
+    // Кнопка «Симметрично»
+    document.getElementById('btn-symmetric').addEventListener('click', () => {
+      const avgSpan = Number(((Math.abs(state.leftX) + Math.abs(state.rightX)) / 2).toFixed(2));
+      state.leftX = -avgSpan;
+      state.rightX = avgSpan;
+      renderAll();
+    });
+
+    // Чекбоксы
+    document.getElementById('toggle-forces').addEventListener('change', (e) => {
+      toggles.showForces = e.target.checked;
+      renderAll();
+    });
+    document.getElementById('toggle-projections').addEventListener('change', (e) => {
+      toggles.showProjections = e.target.checked;
+      renderAll();
+    });
+    document.getElementById('toggle-values').addEventListener('change', (e) => {
+      toggles.showValues = e.target.checked;
+      renderAll();
+    });
+
+    // Сброс и Поделиться
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      state = structuredClone(DEFAULT_STATE);
+      window.history.replaceState({}, '', window.location.pathname);
+      renderAll();
+    });
+
+    document.getElementById('btn-share').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      const prev = btn.textContent;
+      const encoded = encodeState(state);
+      const url = `${window.location.origin}${window.location.pathname}?state=${encoded}`;
+      window.history.replaceState({}, '', `?state=${encoded}`);
+      try {
+        await navigator.clipboard.writeText(url);
+        btn.textContent = 'Ссылка скопирована!';
+        setTimeout(() => (btn.textContent = prev), 2000);
+      } catch {
+        prompt('Скопируйте ссылку на состояние:', url);
       }
     });
 
-    quiz.init();
-
-    // DOM Элементы
-    const sliderMass = document.getElementById('slider-mass');
-    const sliderKnot = document.getElementById('slider-knot');
-    const sliderXA = document.getElementById('slider-xa');
-    const sliderXB = document.getElementById('slider-xb');
-
-    const labelMass = document.getElementById('slider-mass-label');
-    const labelKnot = document.getElementById('slider-knot-label');
-    const labelXA = document.getElementById('slider-xa-label');
-    const labelXB = document.getElementById('slider-xb-label');
-
-    const toggleForces = document.getElementById('toggle-forces');
-    const toggleProjections = document.getElementById('toggle-projections');
-    const toggleValues = document.getElementById('toggle-values');
-    const toggleBracket = document.getElementById('toggle-bracket');
-
-    const handleLeft = document.getElementById('handle-left');
-    const handleRight = document.getElementById('handle-right');
-    const handleKnot = document.getElementById('handle-knot');
-
-    // Кнопка «Поделиться»
-    initShareButton(document.getElementById('btn-share'), () => ({
-      mass: state.mass,
-      xA: state.xA,
-      xB: state.xB,
-      knotX: state.knotX,
-      isBracketMode: state.isBracketMode
-    }));
-
-    // Кнопка сброса
-    document.getElementById('btn-reset')?.addEventListener('click', () => {
-      state.mass = 5.0;
-      state.xA = 200;
-      state.xB = 500;
-      state.knotX = DEFAULT_KNOT_X;
-      state.isBracketMode = false;
-      syncInputs();
-      updateVisuals();
-    });
-
-    // Кнопка симметрии
-    document.getElementById('btn-symmetric')?.addEventListener('click', () => {
-      state.knotX = DEFAULT_KNOT_X;
-      state.xA = 200;
-      state.xB = 500;
-      syncInputs();
-      updateVisuals();
-    });
-
-    // Пресеты
+    // Пресеты задач ЕГЭ
     document.querySelectorAll('.preset-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
         const p = btn.dataset.preset;
         if (p === 'chandelier') {
-          state.mass = 6.0;
-          state.knotX = 350;
-          state.xA = 350 - 156 / Math.tan((60 * Math.PI) / 180);
-          state.xB = 350 + 156 / Math.tan((60 * Math.PI) / 180);
-          state.isBracketMode = false;
+          // Симметричный подвес (углы 60°: h / |x| = tan(60°) = 1.732 => x=0.30, h=0.52)
+          state.leftX = -0.30;
+          state.rightX = 0.30;
+          state.sagY = 0.52;
+          state.mass = 6;
         } else if (p === 'pythagoras') {
-          state.mass = 5.0;
-          state.knotX = 350;
-          state.xA = 194;
-          state.xB = 506;
-          state.isBracketMode = false;
-        } else if (p === 'bracket') {
-          state.mass = 4.0;
-          state.knotX = 320;
-          state.xA = 80;
-          state.xB = 520;
-          state.isBracketMode = true;
+          // Прямой угол между нитями
+          state.leftX = -0.40;
+          state.rightX = 0.60;
+          state.sagY = 0.49;
+          state.mass = 5;
         } else if (p === 'danger') {
-          state.mass = 5.0;
-          state.knotX = 350;
-          state.xA = 80;
-          state.xB = 620;
-          state.isBracketMode = false;
+          // Опасное натяжение (тупой угол, почти в горизонталь)
+          state.leftX = -0.75;
+          state.rightX = 0.75;
+          state.sagY = 0.15;
+          state.mass = 5;
         }
-        syncInputs();
-        updateVisuals();
+        renderAll();
       });
     });
 
-    // Синхронизация контролов с состоянием
-    function syncInputs() {
-      sliderMass.value = state.mass;
-      sliderKnot.value = state.knotX - DEFAULT_KNOT_X;
-      sliderXA.value = state.xA;
-      sliderXB.value = state.xB;
-      toggleBracket.checked = state.isBracketMode;
-
-      labelMass.textContent = `${state.mass.toFixed(1)} кг`;
-      labelKnot.textContent = `${state.knotX - DEFAULT_KNOT_X} мм`;
-      labelXA.textContent = `x = ${Math.round(state.xA)}`;
-      labelXB.textContent = `x = ${Math.round(state.xB)}`;
-    }
-
-    // Слушатели слайдеров
-    sliderMass.addEventListener('input', (e) => {
-      state.mass = parseFloat(e.target.value);
-      labelMass.textContent = `${state.mass.toFixed(1)} кг`;
-      updateVisuals();
-    });
-
-    sliderKnot.addEventListener('input', (e) => {
-      state.knotX = DEFAULT_KNOT_X + parseInt(e.target.value, 10);
-      labelKnot.textContent = `${e.target.value} мм`;
-      updateVisuals();
-    });
-
-    sliderXA.addEventListener('input', (e) => {
-      state.xA = parseInt(e.target.value, 10);
-      labelXA.textContent = `x = ${state.xA}`;
-      updateVisuals();
-    });
-
-    sliderXB.addEventListener('input', (e) => {
-      state.xB = parseInt(e.target.value, 10);
-      labelXB.textContent = `x = ${state.xB}`;
-      updateVisuals();
-    });
-
-    // Чекбоксы
-    toggleForces.addEventListener('change', (e) => {
-      state.showForces = e.target.checked;
-      updateVisuals();
-    });
-    toggleProjections.addEventListener('change', (e) => {
-      state.showProjections = e.target.checked;
-      updateVisuals();
-    });
-    toggleValues.addEventListener('change', (e) => {
-      state.showValues = e.target.checked;
-      updateVisuals();
-    });
-    toggleBracket.addEventListener('change', (e) => {
-      state.isBracketMode = e.target.checked;
-      updateVisuals();
-    });
-
-    // Pure расчёт физики
-    function computeThreads(st) {
-      const dx1 = Math.max(10, st.knotX - st.xA);
-      const dx2 = Math.max(10, st.xB - st.knotX);
-      const dy = Y_KNOT - Y_CEILING; // 156 px
-
-      const alpha1Rad = Math.atan2(dy, dx1);
-      const alpha2Rad = Math.atan2(dy, dx2);
-      const alpha1Deg = (alpha1Rad * 180) / Math.PI;
-      const alpha2Deg = (alpha2Rad * 180) / Math.PI;
-
-      const mg = st.mass * G;
-      const denom = Math.sin(alpha1Rad + alpha2Rad);
-
-      let T1 = 0;
-      let T2 = 0;
-      if (denom > 1e-4) {
-        T1 = (mg * Math.cos(alpha2Rad)) / denom;
-        T2 = (mg * Math.cos(alpha1Rad)) / denom;
-      }
-
-      const T1x = T1 * Math.cos(alpha1Rad);
-      const T1y = T1 * Math.sin(alpha1Rad);
-      const T2x = T2 * Math.cos(alpha2Rad);
-      const T2y = T2 * Math.sin(alpha2Rad);
-
-      return {
-        dx1, dx2, dy,
-        alpha1Rad, alpha2Rad,
-        alpha1Deg, alpha2Deg,
-        mg,
-        T1, T2,
-        T1x, T1y,
-        T2x, T2y
-      };
-    }
-
-    // Отрисовка
-    function updateVisuals() {
-      const comp = computeThreads(state);
-
-      // Проверка испытаний
-      quiz.checkChallenges(state, comp);
-
-      const isMasked = quiz.isQuiz();
-
-      // Обновление ручек
-      document.getElementById('vis-handle-left').setAttribute('cx', state.xA);
-      document.getElementById('vis-handle-right').setAttribute('cx', state.xB);
-      document.getElementById('vis-handle-knot').setAttribute('cx', state.knotX);
-
-      handleLeft.querySelector('text').setAttribute('x', state.xA);
-      handleRight.querySelector('text').setAttribute('x', state.xB);
-      handleKnot.querySelector('text').setAttribute('x', state.knotX);
-
-      // Нити
-      const tLeft = document.getElementById('thread-left');
-      const tRight = document.getElementById('thread-right');
-      const tVert = document.getElementById('thread-vertical');
-
-      tLeft.setAttribute('x1', state.xA);
-      tLeft.setAttribute('y1', Y_CEILING);
-      tLeft.setAttribute('x2', state.knotX);
-      tLeft.setAttribute('y2', Y_KNOT);
-
-      tRight.setAttribute('x1', state.xB);
-      tRight.setAttribute('y1', Y_CEILING);
-      tRight.setAttribute('x2', state.knotX);
-      tRight.setAttribute('y2', Y_KNOT);
-
-      tVert.setAttribute('x1', state.knotX);
-      tVert.setAttribute('y1', Y_KNOT);
-      tVert.setAttribute('x2', state.knotX);
-      tVert.setAttribute('y2', Y_KNOT + 70);
-
-      // Кронштейн стиль: если распорка, левая нить выглядит как жёсткий стержень
-      if (state.isBracketMode) {
-        tLeft.setAttribute('stroke-width', '6');
-        tLeft.setAttribute('stroke', '#475569');
-        document.getElementById('bracket-wall-group').classList.remove('hidden');
-      } else {
-        tLeft.setAttribute('stroke-width', '3');
-        tLeft.setAttribute('stroke', '#334155');
-        document.getElementById('bracket-wall-group').classList.add('hidden');
-      }
-
-      // Груз
-      const weightGroup = document.getElementById('weight-group');
-      weightGroup.setAttribute('transform', `translate(${state.knotX - 30}, ${Y_KNOT + 70})`);
-      document.getElementById('weight-label').textContent = `${state.mass.toFixed(1)} кг`;
-
-      // Горизонтальная линия узла
-      document.getElementById('knot-horizontal-line').setAttribute('y1', Y_KNOT);
-      document.getElementById('knot-horizontal-line').setAttribute('y2', Y_KNOT);
-
-      // Векторы сил
-      const forcesGroup = document.getElementById('forces-group');
-      forcesGroup.style.display = state.showForces ? 'inline' : 'none';
-
-      const scale = 2.0; // масштаб векторов: 1 Н = 2 px
-      const len1 = Math.min(160, comp.T1 * scale);
-      const len2 = Math.min(160, comp.T2 * scale);
-      const lenG = Math.min(160, comp.mg * scale);
-
-      const vT1 = document.getElementById('vec-t1');
-      const vT1Lab = document.getElementById('vec-t1-label');
-      const x1End = state.knotX - len1 * Math.cos(comp.alpha1Rad);
-      const y1End = Y_KNOT - len1 * Math.sin(comp.alpha1Rad);
-      vT1.setAttribute('x1', state.knotX);
-      vT1.setAttribute('y1', Y_KNOT);
-      vT1.setAttribute('x2', x1End);
-      vT1.setAttribute('y2', y1End);
-      vT1Lab.setAttribute('x', x1End - 20);
-      vT1Lab.setAttribute('y', y1End - 8);
-      vT1Lab.textContent = isMasked ? 'T₁ = ? Н' : (state.showValues ? `T₁ = ${comp.T1.toFixed(1)} Н` : 'T₁');
-
-      const vT2 = document.getElementById('vec-t2');
-      const vT2Lab = document.getElementById('vec-t2-label');
-      const x2End = state.knotX + len2 * Math.cos(comp.alpha2Rad);
-      const y2End = Y_KNOT - len2 * Math.sin(comp.alpha2Rad);
-      vT2.setAttribute('x1', state.knotX);
-      vT2.setAttribute('y1', Y_KNOT);
-      vT2.setAttribute('x2', x2End);
-      vT2.setAttribute('y2', y2End);
-      vT2Lab.setAttribute('x', x2End + 5);
-      vT2Lab.setAttribute('y', y2End - 8);
-      vT2Lab.textContent = isMasked ? 'T₂ = ? Н' : (state.showValues ? `T₂ = ${comp.T2.toFixed(1)} Н` : 'T₂');
-
-      const vMg = document.getElementById('vec-mg');
-      const vMgLab = document.getElementById('vec-mg-label');
-      vMg.setAttribute('x1', state.knotX);
-      vMg.setAttribute('y1', Y_KNOT);
-      vMg.setAttribute('x2', state.knotX);
-      vMg.setAttribute('y2', Y_KNOT + lenG);
-      vMgLab.setAttribute('x', state.knotX + 10);
-      vMgLab.setAttribute('y', Y_KNOT + lenG + 15);
-      vMgLab.textContent = state.showValues ? `mg = ${comp.mg.toFixed(1)} Н` : 'mg';
-
-      // Проекции
-      const projGroup = document.getElementById('projections-group');
-      projGroup.style.display = state.showProjections ? 'inline' : 'none';
-      if (state.showProjections) {
-        const pt1x = document.getElementById('proj-t1-x');
-        const pt1y = document.getElementById('proj-t1-y');
-        const pt2x = document.getElementById('proj-t2-x');
-        const pt2y = document.getElementById('proj-t2-y');
-
-        pt1x.setAttribute('x1', state.knotX);
-        pt1x.setAttribute('y1', Y_KNOT);
-        pt1x.setAttribute('x2', x1End);
-        pt1x.setAttribute('y2', Y_KNOT);
-
-        pt1y.setAttribute('x1', x1End);
-        pt1y.setAttribute('y1', Y_KNOT);
-        pt1y.setAttribute('x2', x1End);
-        pt1y.setAttribute('y2', y1End);
-
-        pt2x.setAttribute('x1', state.knotX);
-        pt2x.setAttribute('y1', Y_KNOT);
-        pt2x.setAttribute('x2', x2End);
-        pt2x.setAttribute('y2', Y_KNOT);
-
-        pt2y.setAttribute('x1', x2End);
-        pt2y.setAttribute('y1', Y_KNOT);
-        pt2y.setAttribute('x2', x2End);
-        pt2y.setAttribute('y2', y2End);
-      }
-
-      // Дуги углов
-      const rArc = 36;
-      const arc1 = document.getElementById('arc-alpha1');
-      const lAlpha1 = document.getElementById('label-alpha1');
-      const arc2 = document.getElementById('arc-alpha2');
-      const lAlpha2 = document.getElementById('label-alpha2');
-
-      const a1X = state.knotX - rArc * Math.cos(comp.alpha1Rad);
-      const a1Y = Y_KNOT - rArc * Math.sin(comp.alpha1Rad);
-      arc1.setAttribute('d', `M ${state.knotX - rArc} ${Y_KNOT} A ${rArc} ${rArc} 0 0 1 ${a1X} ${a1Y} L ${state.knotX} ${Y_KNOT} Z`);
-      lAlpha1.setAttribute('x', state.knotX - rArc - 15);
-      lAlpha1.setAttribute('y', Y_KNOT - 8);
-      lAlpha1.textContent = `${Math.round(comp.alpha1Deg)}°`;
-
-      const a2X = state.knotX + rArc * Math.cos(comp.alpha2Rad);
-      const a2Y = Y_KNOT - rArc * Math.sin(comp.alpha2Rad);
-      arc2.setAttribute('d', `M ${state.knotX + rArc} ${Y_KNOT} A ${rArc} ${rArc} 0 0 0 ${a2X} ${a2Y} L ${state.knotX} ${Y_KNOT} Z`);
-      lAlpha2.setAttribute('x', state.knotX + rArc + 6);
-      lAlpha2.setAttribute('y', Y_KNOT - 8);
-      lAlpha2.textContent = `${Math.round(comp.alpha2Deg)}°`;
-
-      // Мини-векторный замкнутый треугольник
-      const triScale = 1.1;
-      const triMg = Math.min(100, comp.mg * triScale);
-      const triT1 = Math.min(100, comp.T1 * triScale);
-      const triT2 = Math.min(100, comp.T2 * triScale);
-
-      const oX = 82;
-      const oY = 40;
-      // mg вертикально вниз
-      const mgX2 = oX;
-      const mgY2 = oY + triMg;
-
-      // из конца mg идёт T1: против угла comp.alpha1Rad
-      const t1X2 = mgX2 - triT1 * Math.cos(comp.alpha1Rad);
-      const t1Y2 = mgY2 - triT1 * Math.sin(comp.alpha1Rad);
-
-      const triVMg = document.getElementById('tri-vec-mg');
-      triVMg.setAttribute('x1', oX);
-      triVMg.setAttribute('y1', oY);
-      triVMg.setAttribute('x2', mgX2);
-      triVMg.setAttribute('y2', mgY2);
-
-      const triVT1 = document.getElementById('tri-vec-t1');
-      triVT1.setAttribute('x1', mgX2);
-      triVT1.setAttribute('y1', mgY2);
-      triVT1.setAttribute('x2', t1X2);
-      triVT1.setAttribute('y2', t1Y2);
-
-      const triVT2 = document.getElementById('tri-vec-t2');
-      triVT2.setAttribute('x1', t1X2);
-      triVT2.setAttribute('y1', t1Y2);
-      triVT2.setAttribute('x2', oX);
-      triVT2.setAttribute('y2', oY);
-
-      // Информационные карточки
-      document.getElementById('info-t1-val').textContent = isMasked ? '? Н' : `${comp.T1.toFixed(1)} Н`;
-      document.getElementById('info-t2-val').textContent = isMasked ? '? Н' : `${comp.T2.toFixed(1)} Н`;
-      document.getElementById('info-mg-val').textContent = `${comp.mg.toFixed(1)} Н`;
-
-      document.getElementById('info-a1-deg').textContent = `${Math.round(comp.alpha1Deg)}°`;
-      document.getElementById('info-a2-deg').textContent = `${Math.round(comp.alpha2Deg)}°`;
-      document.getElementById('info-m-val').textContent = `${state.mass.toFixed(1)} кг`;
-
-      document.getElementById('info-t1x').textContent = `${comp.T1x.toFixed(1)} Н`;
-      document.getElementById('info-t1y').textContent = `${comp.T1y.toFixed(1)} Н`;
-      document.getElementById('info-t2x').textContent = `${comp.T2x.toFixed(1)} Н`;
-      document.getElementById('info-t2y').textContent = `${comp.T2y.toFixed(1)} Н`;
-
-      // Статус равновесия
-      const isEquil = Math.abs(comp.T1x - comp.T2x) < 0.1 && Math.abs(comp.T1y + comp.T2y - comp.mg) < 0.1;
-      const statusDot = document.getElementById('status-dot');
-      const statusText = document.getElementById('status-text');
-      if (isEquil) {
-        statusDot.className = 'inline-block h-3.5 w-3.5 rounded-full bg-green-600 animate-pulse';
-        statusText.textContent = `Узел в равновесии (ΣFx = 0.0 Н, ΣFy = 0.0 Н)`;
-      } else {
-        statusDot.className = 'inline-block h-3.5 w-3.5 rounded-full bg-red-600';
-        statusText.textContent = 'Равновесие нарушено';
-      }
-    }
-
-    // Drag and Drop ручек
-    let activeDrag = null;
-    const svg = document.getElementById('scene-svg');
-
-    function getSvgCoords(e) {
-      const pt = svg.createSVGPoint();
-      pt.x = e.clientX;
-      pt.y = e.clientY;
-      return pt.matrixTransform(svg.getScreenCTM().inverse());
-    }
-
-    function onPointerDown(target, e) {
-      activeDrag = target;
-      e.target.setPointerCapture?.(e.pointerId);
-    }
-
-    handleLeft.addEventListener('pointerdown', (e) => onPointerDown('left', e));
-    handleRight.addEventListener('pointerdown', (e) => onPointerDown('right', e));
-    handleKnot.addEventListener('pointerdown', (e) => onPointerDown('knot', e));
-
-    window.addEventListener('pointermove', (e) => {
-      if (!activeDrag) return;
-      const coords = getSvgCoords(e);
-      if (activeDrag === 'left') {
-        state.xA = Math.max(60, Math.min(state.knotX - 30, coords.x));
-      } else if (activeDrag === 'right') {
-        state.xB = Math.max(state.knotX + 30, Math.min(640, coords.x));
-      } else if (activeDrag === 'knot') {
-        state.knotX = Math.max(state.xA + 30, Math.min(state.xB - 30, coords.x));
-      }
-      syncInputs();
-      updateVisuals();
-    });
-
-    window.addEventListener('pointerup', () => {
-      activeDrag = null;
-    });
-
-    // Слушатель смены темы для перерисовки SVG при необходимости
-    window.addEventListener('themechanged', () => {
-      updateVisuals();
-    });
-
-    // Начальный запуск
-    syncInputs();
-    updateVisuals();
+    // Запуск
+    renderAll();
   </script>
 </body>
 </html>
