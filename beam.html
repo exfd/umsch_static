@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Статика ЕГЭ 2027 — Балка на двух опорах и выбор оси вращения</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {} }
+    };
+  </script>
+  <!-- KaTeX для формул -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
+  <style>
+    #beam-assembly {
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .dragging #beam-assembly {
+      transition: transform 0.05s linear;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-6 px-4 transition-colors duration-200">
+
+  <main class="max-w-4xl mx-auto flex flex-col gap-5">
+    <!-- Навигация между HTML-файлами -->
+    <nav class="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 overflow-x-auto pb-1">
+      <a href="index.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition flex items-center gap-1 shadow-xs">
+        <span>🏠</span> <span>Все темы</span>
+      </a>
+      <a href="lever.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">1. Рычаг</a>
+      <a href="pulleys.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">2. Блоки</a>
+      <a href="inclined-plane.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">3. Плоскость</a>
+      <a href="threads.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">4. Нити</a>
+      <a href="beam.html" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white shadow-sm font-semibold">5. Балка</a>
+      <a href="ladder.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">6. Лестница (№26)</a>
+    </nav>
+
+    <!-- Шапка -->
+    <header class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Топик 5 • Статика ЕГЭ</span>
+          <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-medium">Версия 2.0</span>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Балка на двух опорах и выбор оси вращения</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-theme-toggle" class="p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition text-base" title="Переключить тему">
+          🌙
+        </button>
+        <button id="btn-reset" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition">
+          Сброс
+        </button>
+        <button id="btn-share" class="rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-blue-700 active:scale-95 transition shadow-xs">
+          Поделиться
+        </button>
+      </div>
+    </header>
+
+    <!-- Переключатель режима: Песочница / Задача ЕГЭ -->
+    <div class="flex items-center justify-between bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Режим:</span>
+        <div class="inline-flex rounded-lg bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700">
+          <button id="btn-mode-sandbox" class="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs shadow-sm transition">
+            🔬 Песочница
+          </button>
+          <button id="btn-mode-quiz" class="px-3.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-300 font-medium text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+            🎯 Задача ЕГЭ
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-slate-500 dark:text-slate-400">Испытания:</span>
+        <span id="challenges-counter" class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">0/3</span>
+      </div>
+    </div>
+
+    <!-- Карточка задачи ЕГЭ -->
+    <div id="quiz-card" class="hidden bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950/40 border border-blue-200 dark:border-indigo-900/60 rounded-xl p-4 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-bold text-blue-900 dark:text-blue-300">🎯 Задание ЕГЭ (реакции опор балки):</span>
+        </div>
+        <button id="btn-quiz-new" class="text-xs px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-slate-700 transition">
+          🔄 Новые данные
+        </button>
+      </div>
+      <div id="quiz-prompt" class="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium"></div>
+      <div class="flex flex-wrap items-center gap-3 pt-1">
+        <div class="relative flex items-center">
+          <input type="text" id="quiz-input" placeholder="Введите ответ (Н)" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 outline-hidden w-44" />
+          <span class="ml-2 text-xs text-slate-500 dark:text-slate-400">Н</span>
+        </div>
+        <button id="btn-quiz-check" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs active:scale-95 transition">
+          Проверить ответ
+        </button>
+        <button id="btn-quiz-solution" class="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 text-xs font-medium transition">
+          Показать подсказку/решение
+        </button>
+      </div>
+      <div id="quiz-feedback"></div>
+      <div id="quiz-solution-text" class="hidden mt-2 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 space-y-1"></div>
+    </div>
+
+    <!-- Краткая теория -->
+    <details class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-3 shadow-sm">
+      <summary class="cursor-pointer font-semibold text-slate-800 dark:text-slate-200 select-none">
+        📖 Краткая теория: как выбирать ось вращения при составлении уравнения моментов
+      </summary>
+      <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300 space-y-2 leading-relaxed">
+        <p>
+          В статике абсолютно твёрдого тела ось вращения можно выбирать <strong>через любую точку плоскости</strong>: сумма моментов сил относительно любой неподвижной оси равна нулю ($\sum M = 0$).
+        </p>
+        <p>
+          <strong>Стратегический приём ЕГЭ №26:</strong> выбирайте ось через точку приложения <em>неизвестной</em> силы (например, опору A). Тогда плечо реакции $R_1$ равно нулю ($M(R_1) = 0$), и уравнение содержит только одну неизвестную величину $R_2$!
+        </p>
+      </div>
+    </details>
+
+    <!-- Шаблон обоснования №26 (Критерии ФИПИ) -->
+    <div id="justification-container"></div>
+
+    <!-- Выбор оси вращения (Новая фича ТЗ v2.0) -->
+    <div class="rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/60 dark:bg-slate-900/70 p-4 shadow-sm space-y-2.5">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="font-bold text-indigo-950 dark:text-indigo-300 text-xs uppercase tracking-wider flex items-center gap-1.5">
+          <span>🎯</span> <span>Ось вращения для правила моментов:</span>
+        </span>
+        <span class="text-[11px] text-slate-500 dark:text-slate-400">Плечи $d$ пересчитываются от выбранной оси</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+        <button data-axis="supportA" class="axis-btn py-2 px-3 rounded-lg border font-medium transition bg-blue-600 text-white shadow-xs">
+          📍 Опора A (x_A)
+        </button>
+        <button data-axis="supportB" class="axis-btn py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium transition">
+          📍 Опора B (x_B)
+        </button>
+        <button data-axis="centerC" class="axis-btn py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium transition">
+          ⚖️ Центр балки C (L/2)
+        </button>
+        <button data-axis="loadD" class="axis-btn py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium transition">
+          📦 Под грузом (x_гр)
+        </button>
+      </div>
+
+      <!-- Живое уравнение моментов -->
+      <div class="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-indigo-100 dark:border-indigo-900/40 text-xs text-indigo-900 dark:text-indigo-200 font-mono" id="equation-display">
+        $$\sum M_A = R_2 \cdot (x_B - x_A) - mg(x_{\text{гр}} - x_A) - M_{\text{б}}g(x_C - x_A) = 0$$
+      </div>
+    </div>
+
+    <!-- Панель статуса и чекбоксов -->
+    <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+      <div class="flex items-center gap-2.5">
+        <span id="status-dot" class="inline-block h-3.5 w-3.5 rounded-full bg-green-600"></span>
+        <span id="status-text" class="font-semibold text-slate-800 dark:text-slate-200 text-sm sm:text-base" role="status" aria-live="polite">Проверка...</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4 text-sm text-slate-700 dark:text-slate-300">
+        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+          <input type="checkbox" id="toggle-forces" checked class="accent-blue-600" /> Силы ($R_1, R_2, mg$)
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+          <input type="checkbox" id="toggle-arms" checked class="accent-blue-600" /> Плечи сил от оси
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+          <input type="checkbox" id="toggle-values" checked class="accent-blue-600" /> Числа
+        </label>
+      </div>
+
+      <button id="btn-equalize" class="rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-emerald-700 active:scale-95 transition shadow-xs flex items-center gap-1.5">
+        <span>⚖️</span> <span>Поровну (R₁ = R₂)</span>
+      </button>
+    </div>
+
+    <!-- Быстрые пресеты задач ЕГЭ -->
+    <div class="flex flex-wrap items-center gap-2 bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-slate-900 dark:to-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/60 rounded-xl px-4 py-2.5 text-xs text-slate-700 dark:text-slate-300">
+      <span class="font-bold text-emerald-950 dark:text-emerald-300 flex items-center gap-1">🎯 Пресеты ЕГЭ:</span>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="bridge">
+        🌉 Симметричный мост (R₁ = R₂)
+      </button>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="crane">
+        🏗️ Кран с вылетом стрелы (консоль)
+      </button>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="tipping">
+        ⚠️ На грани отрыва от опоры A
+      </button>
+    </div>
+
+    <!-- Панель испытаний темы -->
+    <div class="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-slate-900/50 p-3.5 space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-amber-950 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+          <span>🏆</span> <span>Испытания темы: Балка и опоры</span>
+        </span>
+        <span class="text-[11px] text-slate-500 dark:text-slate-400">Выполняйте условия в песочнице</span>
+      </div>
+      <div id="challenges-list" class="grid grid-cols-1 md:grid-cols-3 gap-2"></div>
+    </div>
+
+    <!-- Основной интерактивный холст SVG -->
+    <div class="relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 shadow-sm overflow-hidden">
+      <div class="text-[11px] font-medium text-slate-600 dark:text-slate-400 flex items-center justify-between mb-2">
+        <span class="flex items-center gap-1">
+          <span>👆</span> <span>Перетаскивайте опоры A, B и подвешенный груз</span>
+        </span>
+        <span id="canvas-status-badge" class="font-bold text-emerald-600 dark:text-emerald-400">● Балка в равновесии</span>
+      </div>
+
+      <svg id="scene" viewBox="0 0 700 380" class="w-full h-auto select-none rounded-lg bg-slate-50/60 dark:bg-slate-950/70 border border-slate-100 dark:border-slate-800/80 cursor-default">
+        <defs>
+          <pattern id="grid-pattern" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" class="text-slate-200 dark:text-slate-800/60" stroke-width="0.75" />
+          </pattern>
+          <marker id="arrow-up-blue" viewBox="0 0 10 10" refX="5" refY="0" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 1 10 L 5 0 L 9 10 z" fill="#2563eb" />
+          </marker>
+          <marker id="arrow-up-teal" viewBox="0 0 10 10" refX="5" refY="0" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 1 10 L 5 0 L 9 10 z" fill="#0d9488" />
+          </marker>
+          <marker id="arrow-down-red" viewBox="0 0 10 10" refX="5" refY="10" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 1 0 L 5 10 L 9 0 z" fill="#dc2626" />
+          </marker>
+          <marker id="arrow-down-amber" viewBox="0 0 10 10" refX="5" refY="10" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 1 0 L 5 10 L 9 0 z" fill="#d97706" />
+          </marker>
+        </defs>
+
+        <!-- Фоновая сетка -->
+        <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+
+        <!-- Пол / основание под опорами -->
+        <line x1="60" y1="280" x2="640" y2="280" stroke="#94a3b8" stroke-width="2.5" class="dark:stroke-slate-700" />
+
+        <!-- Слой плеч сил от выбранной оси -->
+        <g id="arms-layer"></g>
+
+        <!-- Опоры A и B (на полу) -->
+        <!-- Опора A -->
+        <g id="support-a-group" class="cursor-ew-resize">
+          <circle id="support-a-hitbox" cx="142" cy="250" r="24" fill="transparent" />
+          <polygon id="support-a-tri" points="142,220 122,280 162,280" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2.5" class="shadow-md" />
+          <circle id="support-a-pivot" cx="142" cy="220" r="4.5" fill="#ffffff" stroke="#1d4ed8" stroke-width="2.5" />
+          <text id="support-a-label" x="142" y="296" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af" class="dark:fill-blue-400">Опора A</text>
+        </g>
+
+        <!-- Опора B -->
+        <g id="support-b-group" class="cursor-ew-resize">
+          <circle id="support-b-hitbox" cx="558" cy="250" r="24" fill="transparent" />
+          <polygon id="support-b-tri" points="558,220 538,280 578,280" fill="#0d9488" stroke="#0f766e" stroke-width="2.5" class="shadow-md" />
+          <circle id="support-b-pivot" cx="558" cy="220" r="4.5" fill="#ffffff" stroke="#0f766e" stroke-width="2.5" />
+          <text id="support-b-label" x="558" y="296" text-anchor="middle" font-size="11" font-weight="bold" fill="#115e59" class="dark:fill-teal-400">Опора B</text>
+        </g>
+
+        <!-- Вращающаяся балка при опрокидывании -->
+        <g id="beam-assembly" transform="rotate(0 142 220)">
+          <!-- Тело балки -->
+          <rect id="beam-body" x="90" y="206" width="520" height="14" rx="3" fill="#64748b" stroke="#334155" stroke-width="2" class="dark:fill-slate-700 dark:stroke-slate-400 shadow-sm" />
+
+          <!-- Центр балки C -->
+          <circle cx="350" cy="213" r="4" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5" />
+          <text x="350" y="200" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309" class="dark:fill-amber-400">C (центр)</text>
+
+          <!-- Деления шкалы -->
+          <g id="beam-ticks"></g>
+
+          <!-- Груз на балке -->
+          <g id="load-group" class="cursor-ew-resize">
+            <line id="load-rope" x1="246" y1="220" x2="246" y2="255" stroke="#334155" stroke-width="2" class="dark:stroke-slate-300" />
+            <circle id="load-hitbox" cx="246" cy="265" r="24" fill="transparent" />
+            <rect id="load-body" x="221" y="255" width="50" height="42" rx="4" fill="#94a3b8" stroke="#475569" stroke-width="2" class="dark:fill-slate-800 dark:stroke-slate-500 shadow-md" />
+            <circle cx="246" cy="252" r="4" fill="none" stroke="#475569" stroke-width="1.5" />
+            <text id="load-mass-text" x="246" y="280" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a" class="dark:fill-slate-100">6.0 кг</text>
+          </g>
+
+          <!-- Векторы сил -->
+          <g id="forces-layer">
+            <!-- Реакция R1 -->
+            <line id="vec-r1" x1="142" y1="206" x2="142" y2="135" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow-up-blue)" />
+            <text id="label-r1" x="142" y="125" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">R₁</text>
+
+            <!-- Реакция R2 -->
+            <line id="vec-r2" x1="558" y1="206" x2="558" y2="135" stroke="#0d9488" stroke-width="3" marker-end="url(#arrow-up-teal)" />
+            <text id="label-r2" x="558" y="125" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f766e" class="dark:fill-teal-400">R₂</text>
+
+            <!-- Вес груза mg -->
+            <line id="vec-mg" x1="246" y1="297" x2="246" y2="355" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow-down-red)" />
+            <text id="label-mg" x="246" y="370" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c" class="dark:fill-rose-400">mg</text>
+
+            <!-- Вес балки Mб·g (из центра C) -->
+            <line id="vec-mbeam" x1="350" y1="220" x2="350" y2="265" stroke="#d97706" stroke-width="2.5" marker-end="url(#arrow-down-amber)" />
+            <text id="label-mbeam" x="350" y="278" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309" class="dark:fill-amber-400">Mб·g</text>
+          </g>
+
+          <!-- Маркер выбранной оси вращения -->
+          <g id="axis-marker" transform="translate(142, 213)">
+            <circle r="9" fill="none" stroke="#f59e0b" stroke-width="2.5" class="animate-pulse" />
+            <circle r="3" fill="#f59e0b" />
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Информационная таблица сил -->
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+      <div class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/60 rounded-xl p-3 shadow-sm">
+        <span class="text-xs font-bold text-blue-800 dark:text-blue-300 block mb-0.5">Реакция опоры A (R₁)</span>
+        <div class="text-xl font-extrabold text-blue-600 dark:text-blue-400" id="info-r1-val">49.0 Н</div>
+        <span class="text-[11px] text-slate-500 font-mono" id="info-r1-sub">Опора держит</span>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 border border-teal-200 dark:border-teal-900/60 rounded-xl p-3 shadow-sm">
+        <span class="text-xs font-bold text-teal-800 dark:text-teal-300 block mb-0.5">Реакция опоры B (R₂)</span>
+        <div class="text-xl font-extrabold text-teal-600 dark:text-teal-400" id="info-r2-val">29.4 Н</div>
+        <span class="text-[11px] text-slate-500 font-mono" id="info-r2-sub">Опора держит</span>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 border border-red-200 dark:border-red-900/60 rounded-xl p-3 shadow-sm">
+        <span class="text-xs font-bold text-red-800 dark:text-red-300 block mb-0.5">Сила тяжести груза mg</span>
+        <div class="text-xl font-extrabold text-red-600 dark:text-rose-400" id="info-mg-val">58.8 Н</div>
+        <span class="text-[11px] text-slate-500 font-mono">m = 6.0 кг</span>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/60 rounded-xl p-3 shadow-sm">
+        <span class="text-xs font-bold text-amber-800 dark:text-amber-300 block mb-0.5">Вес самой балки Mб·g</span>
+        <div class="text-xl font-extrabold text-amber-600 dark:text-amber-400" id="info-mbeam-val">19.6 Н</div>
+        <span class="text-[11px] text-slate-500 font-mono">Mб = 2.0 кг</span>
+      </div>
+    </div>
+
+    <!-- Ползунки управления -->
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-4">
+      <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm flex items-center gap-1.5">
+        <span>⚙️</span> <span>Параметры балки и нагрузок:</span>
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <span>Положение опоры A:</span>
+            <span id="label-xa" class="font-bold text-blue-600 dark:text-blue-400">0.20 м</span>
+          </div>
+          <input type="range" id="slider-xa" min="0.0" max="0.80" step="0.05" value="0.20" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <span>Положение опоры B:</span>
+            <span id="label-xb" class="font-bold text-teal-600 dark:text-teal-400">1.80 м</span>
+          </div>
+          <input type="range" id="slider-xb" min="1.20" max="2.0" step="0.05" value="1.80" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-teal-600" />
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <span>Положение груза:</span>
+            <span id="label-xload" class="font-bold text-red-600 dark:text-rose-400">0.60 м</span>
+          </div>
+          <input type="range" id="slider-xload" min="0.0" max="2.0" step="0.05" value="0.60" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-red-600" />
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <span>Масса груза m:</span>
+            <span id="label-mass" class="font-bold text-slate-700 dark:text-slate-300">6.0 кг</span>
+          </div>
+          <input type="range" id="slider-mass" min="0.5" max="20.0" step="0.5" value="6.0" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-slate-600" />
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initTheme, toggleTheme } from './assets/js/theme.js';
+    import { initShareButton, formatSI, encodeState, loadStateFromUrl } from './assets/js/widget-utils.js';
+    import { renderJustificationBlock, initJustificationButtons } from './assets/js/justification.js';
+    import { createQuizManager } from './assets/js/quiz-engine.js';
+    import { playSuccessSound } from './assets/js/sound-effects.js';
+
+    const G = 9.8;
+    const BEAM_LEN = 2.0; // 2.0 метра
+    const BEAM_CENTER = 1.0;
+    const BEAM_LEFT_X = 90;
+    const PX_PER_METER = 260;
+    const BEAM_Y = 220;
+
+    const state = {
+      supportA: 0.20,
+      supportB: 1.80,
+      loadX: 0.60,
+      loadMass: 6.0,
+      beamMass: 2.0,
+      axis: 'supportA', // 'supportA' | 'supportB' | 'centerC' | 'loadD'
+      showForces: true,
+      showArms: true,
+      showValues: true
+    };
+
+    // Загрузка состояния из URL
+    const loadedState = loadStateFromUrl();
+    if (loadedState) {
+      if (typeof loadedState.supportA === 'number') state.supportA = loadedState.supportA;
+      if (typeof loadedState.supportB === 'number') state.supportB = loadedState.supportB;
+      if (typeof loadedState.loadX === 'number') state.loadX = loadedState.loadX;
+      if (typeof loadedState.loadMass === 'number') state.loadMass = loadedState.loadMass;
+      if (typeof loadedState.beamMass === 'number') state.beamMass = loadedState.beamMass;
+      if (loadedState.axis) state.axis = loadedState.axis;
+    }
+
+    // Инициализация темы и обоснования
+    initTheme();
+    document.getElementById('btn-theme-toggle')?.addEventListener('click', toggleTheme);
+
+    const justContainer = document.getElementById('justification-container');
+    if (justContainer) {
+      justContainer.innerHTML = renderJustificationBlock('beam');
+      initJustificationButtons();
+    }
+
+    // Квиз-движок
+    const quiz = createQuizManager({
+      topicId: 'beam',
+      generateTask: () => {
+        const m = [4, 6, 8, 10][Math.floor(Math.random() * 4)];
+        const mb = [0, 2, 4][Math.floor(Math.random() * 3)];
+        const xA = 0.2;
+        const xB = 1.8;
+        const span = xB - xA;
+        const xGr = [0.4, 0.6, 0.8, 1.0][Math.floor(Math.random() * 4)];
+
+        const targetR2 = (m * G * (xGr - xA) + mb * G * (1.0 - xA)) / span;
+        const rounded = Math.round(targetR2 * 10) / 10;
+
+        return {
+          prompt: `Однородная балка длины $L = 2.0$ м и массы <b>M_б = ${mb} кг</b> лежит на двух опорах $A$ ($x_A = ${xA}$ м) и $B$ ($x_B = ${xB}$ м). На расстоянии <b>x = ${xGr} м</b> от левого края балки подвешен груз массой <b>m = ${m} кг</b>. Найдите силу реакции правой опоры $R_2$. ($g = 9.8\\text{ м/с}^2$, ответ округлите до десятых).`,
+          answer: rounded,
+          tolerance: 0.3,
+          solution: `<b>Решение:</b><br/>Запишем правило моментов сил относительно опоры $A$:<br/>
+            $\\sum M_A = 0 \\implies R_2 \\cdot (x_B - x_A) = mg(x_{\\text{гр}} - x_A) + M_{\\text{б}}g(x_C - x_A)$.<br/>
+            Подстановка:<br/>
+            $R_2 = \\frac{${m} \\cdot 9.8 \\cdot ${(xGr - xA).toFixed(2)} + ${mb} \\cdot 9.8 \\cdot ${(1.0 - xA).toFixed(2)}}{${span.toFixed(2)}} \\approx ${rounded}\\text{ Н}$.`
+        };
+      },
+      challenges: [
+        {
+          id: 0,
+          title: 'Симметричный мост (R₁ = R₂)',
+          hint: 'Добейтесь равных реакций опор',
+          isCompleted: (st, comp) => comp.isStable && Math.abs(comp.r1 - comp.r2) < 1.0
+        },
+        {
+          id: 1,
+          title: 'На грани опрокидывания (R ≈ 0)',
+          hint: 'Сместите груз на край консоли',
+          isCompleted: (st, comp) => comp.rawR1 <= 0.1 || comp.rawR2 <= 0.1
+        },
+        {
+          id: 2,
+          title: 'Ось через точку приложения груза',
+          hint: 'Выберите ось вращения «Под грузом»',
+          isCompleted: (st, comp) => st.axis === 'loadD'
+        }
+      ],
+      onModeChange: () => updateVisuals(),
+      onTaskSolved: () => playSuccessSound()
+    });
+    quiz.init();
+
+    // Чистая физика
+    function computeBeam(st) {
+      const span = st.supportB - st.supportA;
+      const mg = st.loadMass * G;
+      const mBeamG = st.beamMass * G;
+      const totalG = mg + mBeamG;
+
+      const armLoadFromA = st.loadX - st.supportA;
+      const armBeamFromA = BEAM_CENTER - st.supportA;
+
+      const rawR2 = (mg * armLoadFromA + mBeamG * armBeamFromA) / span;
+      const rawR1 = totalG - rawR2;
+
+      let isStable = true;
+      let r1 = rawR1;
+      let r2 = rawR2;
+      let tiltAngleDeg = 0;
+
+      if (rawR2 < -0.05) {
+        isStable = false;
+        r1 = totalG;
+        r2 = 0;
+        tiltAngleDeg = -8;
+      } else if (rawR1 < -0.05) {
+        isStable = false;
+        r1 = 0;
+        r2 = totalG;
+        tiltAngleDeg = 8;
+      }
+
+      // Координата выбранной оси
+      let axisX = st.supportA;
+      if (st.axis === 'supportB') axisX = st.supportB;
+      else if (st.axis === 'centerC') axisX = BEAM_CENTER;
+      else if (st.axis === 'loadD') axisX = st.loadX;
+
+      return {
+        span, mg, mBeamG, totalG, rawR1, rawR2, r1, r2, isStable, tiltAngleDeg, axisX
+      };
+    }
+
+    // DOM Элементы
+    const sliderXA = document.getElementById('slider-xa');
+    const sliderXB = document.getElementById('slider-xb');
+    const sliderXLoad = document.getElementById('slider-xload');
+    const sliderMass = document.getElementById('slider-mass');
+
+    const labelXA = document.getElementById('label-xa');
+    const labelXB = document.getElementById('label-xb');
+    const labelXLoad = document.getElementById('label-xload');
+    const labelMass = document.getElementById('label-mass');
+
+    const toggleForces = document.getElementById('toggle-forces');
+    const toggleArms = document.getElementById('toggle-arms');
+    const toggleValues = document.getElementById('toggle-values');
+
+    // Кнопка «Поделиться»
+    initShareButton(document.getElementById('btn-share'), () => ({
+      supportA: state.supportA,
+      supportB: state.supportB,
+      loadX: state.loadX,
+      loadMass: state.loadMass,
+      beamMass: state.beamMass,
+      axis: state.axis
+    }));
+
+    // Сброс
+    document.getElementById('btn-reset')?.addEventListener('click', () => {
+      state.supportA = 0.20;
+      state.supportB = 1.80;
+      state.loadX = 0.60;
+      state.loadMass = 6.0;
+      state.beamMass = 2.0;
+      state.axis = 'supportA';
+      syncInputs();
+      updateVisuals();
+    });
+
+    // Центровка
+    document.getElementById('btn-equalize')?.addEventListener('click', () => {
+      state.supportA = 0.30;
+      state.supportB = 1.70;
+      state.loadX = 1.0;
+      syncInputs();
+      updateVisuals();
+    });
+
+    // Пресеты
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const p = btn.dataset.preset;
+        if (p === 'bridge') {
+          state.supportA = 0.20;
+          state.supportB = 1.80;
+          state.loadX = 1.00;
+        } else if (p === 'crane') {
+          state.supportA = 0.20;
+          state.supportB = 1.20;
+          state.loadX = 1.85;
+        } else if (p === 'tipping') {
+          state.supportA = 0.40;
+          state.supportB = 1.60;
+          state.loadX = 1.95;
+          state.loadMass = 10.0;
+        }
+        syncInputs();
+        updateVisuals();
+      });
+    });
+
+    // Переключение оси вращения
+    document.querySelectorAll('.axis-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.axis = btn.dataset.axis;
+        updateAxisButtons();
+        updateVisuals();
+      });
+    });
+
+    function updateAxisButtons() {
+      document.querySelectorAll('.axis-btn').forEach(btn => {
+        if (btn.dataset.axis === state.axis) {
+          btn.className = 'axis-btn py-2 px-3 rounded-lg border font-medium transition bg-blue-600 text-white shadow-xs';
+        } else {
+          btn.className = 'axis-btn py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium transition';
+        }
+      });
+    }
+
+    // Синхронизация контролов
+    function syncInputs() {
+      sliderXA.value = state.supportA;
+      sliderXB.value = state.supportB;
+      sliderXLoad.value = state.loadX;
+      sliderMass.value = state.loadMass;
+
+      labelXA.textContent = `${state.supportA.toFixed(2)} м`;
+      labelXB.textContent = `${state.supportB.toFixed(2)} м`;
+      labelXLoad.textContent = `${state.loadX.toFixed(2)} м`;
+      labelMass.textContent = `${state.loadMass.toFixed(1)} кг`;
+
+      updateAxisButtons();
+    }
+
+    sliderXA.addEventListener('input', (e) => {
+      state.supportA = Math.min(state.supportB - 0.3, parseFloat(e.target.value));
+      labelXA.textContent = `${state.supportA.toFixed(2)} м`;
+      updateVisuals();
+    });
+
+    sliderXB.addEventListener('input', (e) => {
+      state.supportB = Math.max(state.supportA + 0.3, parseFloat(e.target.value));
+      labelXB.textContent = `${state.supportB.toFixed(2)} м`;
+      updateVisuals();
+    });
+
+    sliderXLoad.addEventListener('input', (e) => {
+      state.loadX = parseFloat(e.target.value);
+      labelXLoad.textContent = `${state.loadX.toFixed(2)} м`;
+      updateVisuals();
+    });
+
+    sliderMass.addEventListener('input', (e) => {
+      state.loadMass = parseFloat(e.target.value);
+      labelMass.textContent = `${state.loadMass.toFixed(1)} кг`;
+      updateVisuals();
+    });
+
+    [toggleForces, toggleArms, toggleValues].forEach(t => {
+      t.addEventListener('change', () => {
+        state.showForces = toggleForces.checked;
+        state.showArms = toggleArms.checked;
+        state.showValues = toggleValues.checked;
+        updateVisuals();
+      });
+    });
+
+    function mToPx(m) {
+      return BEAM_LEFT_X + m * PX_PER_METER;
+    }
+
+    // Разметка шкалы
+    function renderTicks() {
+      const g = document.getElementById('beam-ticks');
+      g.innerHTML = '';
+      for (let m = 0; m <= BEAM_LEN + 0.001; m += 0.2) {
+        const x = mToPx(m);
+        const isMajor = Math.abs(m * 10 % 5) < 0.1 || Math.abs(m) < 0.01;
+        const tickH = isMajor ? 6 : 3;
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x);
+        line.setAttribute('y1', 206);
+        line.setAttribute('x2', x);
+        line.setAttribute('y2', 206 + tickH);
+        line.setAttribute('stroke', '#cbd5e1');
+        line.setAttribute('stroke-width', '1');
+        g.appendChild(line);
+      }
+    }
+    renderTicks();
+
+    // Отрисовка
+    function updateVisuals() {
+      const comp = computeBeam(state);
+      const isMasked = quiz.isQuiz();
+
+      // Проверка испытаний
+      quiz.checkChallenges(state, comp);
+
+      const xAPx = mToPx(state.supportA);
+      const xBPx = mToPx(state.supportB);
+      const xLoadPx = mToPx(state.loadX);
+      const xCenterPx = mToPx(BEAM_CENTER);
+      const axisPx = mToPx(comp.axisX);
+
+      // Опора A
+      document.getElementById('support-a-tri').setAttribute('points', `${xAPx},220 ${xAPx - 20},280 ${xAPx + 20},280`);
+      document.getElementById('support-a-pivot').setAttribute('cx', xAPx);
+      document.getElementById('support-a-label').setAttribute('x', xAPx);
+      document.getElementById('support-a-hitbox').setAttribute('cx', xAPx);
+
+      // Опора B
+      document.getElementById('support-b-tri').setAttribute('points', `${xBPx},220 ${xBPx - 20},280 ${xBPx + 20},280`);
+      document.getElementById('support-b-pivot').setAttribute('cx', xBPx);
+      document.getElementById('support-b-label').setAttribute('x', xBPx);
+      document.getElementById('support-b-hitbox').setAttribute('cx', xBPx);
+
+      // Груз
+      const loadRope = document.getElementById('load-rope');
+      const loadHitbox = document.getElementById('load-hitbox');
+      const loadBody = document.getElementById('load-body');
+      const loadMassText = document.getElementById('load-mass-text');
+      loadRope.setAttribute('x1', xLoadPx);
+      loadRope.setAttribute('x2', xLoadPx);
+      loadHitbox.setAttribute('cx', xLoadPx);
+      loadBody.setAttribute('x', xLoadPx - 25);
+      loadMassText.setAttribute('x', xLoadPx);
+      loadMassText.textContent = `${state.loadMass.toFixed(1)} кг`;
+
+      // Поворот балки при отрыве
+      const pivotForTilt = comp.rawR2 < 0 ? xAPx : xBPx;
+      document.getElementById('beam-assembly').setAttribute('transform', `rotate(${comp.tiltAngleDeg} ${pivotForTilt} 220)`);
+
+      // Маркер оси вращения
+      document.getElementById('axis-marker').setAttribute('transform', `translate(${axisPx}, 213)`);
+
+      // Векторы сил
+      const forcesLayer = document.getElementById('forces-layer');
+      forcesLayer.style.display = state.showForces ? 'inline' : 'none';
+
+      const scale = 1.3;
+      // R1
+      const vR1 = document.getElementById('vec-r1');
+      const lR1 = document.getElementById('label-r1');
+      const r1Len = Math.min(80, Math.max(15, comp.r1 * scale));
+      vR1.setAttribute('x1', xAPx);
+      vR1.setAttribute('y1', 206);
+      vR1.setAttribute('x2', xAPx);
+      vR1.setAttribute('y2', 206 - r1Len);
+      lR1.setAttribute('x', xAPx);
+      lR1.setAttribute('y', 206 - r1Len - 8);
+      lR1.textContent = isMasked ? 'R₁ = ? Н' : (state.showValues ? `R₁ = ${comp.r1.toFixed(1)} Н` : 'R₁');
+
+      // R2
+      const vR2 = document.getElementById('vec-r2');
+      const lR2 = document.getElementById('label-r2');
+      const r2Len = Math.min(80, Math.max(15, comp.r2 * scale));
+      vR2.setAttribute('x1', xBPx);
+      vR2.setAttribute('y1', 206);
+      vR2.setAttribute('x2', xBPx);
+      vR2.setAttribute('y2', 206 - r2Len);
+      lR2.setAttribute('x', xBPx);
+      lR2.setAttribute('y', 206 - r2Len - 8);
+      lR2.textContent = isMasked ? 'R₂ = ? Н' : (state.showValues ? `R₂ = ${comp.r2.toFixed(1)} Н` : 'R₂');
+
+      // mg
+      const vMg = document.getElementById('vec-mg');
+      const lMg = document.getElementById('label-mg');
+      const mgLen = Math.min(80, Math.max(15, comp.mg * scale));
+      vMg.setAttribute('x1', xLoadPx);
+      vMg.setAttribute('y1', 297);
+      vMg.setAttribute('x2', xLoadPx);
+      vMg.setAttribute('y2', 297 + mgLen);
+      lMg.setAttribute('x', xLoadPx);
+      lMg.setAttribute('y', 297 + mgLen + 14);
+      lMg.textContent = state.showValues ? `mg = ${comp.mg.toFixed(1)} Н` : 'mg';
+
+      // mBeamG
+      const vMb = document.getElementById('vec-mbeam');
+      const lMb = document.getElementById('label-mbeam');
+      const mbLen = Math.min(60, Math.max(12, comp.mBeamG * scale));
+      vMb.setAttribute('x1', xCenterPx);
+      vMb.setAttribute('y1', 220);
+      vMb.setAttribute('x2', xCenterPx);
+      vMb.setAttribute('y2', 220 + mbLen);
+      lMb.setAttribute('x', xCenterPx);
+      lMb.setAttribute('y', 220 + mbLen + 12);
+      lMb.textContent = state.showValues ? `Mб·g = ${comp.mBeamG.toFixed(1)} Н` : 'Mб·g';
+
+      // Плечи сил от выбранной оси
+      const armsLayer = document.getElementById('arms-layer');
+      armsLayer.innerHTML = '';
+      if (state.showArms) {
+        // Линии плеч от axisPx до xAPx, xBPx, xLoadPx, xCenterPx
+        const targets = [
+          { name: 'dA', x: xAPx, y: 190, color: '#2563eb' },
+          { name: 'dB', x: xBPx, y: 175, color: '#0d9488' },
+          { name: 'dгр', x: xLoadPx, y: 160, color: '#dc2626' }
+        ];
+
+        targets.forEach(t => {
+          if (Math.abs(t.x - axisPx) > 5) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', axisPx);
+            line.setAttribute('y1', t.y);
+            line.setAttribute('x2', t.x);
+            line.setAttribute('y2', t.y);
+            line.setAttribute('stroke', t.color);
+            line.setAttribute('stroke-width', '1.5');
+            line.setAttribute('stroke-dasharray', '3 2');
+            armsLayer.appendChild(line);
+
+            const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            txt.setAttribute('x', (axisPx + t.x) / 2);
+            txt.setAttribute('y', t.y - 4);
+            txt.setAttribute('text-anchor', 'middle');
+            txt.setAttribute('font-size', '9');
+            txt.setAttribute('font-weight', 'bold');
+            txt.setAttribute('fill', t.color);
+            txt.textContent = `${t.name} = ${Math.abs((t.x - axisPx) / PX_PER_METER).toFixed(2)} м`;
+            armsLayer.appendChild(txt);
+          }
+        });
+      }
+
+      // Обновление уравнения моментов
+      const eqDisplay = document.getElementById('equation-display');
+      if (state.axis === 'supportA') {
+        eqDisplay.innerHTML = `$$\\sum M_A = 0 \\implies R_2 \\cdot ${(state.supportB - state.supportA).toFixed(2)} - ${(state.loadMass * G).toFixed(1)} \\cdot ${(state.loadX - state.supportA).toFixed(2)} - ${(state.beamMass * G).toFixed(1)} \\cdot ${(BEAM_CENTER - state.supportA).toFixed(2)} = 0$$`;
+      } else if (state.axis === 'supportB') {
+        eqDisplay.innerHTML = `$$\\sum M_B = 0 \\implies -R_1 \\cdot ${(state.supportB - state.supportA).toFixed(2)} + ${(state.loadMass * G).toFixed(1)} \\cdot ${(state.supportB - state.loadX).toFixed(2)} + ${(state.beamMass * G).toFixed(1)} \\cdot ${(state.supportB - BEAM_CENTER).toFixed(2)} = 0$$`;
+      } else if (state.axis === 'centerC') {
+        eqDisplay.innerHTML = `$$\\sum M_C = 0 \\implies R_2 \\cdot ${(state.supportB - BEAM_CENTER).toFixed(2)} - R_1 \\cdot ${(BEAM_CENTER - state.supportA).toFixed(2)} - ${(state.loadMass * G).toFixed(1)} \\cdot ${(state.loadX - BEAM_CENTER).toFixed(2)} = 0$$`;
+      } else {
+        eqDisplay.innerHTML = `$$\\sum M_D = 0 \\implies R_2 \\cdot ${(state.supportB - state.loadX).toFixed(2)} - R_1 \\cdot ${(state.loadX - state.supportA).toFixed(2)} - ${(state.beamMass * G).toFixed(1)} \\cdot ${(BEAM_CENTER - state.loadX).toFixed(2)} = 0$$`;
+      }
+      if (window.renderMathInElement) {
+        window.renderMathInElement(eqDisplay, { delimiters: [{left: '$$', right: '$$', display: true}] });
+      }
+
+      // Информационные карточки
+      document.getElementById('info-r1-val').textContent = isMasked ? '? Н' : `${comp.r1.toFixed(1)} Н`;
+      document.getElementById('info-r2-val').textContent = isMasked ? '? Н' : `${comp.r2.toFixed(1)} Н`;
+      document.getElementById('info-mg-val').textContent = `${comp.mg.toFixed(1)} Н`;
+      document.getElementById('info-mbeam-val').textContent = `${comp.mBeamG.toFixed(1)} Н`;
+
+      document.getElementById('info-r1-sub').textContent = comp.rawR1 < 0 ? '⚠️ Отрыв от опоры!' : 'Опора нагружена';
+      document.getElementById('info-r2-sub').textContent = comp.rawR2 < 0 ? '⚠️ Отрыв от опоры!' : 'Опора нагружена';
+
+      const statusDot = document.getElementById('status-dot');
+      const statusText = document.getElementById('status-text');
+      const canvasBadge = document.getElementById('canvas-status-badge');
+
+      if (comp.isStable) {
+        statusDot.className = 'inline-block h-3.5 w-3.5 rounded-full bg-emerald-600 animate-pulse';
+        statusText.textContent = `Балка устойчива (R₁ = ${comp.r1.toFixed(1)} Н, R₂ = ${comp.r2.toFixed(1)} Н)`;
+        canvasBadge.className = 'font-bold text-emerald-600 dark:text-emerald-400';
+        canvasBadge.textContent = '● Балка в равновесии';
+      } else {
+        statusDot.className = 'inline-block h-3.5 w-3.5 rounded-full bg-red-600';
+        statusText.textContent = '⚠️ Нарушение равновесия: отрыв от опоры и опрокидывание!';
+        canvasBadge.className = 'font-bold text-red-600 dark:text-rose-400';
+        canvasBadge.textContent = '● Опрокидывание балки';
+      }
+    }
+
+    // Drag and Drop опор и груза
+    let activeDrag = null;
+    const svgEl = document.getElementById('scene');
+
+    function getMetersFromEvent(e) {
+      const rect = svgEl.getBoundingClientRect();
+      const scaleX = 700 / rect.width;
+      const svgX = (e.clientX - rect.left) * scaleX;
+      return Math.max(0, Math.min(BEAM_LEN, (svgX - BEAM_LEFT_X) / PX_PER_METER));
+    }
+
+    document.getElementById('support-a-group').addEventListener('pointerdown', (e) => {
+      activeDrag = 'supportA';
+      e.target.setPointerCapture?.(e.pointerId);
+    });
+
+    document.getElementById('support-b-group').addEventListener('pointerdown', (e) => {
+      activeDrag = 'supportB';
+      e.target.setPointerCapture?.(e.pointerId);
+    });
+
+    document.getElementById('load-group').addEventListener('pointerdown', (e) => {
+      activeDrag = 'load';
+      e.target.setPointerCapture?.(e.pointerId);
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!activeDrag) return;
+      const m = getMetersFromEvent(e);
+      if (activeDrag === 'supportA') {
+        state.supportA = Math.min(state.supportB - 0.25, Math.max(0, m));
+      } else if (activeDrag === 'supportB') {
+        state.supportB = Math.max(state.supportA + 0.25, Math.min(BEAM_LEN, m));
+      } else if (activeDrag === 'load') {
+        state.loadX = m;
+      }
+      syncInputs();
+      updateVisuals();
+    });
+
+    window.addEventListener('pointerup', () => {
+      activeDrag = null;
+    });
+
+    window.addEventListener('themechanged', () => updateVisuals());
+
+    // Инициализация
+    syncInputs();
+    updateVisuals();
+  </script>
+</body>
+</html>

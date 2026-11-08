@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Статика ЕГЭ 2027 — Лестница у гладкой стены (Задача №26)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {} }
+    };
+  </script>
+  <!-- KaTeX для формул -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
+  <style>
+    #ladder-group {
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .dragging #ladder-group {
+      transition: transform 0.05s linear;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-6 px-4 transition-colors duration-200">
+
+  <main class="max-w-4xl mx-auto flex flex-col gap-5">
+    <!-- Навигация между HTML-файлами -->
+    <nav class="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 overflow-x-auto pb-1">
+      <a href="index.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition flex items-center gap-1 shadow-xs">
+        <span>🏠</span> <span>Все темы</span>
+      </a>
+      <a href="lever.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">1. Рычаг</a>
+      <a href="pulleys.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">2. Блоки</a>
+      <a href="inclined-plane.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">3. Плоскость</a>
+      <a href="threads.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">4. Нити</a>
+      <a href="beam.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">5. Балка</a>
+      <a href="ladder.html" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white shadow-sm font-semibold">6. Лестница (№26)</a>
+    </nav>
+
+    <!-- Шапка -->
+    <header class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Топик 6 • Статика ЕГЭ</span>
+          <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-medium">Задача №26 (4 балла)</span>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Лестница у вертикальной стены</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-theme-toggle" class="p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition text-base" title="Переключить тему">
+          🌙
+        </button>
+        <button id="btn-reset" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition">
+          Сброс
+        </button>
+        <button id="btn-share" class="rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-blue-700 active:scale-95 transition shadow-xs">
+          Поделиться
+        </button>
+      </div>
+    </header>
+
+    <!-- Переключатель режима: Песочница / Задача ЕГЭ -->
+    <div class="flex items-center justify-between bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Режим:</span>
+        <div class="inline-flex rounded-lg bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700">
+          <button id="btn-mode-sandbox" class="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs shadow-sm transition">
+            🔬 Песочница
+          </button>
+          <button id="btn-mode-quiz" class="px-3.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-300 font-medium text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+            🎯 Задача ЕГЭ
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-slate-500 dark:text-slate-400">Испытания:</span>
+        <span id="challenges-counter" class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">0/3</span>
+      </div>
+    </div>
+
+    <!-- Карточка задачи ЕГЭ -->
+    <div id="quiz-card" class="hidden bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950/40 border border-blue-200 dark:border-indigo-900/60 rounded-xl p-4 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-bold text-blue-900 dark:text-blue-300">🎯 Задание высокой сложности №26 ЕГЭ (4 балла):</span>
+        </div>
+        <button id="btn-quiz-new" class="text-xs px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-slate-700 transition">
+          🔄 Новые данные
+        </button>
+      </div>
+      <div id="quiz-prompt" class="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium"></div>
+      <div class="flex flex-wrap items-center gap-3 pt-1">
+        <div class="relative flex items-center">
+          <input type="text" id="quiz-input" placeholder="Введите ответ (Н)" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 outline-hidden w-44" />
+          <span class="ml-2 text-xs text-slate-500 dark:text-slate-400">Н</span>
+        </div>
+        <button id="btn-quiz-check" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs active:scale-95 transition">
+          Проверить ответ
+        </button>
+        <button id="btn-quiz-solution" class="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 text-xs font-medium transition">
+          Показать подсказку/решение
+        </button>
+      </div>
+      <div id="quiz-feedback"></div>
+      <div id="quiz-solution-text" class="hidden mt-2 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 space-y-1"></div>
+    </div>
+
+    <!-- Краткая теория -->
+    <details class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-3 shadow-sm">
+      <summary class="cursor-pointer font-semibold text-slate-800 dark:text-slate-200 select-none">
+        📖 Краткая теория: классическая модель лестницы у гладкой стены (ЕГЭ №26)
+      </summary>
+      <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300 space-y-2 leading-relaxed">
+        <p>
+          Однородная лестница длины $L$ и массы $M$ опирается на идеально гладкую вертикальную стену под углом $\alpha$ к шероховатому полу (коэффициент трения $\mu$). Человек массы $m$ поднимается по лестнице на расстояние $s$ от пола.
+        </p>
+        <p>
+          <strong>Силы и условия равновесия в ИСО:</strong><br/>
+          1) По вертикали ($Oy$): $N_{\text{пол}} - (M + m)g = 0 \implies N_{\text{пол}} = (M + m)g$.<br/>
+          2) По горизонтали ($Ox$): $F_{\text{тр}} - N_{\text{ст}} = 0 \implies F_{\text{тр}} = N_{\text{ст}}$.<br/>
+          3) Правило моментов относительно нижней точки опоры $A$ на полу:<br/>
+          $$\sum M_A = N_{\text{ст}} \cdot L\sin\alpha - Mg \cdot \frac{L}{2}\cos\alpha - mg \cdot s\cos\alpha = 0$$
+          $$\implies N_{\text{ст}} = F_{\text{тр}} = \left(\frac{M}{2} + m\frac{s}{L}\right) g \cot\alpha$$
+        </p>
+        <p>
+          <strong>Критерий устойчивости:</strong> лестница не соскальзывает, пока требуемая сила трения не превышает предел Кулона — Амонтона:
+          $$F_{\text{тр}} \le \mu N_{\text{пол}} = \mu (M + m)g$$
+          По мере подъёма человека ($s \uparrow$) сила трения возрастает, приближаясь к опасному пределу!
+        </p>
+      </div>
+    </details>
+
+    <!-- Шаблон обоснования №26 (Критерии ФИПИ) -->
+    <div id="justification-container"></div>
+
+    <!-- Панель статуса и чекбоксов -->
+    <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+      <div class="flex items-center gap-2.5">
+        <span id="status-dot" class="inline-block h-3.5 w-3.5 rounded-full bg-green-600"></span>
+        <span id="status-text" class="font-semibold text-slate-800 dark:text-slate-200 text-sm sm:text-base" role="status" aria-live="polite">Проверка...</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4 text-sm text-slate-700 dark:text-slate-300">
+        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+          <input type="checkbox" id="toggle-forces" checked class="accent-blue-600" /> Все 5 векторов сил
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+          <input type="checkbox" id="toggle-arms" checked class="accent-blue-600" /> Плечи моментов от пола
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+          <input type="checkbox" id="toggle-values" checked class="accent-blue-600" /> Числа
+        </label>
+      </div>
+
+      <button id="btn-safe-angle" class="rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-emerald-700 active:scale-95 transition shadow-xs flex items-center gap-1.5">
+        <span>🛡️</span> <span>Безопасный угол</span>
+      </button>
+    </div>
+
+    <!-- Быстрые пресеты задач ЕГЭ -->
+    <div class="flex flex-wrap items-center gap-2 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/60 rounded-xl px-4 py-2.5 text-xs text-slate-700 dark:text-slate-300">
+      <span class="font-bold text-emerald-950 dark:text-emerald-300 flex items-center gap-1">🎯 Пресеты ЕГЭ:</span>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="empty">
+        🪜 Лестница без человека (s = 0)
+      </button>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="middle">
+        🧗 Человек на середине (s = L/2)
+      </button>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="top">
+        ⚠️ Человек на вершине (s = L, опасная зона)
+      </button>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="slip">
+        💥 Соскальзывание (малый угол)
+      </button>
+    </div>
+
+    <!-- Панель испытаний темы -->
+    <div class="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-slate-900/50 p-3.5 space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-amber-950 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+          <span>🏆</span> <span>Испытания темы: Лестница у стены</span>
+        </span>
+        <span class="text-[11px] text-slate-500 dark:text-slate-400">Выполняйте условия в песочнице</span>
+      </div>
+      <div id="challenges-list" class="grid grid-cols-1 md:grid-cols-3 gap-2"></div>
+    </div>
+
+    <!-- Основной интерактивный холст SVG -->
+    <div class="relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 shadow-sm overflow-hidden">
+      <div class="text-[11px] font-medium text-slate-600 dark:text-slate-400 flex items-center justify-between mb-2">
+        <span class="flex items-center gap-1">
+          <span>👆</span> <span>Перетаскивайте основание лестницы на полу или человека по лестнице</span>
+        </span>
+        <span id="canvas-status-badge" class="font-bold text-emerald-600 dark:text-emerald-400">● Статическое равновесие</span>
+      </div>
+
+      <svg id="scene" viewBox="0 0 700 420" class="w-full h-auto select-none rounded-lg bg-slate-50/60 dark:bg-slate-950/70 border border-slate-100 dark:border-slate-800/80 cursor-default">
+        <defs>
+          <pattern id="grid-pattern" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" class="text-slate-200 dark:text-slate-800/60" stroke-width="0.75" />
+          </pattern>
+          <pattern id="hatch-wall" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="currentColor" class="text-slate-400 dark:text-slate-600" stroke-width="1.5" />
+          </pattern>
+          <pattern id="hatch-floor" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="currentColor" class="text-slate-400 dark:text-slate-600" stroke-width="1.5" />
+          </pattern>
+          <!-- Маркеры стрелок -->
+          <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" />
+          </marker>
+          <marker id="arrow-teal" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#0d9488" />
+          </marker>
+          <marker id="arrow-emerald" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+          </marker>
+          <marker id="arrow-red" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
+          </marker>
+          <marker id="arrow-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#d97706" />
+          </marker>
+        </defs>
+
+        <!-- Фоновая сетка -->
+        <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+
+        <!-- Вертикальная стена слева X=140 -->
+        <rect x="90" y="40" width="50" height="320" fill="url(#hatch-wall)" />
+        <line x1="140" y1="40" x2="140" y2="360" stroke="#475569" stroke-width="3" class="dark:stroke-slate-500" />
+        <text x="115" y="70" font-size="11" font-weight="bold" fill="#64748b" transform="rotate(-90 115 70)">Гладкая стена (трения нет)</text>
+
+        <!-- Горизонтальный шероховатый пол Y=360 -->
+        <rect x="90" y="360" width="570" height="30" fill="url(#hatch-floor)" />
+        <line x1="140" y1="360" x2="660" y2="360" stroke="#475569" stroke-width="3" class="dark:stroke-slate-500" />
+        <text x="500" y="380" font-size="11" font-weight="bold" fill="#64748b">Шероховатый пол (μ)</text>
+
+        <!-- Дуга угла наклона лестницы α к полу -->
+        <path id="arc-alpha" d="" fill="rgba(37, 99, 235, 0.15)" stroke="#2563eb" stroke-width="1.5" />
+        <text id="label-alpha-deg" x="0" y="0" font-size="11" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">α</text>
+
+        <!-- Слой плеч сил (пунктирные линии проекций) -->
+        <g id="arms-layer"></g>
+
+        <!-- Лестница (боковины и перекладины) -->
+        <g id="ladder-group">
+          <!-- Основная балка лестницы -->
+          <line id="ladder-main" x1="450" y1="360" x2="140" y2="90" stroke="#94a3b8" stroke-width="10" stroke-linecap="round" class="dark:stroke-slate-700" />
+          <line id="ladder-core" x1="450" y1="360" x2="140" y2="90" stroke="#64748b" stroke-width="6" stroke-linecap="round" class="dark:stroke-slate-500" />
+
+          <!-- Перекладины ступени -->
+          <g id="ladder-rungs"></g>
+
+          <!-- Центр масс лестницы (L/2) -->
+          <circle id="ladder-com" cx="0" cy="0" r="4.5" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5" />
+          <text id="ladder-com-label" x="0" y="0" font-size="10" font-weight="bold" fill="#b45309" class="dark:fill-amber-400">M·g (L/2)</text>
+        </g>
+
+        <!-- Фигурка поднимающегося человека -->
+        <g id="climber-group" class="cursor-pointer">
+          <circle id="climber-hitbox" cx="0" cy="0" r="24" fill="transparent" />
+          <!-- Голова -->
+          <circle id="climber-head" cx="0" cy="-30" r="8" fill="#ef4444" stroke="#ffffff" stroke-width="1.5" />
+          <!-- Туловище -->
+          <line id="climber-body" x1="0" y1="-22" x2="0" y2="0" stroke="#ef4444" stroke-width="4" stroke-linecap="round" />
+          <!-- Руки и ноги -->
+          <line id="climber-arms" x1="-10" y1="-14" x2="10" y2="-14" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" />
+          <text id="climber-label" x="14" y="-12" font-size="11" font-weight="bold" fill="#dc2626" class="dark:fill-rose-400">m = 60 кг</text>
+        </g>
+
+        <!-- 5 Векторов сил -->
+        <g id="forces-layer">
+          <!-- 1. Нормальная реакция гладкой стены Nст (горизонтально вправо от стены на верхний конец) -->
+          <line id="vec-nwall" x1="140" y1="90" x2="220" y2="90" stroke="#2563eb" stroke-width="3.5" marker-end="url(#arrow-blue)" />
+          <text id="label-nwall" x="225" y="85" font-size="11" font-weight="bold" fill="#1d4ed8" class="dark:fill-blue-400">Nст</text>
+
+          <!-- 2. Нормальная реакция пола Nпол (вертикально вверх от точки A) -->
+          <line id="vec-nfloor" x1="450" y1="360" x2="450" y2="270" stroke="#0d9488" stroke-width="3.5" marker-end="url(#arrow-teal)" />
+          <text id="label-nfloor" x="458" y="275" font-size="11" font-weight="bold" fill="#0f766e" class="dark:fill-teal-400">Nпол</text>
+
+          <!-- 3. Сила трения пола Fтр (горизонтально влево, препятствует соскальзыванию основания) -->
+          <line id="vec-ftr" x1="450" y1="360" x2="370" y2="360" stroke="#059669" stroke-width="3.5" marker-end="url(#arrow-emerald)" />
+          <text id="label-ftr" x="350" y="375" font-size="11" font-weight="bold" fill="#047857" class="dark:fill-emerald-400">Fтр</text>
+
+          <!-- 4. Вес лестницы Mg (вертикально вниз от L/2) -->
+          <line id="vec-mg-ladder" x1="0" y1="0" x2="0" y2="0" stroke="#d97706" stroke-width="2.5" marker-end="url(#arrow-amber)" />
+          <text id="label-mg-ladder" x="0" y="0" font-size="10" font-weight="bold" fill="#b45309" class="dark:fill-amber-400">M·g</text>
+
+          <!-- 5. Вес человека mg (вертикально вниз от положения s) -->
+          <line id="vec-mg-man" x1="0" y1="0" x2="0" y2="0" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow-red)" />
+          <text id="label-mg-man" x="0" y="0" font-size="11" font-weight="bold" fill="#b91c1c" class="dark:fill-rose-400">m·g</text>
+        </g>
+
+        <!-- Интерактивная ручка основания лестницы на полу A -->
+        <g id="handle-base" class="cursor-ew-resize">
+          <circle id="handle-base-hitbox" cx="450" cy="360" r="22" fill="transparent" />
+          <circle id="handle-base-vis" cx="450" cy="360" r="7.5" fill="#2563eb" stroke="#ffffff" stroke-width="2.5" class="shadow-md" />
+          <text id="handle-base-label" x="450" y="350" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af" class="dark:fill-blue-300">A</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Информационная таблица сил -->
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+      <div class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/60 rounded-xl p-3 shadow-sm">
+        <span class="text-xs font-bold text-blue-800 dark:text-blue-300 block mb-0.5">Реакция стены Nст</span>
+        <div class="text-xl font-extrabold text-blue-600 dark:text-blue-400" id="info-nwall-val">196.0 Н</div>
+        <span class="text-[11px] text-slate-500 font-mono">Nст = Fтр (ΣFx = 0)</span>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 border border-teal-200 dark:border-teal-900/60 rounded-xl p-3 shadow-sm">
+        <span class="text-xs font-bold text-teal-800 dark:text-teal-300 block mb-0.5">Реакция пола Nпол</span>
+        <div class="text-xl font-extrabold text-teal-600 dark:text-teal-400" id="info-nfloor-val">686.0 Н</div>
+        <span class="text-[11px] text-slate-500 font-mono">(M + m)g</span>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/60 rounded-xl p-3 shadow-sm">
+        <span class="text-xs font-bold text-emerald-800 dark:text-emerald-300 block mb-0.5">Сила трения пола Fтр</span>
+        <div class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400" id="info-ftr-val">196.0 Н</div>
+        <span class="text-[11px] text-slate-500 font-mono" id="info-ftr-margin">Запас трения: OK</span>
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/60 rounded-xl p-3 shadow-sm">
+        <span class="text-xs font-bold text-amber-800 dark:text-amber-300 block mb-0.5">Предел трения покоя</span>
+        <div class="text-xl font-extrabold text-amber-600 dark:text-amber-400" id="info-ftr-max">274.4 Н</div>
+        <span class="text-[11px] text-slate-500 font-mono">Fтр.макс = μ·Nпол</span>
+      </div>
+    </div>
+
+    <!-- Ползунки управления -->
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-4">
+      <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm flex items-center gap-1.5">
+        <span>⚙️</span> <span>Параметры лестницы, человека и поверхности:</span>
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <span>Угол наклона к полу α:</span>
+            <span id="label-alpha" class="font-bold text-blue-600 dark:text-blue-400">60°</span>
+          </div>
+          <input type="range" id="slider-alpha" min="25" max="80" step="1" value="60" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <span>Положение человека s:</span>
+            <span id="label-s" class="font-bold text-red-600 dark:text-rose-400">2.0 м (L/2)</span>
+          </div>
+          <input type="range" id="slider-s" min="0.0" max="4.0" step="0.1" value="2.0" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-red-600" />
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <span>Коэффициент трения пола μ:</span>
+            <span id="label-mu" class="font-bold text-emerald-600 dark:text-emerald-400">0.40</span>
+          </div>
+          <input type="range" id="slider-mu" min="0.10" max="0.80" step="0.02" value="0.40" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-600" />
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <span>Масса человека m:</span>
+            <span id="label-mass-man" class="font-bold text-slate-700 dark:text-slate-300">60 кг</span>
+          </div>
+          <input type="range" id="slider-mass-man" min="0" max="100" step="5" value="60" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-slate-600" />
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initTheme, toggleTheme } from './assets/js/theme.js';
+    import { initShareButton, formatSI, encodeState, loadStateFromUrl } from './assets/js/widget-utils.js';
+    import { renderJustificationBlock, initJustificationButtons } from './assets/js/justification.js';
+    import { createQuizManager } from './assets/js/quiz-engine.js';
+    import { playSuccessSound } from './assets/js/sound-effects.js';
+
+    const G = 9.8;
+    const LADDER_LEN = 4.0; // длина лестницы 4.0 м
+    const LADDER_MASS = 10.0; // масса самой лестницы M = 10 кг
+    const WALL_X = 140; // координата вертикальной стены
+    const FLOOR_Y = 360; // координата пола
+
+    const state = {
+      alphaDeg: 60,
+      sMan: 2.0, // расстояние от основания до человека
+      massMan: 60.0,
+      mu: 0.40,
+      showForces: true,
+      showArms: true,
+      showValues: true
+    };
+
+    // Загрузка состояния из URL
+    const loadedState = loadStateFromUrl();
+    if (loadedState) {
+      if (typeof loadedState.alphaDeg === 'number') state.alphaDeg = loadedState.alphaDeg;
+      if (typeof loadedState.sMan === 'number') state.sMan = loadedState.sMan;
+      if (typeof loadedState.massMan === 'number') state.massMan = loadedState.massMan;
+      if (typeof loadedState.mu === 'number') state.mu = loadedState.mu;
+    }
+
+    // Инициализация темы и обоснования
+    initTheme();
+    document.getElementById('btn-theme-toggle')?.addEventListener('click', toggleTheme);
+
+    const justContainer = document.getElementById('justification-container');
+    if (justContainer) {
+      justContainer.innerHTML = renderJustificationBlock('ladder');
+      initJustificationButtons();
+    }
+
+    // Квиз-движок
+    const quiz = createQuizManager({
+      topicId: 'ladder',
+      generateTask: () => {
+        const m = [50, 60, 70][Math.floor(Math.random() * 3)];
+        const aDeg = [45, 60][Math.floor(Math.random() * 2)];
+        const aRad = (aDeg * Math.PI) / 180;
+        const s = 2.0; // на середине L=4.0
+        // Nст = (M/2 + m * s/L) * g * cot(alpha)
+        const M = 10.0;
+        const targetN = (M / 2 + m * (s / 4.0)) * G * (1 / Math.tan(aRad));
+        const rounded = Math.round(targetN * 10) / 10;
+
+        return {
+          prompt: `Однородная лестница длины $L = 4.0$ м и массы <b>M = 10 кг</b> прислонена к гладкой вертикальной стене под углом <b>α = ${aDeg}°</b> к полу. Человек массой <b>m = ${m} кг</b> находится на середине лестницы ($s = 2.0$ м). Найдите силу реакции вертикальной стены $N_{\\text{ст}}$. ($g = 9.8\\text{ м/с}^2$, ответ округлите до десятых).`,
+          answer: rounded,
+          tolerance: 0.4,
+          solution: `<b>Решение:</b><br/>Запишем правило моментов относительно нижней точки опоры $A$ на полу:<br/>
+            $\\sum M_A = 0 \\implies N_{\\text{ст}} \\cdot L\\sin\\alpha - Mg \\cdot \\frac{L}{2}\\cos\\alpha - mg \\cdot s\\cos\\alpha = 0$.<br/>
+            Выразим $N_{\\text{ст}}$:<br/>
+            $N_{\\text{ст}} = \\left(\\frac{M}{2} + m\\frac{s}{L}\\right) g \\cot\\alpha = \\left(5 + ${m} \\cdot \\frac{2}{4}\\right) \\cdot 9.8 \\cdot \\cot(${aDeg}^\\circ) \\approx ${rounded}\\text{ Н}$.`
+        };
+      },
+      challenges: [
+        {
+          id: 0,
+          title: 'Безопасный подъём на вершину',
+          hint: 'Поднимитесь на самый верх без срыва',
+          isCompleted: (st, comp) => st.sMan >= 3.8 && comp.isSafe
+        },
+        {
+          id: 1,
+          title: 'На грани соскальзывания (Fтр ≈ μN)',
+          hint: 'Добейтесь предельного трения',
+          isCompleted: (st, comp) => comp.isSafe && Math.abs(comp.fFriction - comp.fFrictionMax) < 5.0
+        },
+        {
+          id: 2,
+          title: 'Удержание при слабом трении (μ = 0.20)',
+          hint: 'Удержите равновесие при малом μ',
+          isCompleted: (st, comp) => st.mu <= 0.22 && comp.isSafe
+        }
+      ],
+      onModeChange: () => updateVisuals(),
+      onTaskSolved: () => playSuccessSound()
+    });
+    quiz.init();
+
+    // Чистая физика
+    function computeLadder(st) {
+      const alphaRad = (st.alphaDeg * Math.PI) / 180;
+      const ladderWeight = LADDER_MASS * G;
+      const manWeight = st.massMan * G;
+      const totalVerticalWeight = ladderWeight + manWeight;
+
+      const nFloor = totalVerticalWeight;
+
+      // Момент относительно нижней точки:
+      // Nст * L * sin(alpha) = Mg * (L/2) * cos(alpha) + mg * s * cos(alpha)
+      const cotA = 1 / Math.tan(alphaRad);
+      const nWall = (LADDER_MASS / 2 + st.massMan * (st.sMan / LADDER_LEN)) * G * cotA;
+      const fFriction = nWall;
+
+      const fFrictionMax = st.mu * nFloor;
+      const isSafe = fFriction <= fFrictionMax + 1e-4;
+
+      return {
+        alphaRad, ladderWeight, manWeight, totalVerticalWeight, nFloor, nWall,
+        fFriction, fFrictionMax, isSafe
+      };
+    }
+
+    // DOM элементы
+    const sliderAlpha = document.getElementById('slider-alpha');
+    const sliderS = document.getElementById('slider-s');
+    const sliderMu = document.getElementById('slider-mu');
+    const sliderMassMan = document.getElementById('slider-mass-man');
+
+    const labelAlpha = document.getElementById('label-alpha');
+    const labelS = document.getElementById('label-s');
+    const labelMu = document.getElementById('label-mu');
+    const labelMassMan = document.getElementById('label-mass-man');
+
+    const toggleForces = document.getElementById('toggle-forces');
+    const toggleArms = document.getElementById('toggle-arms');
+    const toggleValues = document.getElementById('toggle-values');
+
+    // Кнопка «Поделиться»
+    initShareButton(document.getElementById('btn-share'), () => ({
+      alphaDeg: state.alphaDeg,
+      sMan: state.sMan,
+      massMan: state.massMan,
+      mu: state.mu
+    }));
+
+    // Сброс
+    document.getElementById('btn-reset')?.addEventListener('click', () => {
+      state.alphaDeg = 60;
+      state.sMan = 2.0;
+      state.massMan = 60;
+      state.mu = 0.40;
+      syncInputs();
+      updateVisuals();
+    });
+
+    // Безопасный угол
+    document.getElementById('btn-safe-angle')?.addEventListener('click', () => {
+      state.alphaDeg = 65;
+      syncInputs();
+      updateVisuals();
+    });
+
+    // Пресеты
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const p = btn.dataset.preset;
+        if (p === 'empty') {
+          state.massMan = 0;
+          state.sMan = 0;
+          state.alphaDeg = 55;
+        } else if (p === 'middle') {
+          state.massMan = 60;
+          state.sMan = 2.0;
+          state.alphaDeg = 60;
+        } else if (p === 'top') {
+          state.massMan = 60;
+          state.sMan = 3.9;
+          state.alphaDeg = 60;
+        } else if (p === 'slip') {
+          state.massMan = 70;
+          state.sMan = 3.5;
+          state.alphaDeg = 35;
+        }
+        syncInputs();
+        updateVisuals();
+      });
+    });
+
+    // Синхронизация контролов
+    function syncInputs() {
+      sliderAlpha.value = state.alphaDeg;
+      sliderS.value = state.sMan;
+      sliderMu.value = state.mu;
+      sliderMassMan.value = state.massMan;
+
+      labelAlpha.textContent = `${state.alphaDeg}°`;
+      labelS.textContent = `${state.sMan.toFixed(1)} м (${(state.sMan / LADDER_LEN * 100).toFixed(0)}%)`;
+      labelMu.textContent = state.mu.toFixed(2);
+      labelMassMan.textContent = `${state.massMan} кг`;
+    }
+
+    sliderAlpha.addEventListener('input', (e) => {
+      state.alphaDeg = parseInt(e.target.value, 10);
+      labelAlpha.textContent = `${state.alphaDeg}°`;
+      updateVisuals();
+    });
+
+    sliderS.addEventListener('input', (e) => {
+      state.sMan = parseFloat(e.target.value);
+      labelS.textContent = `${state.sMan.toFixed(1)} м (${(state.sMan / LADDER_LEN * 100).toFixed(0)}%)`;
+      updateVisuals();
+    });
+
+    sliderMu.addEventListener('input', (e) => {
+      state.mu = parseFloat(e.target.value);
+      labelMu.textContent = state.mu.toFixed(2);
+      updateVisuals();
+    });
+
+    sliderMassMan.addEventListener('input', (e) => {
+      state.massMan = parseInt(e.target.value, 10);
+      labelMassMan.textContent = `${state.massMan} кг`;
+      updateVisuals();
+    });
+
+    [toggleForces, toggleArms, toggleValues].forEach(t => {
+      t.addEventListener('change', () => {
+        state.showForces = toggleForces.checked;
+        state.showArms = toggleArms.checked;
+        state.showValues = toggleValues.checked;
+        updateVisuals();
+      });
+    });
+
+    // Отрисовка
+    function updateVisuals() {
+      const comp = computeLadder(state);
+      const isMasked = quiz.isQuiz();
+
+      // Проверка испытаний
+      quiz.checkChallenges(state, comp);
+
+      // Геометрия на SVG:
+      // Длина лестницы в пикселях: пусть L_px = 320 px
+      const lPx = 320;
+      const baseDistX = lPx * Math.cos(comp.alphaRad);
+      const wallDistY = lPx * Math.sin(comp.alphaRad);
+
+      const baseAX = WALL_X + baseDistX;
+      const baseAY = FLOOR_Y;
+      const topBX = WALL_X;
+      const topBY = FLOOR_Y - wallDistY;
+
+      // Ручка основания A
+      document.getElementById('handle-base-vis').setAttribute('cx', baseAX);
+      document.getElementById('handle-base-hitbox').setAttribute('cx', baseAX);
+      document.getElementById('handle-base-label').setAttribute('x', baseAX);
+
+      // Лестница линия
+      document.getElementById('ladder-main').setAttribute('x1', baseAX);
+      document.getElementById('ladder-main').setAttribute('y1', baseAY);
+      document.getElementById('ladder-main').setAttribute('x2', topBX);
+      document.getElementById('ladder-main').setAttribute('y2', topBY);
+
+      document.getElementById('ladder-core').setAttribute('x1', baseAX);
+      document.getElementById('ladder-core').setAttribute('y1', baseAY);
+      document.getElementById('ladder-core').setAttribute('x2', topBX);
+      document.getElementById('ladder-core').setAttribute('y2', topBY);
+
+      // Перекладины
+      const rungsG = document.getElementById('ladder-rungs');
+      rungsG.innerHTML = '';
+      const numRungs = 10;
+      for (let i = 1; i < numRungs; i++) {
+        const frac = i / numRungs;
+        const rx = baseAX + (topBX - baseAX) * frac;
+        const ry = baseAY + (topBY - baseAY) * frac;
+        const rung = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        rung.setAttribute('cx', rx);
+        rung.setAttribute('cy', ry);
+        rung.setAttribute('r', '2.5');
+        rung.setAttribute('fill', '#ffffff');
+        rungsG.appendChild(rung);
+      }
+
+      // Центр тяжести лестницы L/2
+      const comX = (baseAX + topBX) / 2;
+      const comY = (baseAY + topBY) / 2;
+      document.getElementById('ladder-com').setAttribute('cx', comX);
+      document.getElementById('ladder-com').setAttribute('cy', comY);
+      document.getElementById('ladder-com-label').setAttribute('x', comX + 12);
+      document.getElementById('ladder-com-label').setAttribute('y', comY - 4);
+
+      // Человек на расстоянии s
+      const sFrac = state.sMan / LADDER_LEN;
+      const manX = baseAX + (topBX - baseAX) * sFrac;
+      const manY = baseAY + (topBY - baseAY) * sFrac;
+
+      const climberG = document.getElementById('climber-group');
+      if (state.massMan > 0) {
+        climberG.style.display = 'inline';
+        climberG.setAttribute('transform', `translate(${manX}, ${manY})`);
+        document.getElementById('climber-label').textContent = `${state.massMan} кг`;
+      } else {
+        climberG.style.display = 'none';
+      }
+
+      // Дуга угла α
+      const rArc = 40;
+      const arc = document.getElementById('arc-alpha');
+      const lArc = document.getElementById('label-alpha-deg');
+      const arcEndX = baseAX - rArc * Math.cos(comp.alphaRad);
+      const arcEndY = baseAY - rArc * Math.sin(comp.alphaRad);
+      arc.setAttribute('d', `M ${baseAX - rArc} ${baseAY} A ${rArc} ${rArc} 0 0 1 ${arcEndX} ${arcEndY} L ${baseAX} ${baseAY} Z`);
+      lArc.setAttribute('x', baseAX - rArc - 15);
+      lArc.setAttribute('y', baseAY - 8);
+      lArc.textContent = `${state.alphaDeg}°`;
+
+      // Векторы сил
+      const forcesLayer = document.getElementById('forces-layer');
+      forcesLayer.style.display = state.showForces ? 'inline' : 'none';
+
+      const scale = 0.4;
+      // Nст (вправо от стены)
+      const nWallLen = Math.min(100, Math.max(15, comp.nWall * scale));
+      const vNWall = document.getElementById('vec-nwall');
+      const lNWall = document.getElementById('label-nwall');
+      vNWall.setAttribute('x1', topBX);
+      vNWall.setAttribute('y1', topBY);
+      vNWall.setAttribute('x2', topBX + nWallLen);
+      vNWall.setAttribute('y2', topBY);
+      lNWall.setAttribute('x', topBX + nWallLen + 6);
+      lNWall.setAttribute('y', topBY - 4);
+      lNWall.textContent = isMasked ? 'Nст = ? Н' : (state.showValues ? `Nст = ${comp.nWall.toFixed(1)} Н` : 'Nст');
+
+      // Nпол (вверх от пола в точке A)
+      const nFloorLen = Math.min(100, Math.max(15, comp.nFloor * scale));
+      const vNFloor = document.getElementById('vec-nfloor');
+      const lNFloor = document.getElementById('label-nfloor');
+      vNFloor.setAttribute('x1', baseAX);
+      vNFloor.setAttribute('y1', baseAY);
+      vNFloor.setAttribute('x2', baseAX);
+      vNFloor.setAttribute('y2', baseAY - nFloorLen);
+      lNFloor.setAttribute('x', baseAX + 6);
+      lNFloor.setAttribute('y', baseAY - nFloorLen - 6);
+      lNFloor.textContent = state.showValues ? `Nпол = ${comp.nFloor.toFixed(1)} Н` : 'Nпол';
+
+      // Ftr (влево от точки A)
+      const ftrLen = Math.min(100, Math.max(15, comp.fFriction * scale));
+      const vFtr = document.getElementById('vec-ftr');
+      const lFtr = document.getElementById('label-ftr');
+      vFtr.setAttribute('x1', baseAX);
+      vFtr.setAttribute('y1', baseAY);
+      vFtr.setAttribute('x2', baseAX - ftrLen);
+      vFtr.setAttribute('y2', baseAY);
+      lFtr.setAttribute('x', baseAX - ftrLen - 8);
+      lFtr.setAttribute('y', baseAY + 15);
+      lFtr.textContent = isMasked ? 'Fтр = ? Н' : (state.showValues ? `Fтр = ${comp.fFriction.toFixed(1)} Н` : 'Fтр');
+
+      // Mg лестницы (вниз от com)
+      const mgLadderLen = Math.min(60, comp.ladderWeight * scale);
+      const vMgL = document.getElementById('vec-mg-ladder');
+      const lMgL = document.getElementById('label-mg-ladder');
+      vMgL.setAttribute('x1', comX);
+      vMgL.setAttribute('y1', comY);
+      vMgL.setAttribute('x2', comX);
+      vMgL.setAttribute('y2', comY + mgLadderLen);
+      lMgL.setAttribute('x', comX + 6);
+      lMgL.setAttribute('y', comY + mgLadderLen + 12);
+      lMgL.textContent = state.showValues ? `M·g = ${comp.ladderWeight.toFixed(1)} Н` : 'Mg';
+
+      // mg человека
+      const vMgM = document.getElementById('vec-mg-man');
+      const lMgM = document.getElementById('label-mg-man');
+      if (state.massMan > 0) {
+        vMgM.style.display = 'inline';
+        lMgM.style.display = 'inline';
+        const mgManLen = Math.min(90, comp.manWeight * scale);
+        vMgM.setAttribute('x1', manX);
+        vMgM.setAttribute('y1', manY);
+        vMgM.setAttribute('x2', manX);
+        vMgM.setAttribute('y2', manY + mgManLen);
+        lMgM.setAttribute('x', manX + 8);
+        lMgM.setAttribute('y', manY + mgManLen + 14);
+        lMgM.textContent = state.showValues ? `m·g = ${comp.manWeight.toFixed(1)} Н` : 'mg';
+      } else {
+        vMgM.style.display = 'none';
+        lMgM.style.display = 'none';
+      }
+
+      // Плечи сил
+      const armsLayer = document.getElementById('arms-layer');
+      armsLayer.innerHTML = '';
+      if (state.showArms) {
+        // Вертикальное плечо реакции стены: h = L·sinα
+        const armH = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        armH.setAttribute('x1', WALL_X - 15);
+        armH.setAttribute('y1', baseAY);
+        armH.setAttribute('x2', WALL_X - 15);
+        armH.setAttribute('y2', topBY);
+        armH.setAttribute('stroke', '#2563eb');
+        armH.setAttribute('stroke-width', '1.5');
+        armH.setAttribute('stroke-dasharray', '3 2');
+        armsLayer.appendChild(armH);
+
+        const txtH = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        txtH.setAttribute('x', WALL_X - 20);
+        txtH.setAttribute('y', (baseAY + topBY) / 2);
+        txtH.setAttribute('text-anchor', 'end');
+        txtH.setAttribute('font-size', '10');
+        txtH.setAttribute('font-weight', 'bold');
+        txtH.setAttribute('fill', '#2563eb');
+        txtH.textContent = `d_ст = ${(LADDER_LEN * Math.sin(comp.alphaRad)).toFixed(2)} м`;
+        armsLayer.appendChild(txtH);
+      }
+
+      // Карточки
+      document.getElementById('info-nwall-val').textContent = isMasked ? '? Н' : `${comp.nWall.toFixed(1)} Н`;
+      document.getElementById('info-nfloor-val').textContent = `${comp.nFloor.toFixed(1)} Н`;
+      document.getElementById('info-ftr-val').textContent = isMasked ? '? Н' : `${comp.fFriction.toFixed(1)} Н`;
+      document.getElementById('info-ftr-max').textContent = `${comp.fFrictionMax.toFixed(1)} Н`;
+
+      const margin = comp.fFrictionMax - comp.fFriction;
+      document.getElementById('info-ftr-margin').textContent = comp.isSafe
+        ? `Запас: +${margin.toFixed(1)} Н`
+        : `Превышение: ${Math.abs(margin).toFixed(1)} Н!`;
+
+      const statusDot = document.getElementById('status-dot');
+      const statusText = document.getElementById('status-text');
+      const canvasBadge = document.getElementById('canvas-status-badge');
+
+      if (comp.isSafe) {
+        statusDot.className = 'inline-block h-3.5 w-3.5 rounded-full bg-emerald-600 animate-pulse';
+        statusText.textContent = `Лестница устойчива (Fтр = ${comp.fFriction.toFixed(1)} Н ≤ Fтр.макс = ${comp.fFrictionMax.toFixed(1)} Н)`;
+        canvasBadge.className = 'font-bold text-emerald-600 dark:text-emerald-400';
+        canvasBadge.textContent = '● Статическое равновесие';
+      } else {
+        statusDot.className = 'inline-block h-3.5 w-3.5 rounded-full bg-red-600';
+        statusText.textContent = `⚠️ Соскальзывание лестницы! Fтр = ${comp.fFriction.toFixed(1)} Н > ${comp.fFrictionMax.toFixed(1)} Н`;
+        canvasBadge.className = 'font-bold text-red-600 dark:text-rose-400';
+        canvasBadge.textContent = '● Соскальзывание по полу!';
+      }
+    }
+
+    // Drag and Drop
+    let activeDrag = null;
+    const svgEl = document.getElementById('scene');
+
+    document.getElementById('handle-base').addEventListener('pointerdown', (e) => {
+      activeDrag = 'base';
+      e.target.setPointerCapture?.(e.pointerId);
+    });
+
+    document.getElementById('climber-group').addEventListener('pointerdown', (e) => {
+      activeDrag = 'climber';
+      e.target.setPointerCapture?.(e.pointerId);
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!activeDrag) return;
+      const rect = svgEl.getBoundingClientRect();
+      const scaleX = 700 / rect.width;
+      const svgX = (e.clientX - rect.left) * scaleX;
+
+      if (activeDrag === 'base') {
+        const dx = Math.max(50, Math.min(290, svgX - WALL_X));
+        const lPx = 320;
+        const rad = Math.acos(Math.min(0.95, dx / lPx));
+        state.alphaDeg = Math.max(25, Math.min(80, Math.round((rad * 180) / Math.PI)));
+        syncInputs();
+        updateVisuals();
+      } else if (activeDrag === 'climber') {
+        const lPx = 320;
+        const baseDistX = lPx * Math.cos((state.alphaDeg * Math.PI) / 180);
+        const baseAX = WALL_X + baseDistX;
+        const frac = Math.max(0, Math.min(1.0, (baseAX - svgX) / baseDistX));
+        state.sMan = Number((frac * LADDER_LEN).toFixed(1));
+        syncInputs();
+        updateVisuals();
+      }
+    });
+
+    window.addEventListener('pointerup', () => {
+      activeDrag = null;
+    });
+
+    window.addEventListener('themechanged', () => updateVisuals());
+
+    // Инициализация
+    syncInputs();
+    updateVisuals();
+  </script>
+</body>
+</html>

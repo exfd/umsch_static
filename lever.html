@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Статика ЕГЭ 2027 — Рычаг, правило моментов и косые силы</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {} }
+    };
+  </script>
+  <!-- KaTeX для формул -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
+  <style>
+    #beam-group {
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .dragging #beam-group {
+      transition: transform 0.05s linear;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-6 px-4 transition-colors duration-200">
+
+  <main class="max-w-4xl mx-auto flex flex-col gap-5">
+    <!-- Навигация между модулями -->
+    <nav class="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 overflow-x-auto pb-1">
+      <a href="index.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition flex items-center gap-1 shadow-xs">
+        <span>🏠</span> <span>Все темы</span>
+      </a>
+      <a href="lever.html" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white shadow-sm font-semibold">1. Рычаг</a>
+      <a href="pulleys.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">2. Блоки</a>
+      <a href="inclined-plane.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">3. Плоскость</a>
+      <a href="threads.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">4. Нити</a>
+      <a href="beam.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">5. Балка</a>
+      <a href="ladder.html" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition">6. Лестница (№26)</a>
+    </nav>
+
+    <!-- Шапка с заголовком и кнопками Сброс / Поделиться -->
+    <header class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Топик 1 • Статика ЕГЭ</span>
+          <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-medium">Версия 2.0</span>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Правило моментов. Рычаг и косые силы</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-theme-toggle" class="p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition text-base" title="Переключить тему">
+          🌙
+        </button>
+        <button id="btn-reset" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 transition">
+          Сброс
+        </button>
+        <button id="btn-share" class="rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-blue-700 active:scale-95 transition shadow-xs">
+          Поделиться
+        </button>
+      </div>
+    </header>
+
+    <!-- Переключатель режима: Песочница / Задача ЕГЭ -->
+    <div class="flex items-center justify-between bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Режим:</span>
+        <div class="inline-flex rounded-lg bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700">
+          <button id="btn-mode-sandbox" class="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-xs shadow-sm transition">
+            🔬 Песочница
+          </button>
+          <button id="btn-mode-quiz" class="px-3.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-300 font-medium text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+            🎯 Задача ЕГЭ
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-slate-500 dark:text-slate-400">Испытания:</span>
+        <span id="challenges-counter" class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">0/3</span>
+      </div>
+    </div>
+
+    <!-- Интерактивная карточка задачи ЕГЭ -->
+    <div id="quiz-card" class="hidden bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950/40 border border-blue-200 dark:border-indigo-900/60 rounded-xl p-4 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-bold text-blue-900 dark:text-blue-300">🎯 Задание ЕГЭ (правило моментов):</span>
+        </div>
+        <button id="btn-quiz-new" class="text-xs px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-slate-700 transition">
+          🔄 Новые данные
+        </button>
+      </div>
+      <div id="quiz-prompt" class="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium"></div>
+      <div class="flex flex-wrap items-center gap-3 pt-1">
+        <div class="relative flex items-center">
+          <input type="text" id="quiz-input" placeholder="Введите ответ (Н)" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 outline-hidden w-44" />
+          <span class="ml-2 text-xs text-slate-500 dark:text-slate-400">Н</span>
+        </div>
+        <button id="btn-quiz-check" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs active:scale-95 transition">
+          Проверить ответ
+        </button>
+        <button id="btn-quiz-solution" class="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 text-xs font-medium transition">
+          Показать подсказку/решение
+        </button>
+      </div>
+      <div id="quiz-feedback"></div>
+      <div id="quiz-solution-text" class="hidden mt-2 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 space-y-1"></div>
+    </div>
+
+    <!-- Краткая теория -->
+    <details class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-3 shadow-sm">
+      <summary class="cursor-pointer font-semibold text-slate-800 dark:text-slate-200 select-none">
+        📖 Краткая теория: истинное плечо силы и правило моментов
+      </summary>
+      <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300 space-y-2 leading-relaxed">
+        <p>
+          <strong>Истинное плечо силы ($d$)</strong> — это длина <em>перпендикуляра</em>, опущенного из оси вращения (точки опоры) на <strong>линию действия силы</strong>:
+          $$d = l \cdot \sin\alpha = |x - x_0| \cdot \sin\alpha$$
+        </p>
+        <p>
+          <strong>Момент силы ($M$):</strong> $M = F \cdot d = F \cdot l \cdot \sin\alpha \quad [\text{Н}\cdot\text{м}]$.
+          Если сила действует перпендикулярно рычагу ($\alpha = 90^\circ$), то $\sin 90^\circ = 1$ и $d = l$. При отклонении вектора истинное плечо уменьшается!
+        </p>
+        <p>
+          <strong>Правило моментов:</strong> рычаг находится в равновесии, если сумма моментов сил, вращающих его против часовой стрелки ($M_1$), равна сумме моментов сил, вращающих по часовой стрелке ($M_2$):
+          $$\sum M = M_1 - M_2 = 0$$
+        </p>
+      </div>
+    </details>
+
+    <!-- Шаблон обоснования №26 (Критерии ФИПИ) -->
+    <div id="justification-container"></div>
+
+    <!-- Панель статуса и чекбоксов -->
+    <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+      <div class="flex items-center gap-2.5">
+        <span id="status-dot" class="inline-block h-3.5 w-3.5 rounded-full bg-red-600 transition-colors"></span>
+        <span id="status-text" class="font-semibold text-slate-800 dark:text-slate-200 text-sm sm:text-base" role="status" aria-live="polite">Проверка...</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4 text-sm text-slate-700 dark:text-slate-300">
+        <label class="flex items-center gap-1.5 cursor-pointer select-none hover:text-blue-600 transition">
+          <input type="checkbox" id="toggle-forces" checked class="accent-blue-600" /> Силы
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer select-none hover:text-blue-600 transition">
+          <input type="checkbox" id="toggle-arms" checked class="accent-blue-600" /> Истинные плечи ($d$)
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer select-none hover:text-blue-600 transition">
+          <input type="checkbox" id="toggle-values" checked class="accent-blue-600" /> Числа
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer select-none hover:text-blue-600 transition">
+          <input type="checkbox" id="toggle-moments" checked class="accent-blue-600" /> Дуги моментов
+        </label>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-balance" class="rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-medium text-white hover:bg-emerald-700 active:scale-95 transition shadow-xs flex items-center gap-1.5">
+          <span>⚖️</span> <span>Уравновесить</span>
+        </button>
+        <button id="btn-add-weight" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition">
+          + Груз
+        </button>
+      </div>
+    </div>
+
+    <!-- Быстрые пресеты задач ЕГЭ -->
+    <div class="flex flex-wrap items-center gap-2 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/60 rounded-xl px-4 py-2.5 text-xs text-slate-700 dark:text-slate-300">
+      <span class="font-bold text-emerald-950 dark:text-emerald-300 flex items-center gap-1">🎯 Пресеты:</span>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="balance-simple">
+        ⚖️ Классический баланс (2:1)
+      </button>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="angled-30">
+        📐 Косая сила (α = 30°)
+      </button>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="golden-rule">
+        🏆 Выигрыш в силе в 3 раза
+      </button>
+      <button class="preset-btn px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition shadow-2xs font-medium" data-preset="multi-load">
+        📦 Три груза на балке
+      </button>
+    </div>
+
+    <!-- Панель испытаний темы -->
+    <div class="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-slate-900/50 p-3.5 space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-amber-950 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+          <span>🏆</span> <span>Испытания темы: Рычаг и моменты</span>
+        </span>
+        <span class="text-[11px] text-slate-500 dark:text-slate-400">Выполняйте условия в песочнице</span>
+      </div>
+      <div id="challenges-list" class="grid grid-cols-1 md:grid-cols-3 gap-2"></div>
+    </div>
+
+    <!-- Основной интерактивный холст SVG -->
+    <div class="relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 shadow-sm overflow-hidden">
+      <div class="text-[11px] font-medium text-slate-600 dark:text-slate-400 flex items-center justify-between mb-2">
+        <span class="flex items-center gap-1">
+          <span>👆</span> <span>Перетаскивайте опору (треугольник) и грузы вдоль балки</span>
+        </span>
+        <span id="canvas-status-badge" class="font-bold text-slate-500 dark:text-slate-400">● Проверка баланса</span>
+      </div>
+
+      <svg id="scene" viewBox="0 0 700 360" class="w-full h-auto select-none rounded-lg bg-slate-50/60 dark:bg-slate-950/70 border border-slate-100 dark:border-slate-800/80 cursor-default">
+        <defs>
+          <pattern id="grid-pattern" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" class="text-slate-200 dark:text-slate-800/60" stroke-width="0.75" />
+          </pattern>
+          <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="10" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 1 0 L 5 10 L 9 0 z" fill="#ef4444" />
+          </marker>
+          <marker id="arrow-angled" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" />
+          </marker>
+          <marker id="arrow-moment-ccw" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6" />
+          </marker>
+          <marker id="arrow-moment-cw" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+          </marker>
+        </defs>
+
+        <!-- Фоновая сетка -->
+        <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+
+        <!-- Земля / пол под опорой -->
+        <line x1="80" y1="260" x2="620" y2="260" stroke="#cbd5e1" class="dark:stroke-slate-700" stroke-width="3" />
+
+        <!-- Пунктирная нулевая горизонталь балки -->
+        <line x1="80" y1="180" x2="620" y2="180" stroke="#94a3b8" class="dark:stroke-slate-600" stroke-dasharray="3 3" stroke-width="1" />
+
+        <!-- Дуги суммарных моментов сил (вокруг опоры) -->
+        <g id="moments-arc-group"></g>
+
+        <!-- Опора (треугольник) -->
+        <g id="fulcrum-group" class="cursor-ew-resize">
+          <circle id="fulcrum-hitbox" cx="350" cy="210" r="24" fill="transparent" />
+          <polygon id="fulcrum-triangle" points="350,180 330,260 370,260" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2.5" class="shadow-md" />
+          <circle id="fulcrum-pivot" cx="350" cy="180" r="5" fill="#ffffff" stroke="#1d4ed8" stroke-width="2.5" />
+          <text id="fulcrum-label" x="350" y="278" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af" class="dark:fill-blue-400">Опора x₀</text>
+        </g>
+
+        <!-- Вращающаяся группа балки -->
+        <g id="beam-group" transform="rotate(0 350 180)">
+          <!-- Балка -->
+          <rect id="beam-rect" x="90" y="172" width="520" height="16" rx="4" fill="#64748b" stroke="#334155" stroke-width="2" class="dark:fill-slate-600 dark:stroke-slate-400 shadow-sm" />
+
+          <!-- Деления линейки шкалы -->
+          <g id="beam-ticks"></g>
+
+          <!-- Плечи, подвесы и грузы -->
+          <g id="arms-group"></g>
+          <g id="weights-group"></g>
+          <g id="forces-group"></g>
+        </g>
+
+        <!-- Слой косой силы (линия действия, истинный перпендикуляр, символ прямого угла) -->
+        <g id="angled-force-layer"></g>
+      </svg>
+    </div>
+
+    <!-- Информационная таблица моментов и баланса -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <!-- Момент против часовой стрелки M1 -->
+      <div class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/60 rounded-xl p-3.5 shadow-sm">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-bold text-blue-800 dark:text-blue-300">Момент влево: M₁ (↺)</span>
+          <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">Против часовой</span>
+        </div>
+        <div class="text-xl font-extrabold text-blue-600 dark:text-blue-400" id="info-m1-val">0.00 Н·м</div>
+        <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono" id="info-m1-formula">
+          Σ (F · d₁)
+        </div>
+      </div>
+
+      <!-- Момент по часовой стрелке M2 -->
+      <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/60 rounded-xl p-3.5 shadow-sm">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-bold text-amber-800 dark:text-amber-300">Момент вправо: M₂ (↻)</span>
+          <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300">По часовой</span>
+        </div>
+        <div class="text-xl font-extrabold text-amber-600 dark:text-amber-400" id="info-m2-val">0.00 Н·м</div>
+        <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono" id="info-m2-formula">
+          Σ (F · d₂)
+        </div>
+      </div>
+
+      <!-- Разность моментов ΔM -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 shadow-sm">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Результирующий: ΔM</span>
+          <span id="badge-balance" class="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Баланс</span>
+        </div>
+        <div class="text-xl font-extrabold text-slate-800 dark:text-slate-100" id="info-dm-val">0.00 Н·м</div>
+        <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono">
+          ΔM = M₁ − M₂ = 0
+        </div>
+      </div>
+    </div>
+
+    <!-- Управление косой силой (угол действия) -->
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm flex items-center gap-1.5">
+          <span>📐</span> <span>Угол действия крайней правой силы (Задание №26 ЕГЭ):</span>
+        </h3>
+        <span id="force-angle-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">α = 90° (вертикально)</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-xs font-mono text-slate-500">15°</span>
+        <input type="range" id="slider-force-angle" min="15" max="165" step="1" value="90" class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+        <span class="text-xs font-mono text-slate-500">165°</span>
+      </div>
+      <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+        Обратите внимание: при наклоне вектора истинное плечо $d = l \cdot \sin\alpha$ (зелёная пунктирная линия с прямым углом $\square$) становится меньше геометрического расстояния вдоль балки $l$.
+      </p>
+    </div>
+
+    <!-- Список карточек грузов с ползунками массы и координаты -->
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm flex items-center gap-1.5">
+          <span>📦</span> <span>Грузы на рычаге:</span>
+        </h3>
+        <span class="text-xs text-slate-500 dark:text-slate-400">Максимум 4 груза</span>
+      </div>
+      <div id="controls-container" class="space-y-3"></div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initTheme, toggleTheme } from './assets/js/theme.js';
+    import { initShareButton, formatSI } from './assets/js/widget-utils.js';
+    import { renderJustificationBlock, initJustificationButtons } from './assets/js/justification.js';
+    import { createQuizManager } from './assets/js/quiz-engine.js';
+    import { playSuccessSound } from './assets/js/sound-effects.js';
+
+    // Константы модели
+    const G = 9.8;
+    const SVG_WIDTH = 700;
+    const SVG_HEIGHT = 360;
+    const BEAM_Y = 180;
+    const BEAM_HALF_LENGTH = 1.0; // от -1.0 м до +1.0 м (полная длина 2.0 м)
+    const PX_PER_METER = 260; // 1 м = 260 px
+    const BEAM_CENTER_PX = 350;
+    const EPSILON = 0.05; // допуск баланса Н·м
+
+    // Начальное состояние
+    const state = {
+      fulcrumX: 0, // координата опоры от -0.6 до +0.6 м
+      forceAngleDeg: 90, // угол крайней правой силы (от 15° до 165°)
+      weights: [
+        { id: 'w1', mass: 2.0, position: -0.6 },
+        { id: 'w2', mass: 4.0, position: 0.3 }
+      ],
+      showForces: true,
+      showArms: true,
+      showValues: true,
+      showMoments: true
+    };
+
+    // Загрузка состояния из URL
+    function loadStateFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('state');
+      if (!raw) return;
+      try {
+        const base64 = raw.replace(/-/g, '+').replace(/_/g, '/');
+        const parsed = JSON.parse(decodeURIComponent(atob(base64)));
+        if (typeof parsed.fulcrumX === 'number') state.fulcrumX = Math.max(-0.6, Math.min(0.6, parsed.fulcrumX));
+        if (typeof parsed.forceAngleDeg === 'number') state.forceAngleDeg = Math.max(15, Math.min(165, parsed.forceAngleDeg));
+        if (Array.isArray(parsed.weights)) {
+          state.weights = parsed.weights.slice(0, 4).map(w => ({
+            id: w.id || ('w' + Math.random().toString(36).substr(2, 4)),
+            mass: Math.max(0.1, Math.min(20, w.mass || 1)),
+            position: Math.max(-1, Math.min(1, w.position || 0))
+          }));
+        }
+      } catch (err) {
+        console.warn('URL state parsing error:', err);
+      }
+    }
+    loadStateFromUrl();
+
+    // Инициализация темы и обоснования
+    initTheme();
+    document.getElementById('btn-theme-toggle')?.addEventListener('click', toggleTheme);
+
+    const justContainer = document.getElementById('justification-container');
+    if (justContainer) {
+      justContainer.innerHTML = renderJustificationBlock('lever');
+      initJustificationButtons();
+    }
+
+    // Инициализация квиз-движка
+    const quiz = createQuizManager({
+      topicId: 'lever',
+      generateTask: () => {
+        const m1 = [1, 2, 3, 4][Math.floor(Math.random() * 4)];
+        const l1 = [0.4, 0.5, 0.6, 0.8][Math.floor(Math.random() * 4)];
+        const l2 = [0.3, 0.4, 0.5][Math.floor(Math.random() * 3)];
+        const aDeg = [30, 45, 60, 90][Math.floor(Math.random() * 4)];
+        const aRad = (aDeg * Math.PI) / 180;
+
+        const targetF2 = (m1 * G * l1) / (l2 * Math.sin(aRad));
+        const rounded = Math.round(targetF2 * 10) / 10;
+
+        return {
+          prompt: `К левому концу невесомого рычага на плече <b>l₁ = ${l1} м</b> подвешен груз массой <b>m₁ = ${m1} кг</b>. Справа на расстоянии <b>l₂ = ${l2} м</b> приложена удерживающая сила $F_2$ под углом <b>α = ${aDeg}°</b> к рычагу. Найдите величину силы $F_2$, необходимой для удержания рычага в горизонтальном равновесии. (Примите $g = 9.8\\text{ м/с}^2$, ответ округлите до десятых).`,
+          answer: rounded,
+          tolerance: 0.3,
+          solution: `<b>Решение:</b><br/>
+            Правило моментов относительно оси вращения в точке опоры:<br/>
+            $M_1 = M_2 \\implies (m_1 g) \\cdot l_1 = F_2 \\cdot d_2$.<br/>
+            Истинное плечо наклонной силы: $d_2 = l_2 \\cdot \\sin\\alpha$.<br/>
+            Следовательно: $F_2 = \\frac{m_1 g l_1}{l_2 \\sin\\alpha} = \\frac{${m1} \\cdot 9.8 \\cdot ${l1}}{${l2} \\cdot \\sin(${aDeg}^\\circ)} \\approx ${rounded}\\text{ Н}$.`
+        };
+      },
+      challenges: [
+        {
+          id: 0,
+          title: 'Идеальный баланс (ΔM ≈ 0)',
+          hint: 'Уравновесьте рычаг',
+          isCompleted: (st, comp) => comp.isBalanced
+        },
+        {
+          id: 1,
+          title: 'Косой угол действия (α ≤ 45°)',
+          hint: 'Удержите равновесие при малом угле',
+          isCompleted: (st, comp) => comp.isBalanced && st.forceAngleDeg <= 45
+        },
+        {
+          id: 2,
+          title: 'Золотое правило (выигрыш ≥ 3×)',
+          hint: 'Отношение плеч сил ≥ 3',
+          isCompleted: (st, comp) => {
+            if (!comp.isBalanced || comp.weights.length < 2) return false;
+            const w1 = comp.weights[0];
+            const w2 = comp.weights[comp.weights.length - 1];
+            if (w1.arm < 0.05 || w2.arm < 0.05) return false;
+            const ratio = Math.max(w1.arm / w2.arm, w2.arm / w1.arm);
+            return ratio >= 3.0;
+          }
+        }
+      ],
+      onModeChange: () => updateVisualsOnly(),
+      onTaskSolved: () => playSuccessSound()
+    });
+    quiz.init();
+
+    // DOM ссылки
+    const svgEl = document.getElementById('scene');
+    const fulcrumGroup = document.getElementById('fulcrum-group');
+    const beamGroup = document.getElementById('beam-group');
+    const momentsArcGroup = document.getElementById('moments-arc-group');
+    const angledForceLayer = document.getElementById('angled-force-layer');
+    const controlsContainer = document.getElementById('controls-container');
+    const sliderAngle = document.getElementById('slider-force-angle');
+    const badgeAngle = document.getElementById('force-angle-badge');
+
+    // Кнопка «Поделиться»
+    initShareButton(document.getElementById('btn-share'), () => ({
+      fulcrumX: state.fulcrumX,
+      forceAngleDeg: state.forceAngleDeg,
+      weights: state.weights
+    }));
+
+    // Кнопка сброса
+    document.getElementById('btn-reset')?.addEventListener('click', () => {
+      state.fulcrumX = 0;
+      state.forceAngleDeg = 90;
+      state.weights = [
+        { id: 'w1', mass: 2.0, position: -0.6 },
+        { id: 'w2', mass: 4.0, position: 0.3 }
+      ];
+      sliderAngle.value = 90;
+      renderAll();
+    });
+
+    // Кнопка уравновесить
+    document.getElementById('btn-balance')?.addEventListener('click', balanceLever);
+
+    // Добавить груз
+    document.getElementById('btn-add-weight')?.addEventListener('click', () => {
+      if (state.weights.length >= 4) return;
+      const id = 'w' + Math.random().toString(36).substr(2, 4);
+      const pos = state.weights.length % 2 === 0 ? -0.4 : 0.5;
+      state.weights.push({ id, mass: 2.0, position: pos });
+      renderAll();
+    });
+
+    // Слайдер угла силы
+    sliderAngle.addEventListener('input', (e) => {
+      state.forceAngleDeg = parseInt(e.target.value, 10);
+      badgeAngle.textContent = `α = ${state.forceAngleDeg}°${state.forceAngleDeg === 90 ? ' (вертикально)' : ''}`;
+      updateVisualsOnly();
+    });
+
+    // Чекбоксы
+    ['toggle-forces', 'toggle-arms', 'toggle-values', 'toggle-moments'].forEach(id => {
+      document.getElementById(id)?.addEventListener('change', (e) => {
+        if (id === 'toggle-forces') state.showForces = e.target.checked;
+        if (id === 'toggle-arms') state.showArms = e.target.checked;
+        if (id === 'toggle-values') state.showValues = e.target.checked;
+        if (id === 'toggle-moments') state.showMoments = e.target.checked;
+        updateVisualsOnly();
+      });
+    });
+
+    // Пресеты
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const p = btn.dataset.preset;
+        if (p === 'balance-simple') {
+          state.fulcrumX = 0;
+          state.forceAngleDeg = 90;
+          state.weights = [
+            { id: 'w1', mass: 4.0, position: -0.3 },
+            { id: 'w2', mass: 2.0, position: 0.6 }
+          ];
+        } else if (p === 'angled-30') {
+          state.fulcrumX = 0;
+          state.forceAngleDeg = 30; // sin 30° = 0.5
+          state.weights = [
+            { id: 'w1', mass: 1.0, position: -0.4 }, // M1 = 1 * g * 0.4 = 0.4g
+            { id: 'w2', mass: 1.6, position: 0.5 }   // M2 = 1.6 * g * 0.5 * sin30° = 0.4g
+          ];
+        } else if (p === 'golden-rule') {
+          state.fulcrumX = -0.5;
+          state.forceAngleDeg = 90;
+          state.weights = [
+            { id: 'w1', mass: 6.0, position: -0.8 }, // d1 = 0.3 м
+            { id: 'w2', mass: 2.0, position: 0.4 }   // d2 = 0.9 м (в 3 раза длиннее!)
+          ];
+        } else if (p === 'multi-load') {
+          state.fulcrumX = 0;
+          state.forceAngleDeg = 90;
+          state.weights = [
+            { id: 'w1', mass: 3.0, position: -0.7 },
+            { id: 'w2', mass: 2.0, position: -0.2 },
+            { id: 'w3', mass: 5.0, position: 0.5 }
+          ];
+        }
+        sliderAngle.value = state.forceAngleDeg;
+        badgeAngle.textContent = `α = ${state.forceAngleDeg}°`;
+        renderAll();
+      });
+    });
+
+    // Расчёт физики
+    function computeLever(st) {
+      let momentCCW = 0;
+      let momentCW = 0;
+
+      const weights = st.weights.map((w, idx) => {
+        const isLastRight = idx === st.weights.length - 1 && (w.position > st.fulcrumX);
+        const angleDeg = isLastRight ? st.forceAngleDeg : 90;
+        const angleRad = (angleDeg * Math.PI) / 180;
+
+        const force = w.mass * G;
+        const signedDistance = w.position - st.fulcrumX;
+        const geomDist = Math.abs(signedDistance);
+        const trueArm = geomDist * Math.sin(angleRad);
+        const moment = force * trueArm;
+
+        if (signedDistance < 0) momentCCW += moment;
+        else if (signedDistance > 0) momentCW += moment;
+
+        return { ...w, force, geomDist, trueArm, angleDeg, angleRad, moment, signedDistance };
+      });
+
+      const netMoment = momentCCW - momentCW;
+      const isBalanced = Math.abs(netMoment) <= EPSILON;
+      const tiltAngleDeg = isBalanced ? 0 : Math.max(-12, Math.min(12, -netMoment * 0.8));
+
+      return { weights, momentCCW, momentCW, netMoment, isBalanced, tiltAngleDeg };
+    }
+
+    function balanceLever() {
+      if (state.weights.length < 2) return;
+      const lastIdx = state.weights.length - 1;
+      const lastW = state.weights[lastIdx];
+      const isRight = lastW.position > state.fulcrumX;
+      const angleRad = isRight ? (state.forceAngleDeg * Math.PI) / 180 : Math.PI / 2;
+
+      let otherNet = 0;
+      for (let i = 0; i < lastIdx; i++) {
+        const w = state.weights[i];
+        const dist = w.position - state.fulcrumX;
+        otherNet += -dist * (w.mass * G);
+      }
+
+      const targetArm = (otherNet / (lastW.mass * G * Math.sin(angleRad)));
+      const targetPos = state.fulcrumX + targetArm;
+      if (targetPos >= -BEAM_HALF_LENGTH && targetPos <= BEAM_HALF_LENGTH) {
+        state.weights[lastIdx].position = Number(targetPos.toFixed(2));
+      } else {
+        state.fulcrumX = 0;
+      }
+      renderAll();
+    }
+
+    function meterToPx(m) {
+      return BEAM_CENTER_PX + m * PX_PER_METER;
+    }
+
+    function clientXToMeters(clientX) {
+      const rect = svgEl.getBoundingClientRect();
+      const scaleX = SVG_WIDTH / rect.width;
+      const svgX = (clientX - rect.left) * scaleX;
+      const m = (svgX - BEAM_CENTER_PX) / PX_PER_METER;
+      return Math.max(-BEAM_HALF_LENGTH, Math.min(BEAM_HALF_LENGTH, m));
+    }
+
+    // Рендер разметки балки
+    function renderTicks() {
+      const g = document.getElementById('beam-ticks');
+      g.innerHTML = '';
+      for (let m = -BEAM_HALF_LENGTH; m <= BEAM_HALF_LENGTH + 0.001; m += 0.2) {
+        const x = meterToPx(m);
+        const isMajor = Math.abs(m * 10 % 4) < 0.1 || Math.abs(m) < 0.01;
+        const tickHeight = isMajor ? 8 : 4;
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x);
+        line.setAttribute('y1', BEAM_Y - tickHeight);
+        line.setAttribute('x2', x);
+        line.setAttribute('y2', BEAM_Y + tickHeight);
+        line.setAttribute('stroke', '#94a3b8');
+        line.setAttribute('stroke-width', isMajor ? '1.5' : '1');
+        g.appendChild(line);
+
+        if (isMajor && Math.abs(m) > 0.01) {
+          const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          txt.setAttribute('x', x);
+          txt.setAttribute('y', BEAM_Y - 12);
+          txt.setAttribute('text-anchor', 'middle');
+          txt.setAttribute('font-size', '9');
+          txt.setAttribute('fill', '#94a3b8');
+          txt.textContent = `${m > 0 ? '+' : ''}${m.toFixed(1)}м`;
+          g.appendChild(txt);
+        }
+      }
+    }
+    renderTicks();
+
+    // Быстрое обновление только визуальных элементов без сброса карточек
+    function updateVisualsOnly() {
+      const comp = computeLever(state);
+      const isMasked = quiz.isQuiz();
+
+      // Проверка испытаний
+      quiz.checkChallenges(state, comp);
+
+      // Опора X
+      const fulcrumPx = meterToPx(state.fulcrumX);
+      document.getElementById('fulcrum-triangle').setAttribute('points', `${fulcrumPx},${BEAM_Y} ${fulcrumPx - 20},260 ${fulcrumPx + 20},260`);
+      document.getElementById('fulcrum-pivot').setAttribute('cx', fulcrumPx);
+      document.getElementById('fulcrum-label').setAttribute('x', fulcrumPx);
+      document.getElementById('fulcrum-hitbox').setAttribute('cx', fulcrumPx);
+
+      // Вращение балки
+      beamGroup.setAttribute('transform', `rotate(${comp.tiltAngleDeg} ${fulcrumPx} ${BEAM_Y})`);
+
+      // Рендер плеч, грузов и сил внутри балки
+      const armsGroup = document.getElementById('arms-group');
+      const weightsGroup = document.getElementById('weights-group');
+      const forcesGroup = document.getElementById('forces-group');
+      armsGroup.innerHTML = '';
+      weightsGroup.innerHTML = '';
+      forcesGroup.innerHTML = '';
+      angledForceLayer.innerHTML = '';
+
+      comp.weights.forEach((w, idx) => {
+        const wx = meterToPx(w.position);
+        const isAngled = w.angleDeg !== 90;
+
+        // Плечо
+        if (state.showArms) {
+          const armLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          armLine.setAttribute('x1', fulcrumPx);
+          armLine.setAttribute('y1', BEAM_Y - 20);
+          armLine.setAttribute('x2', wx);
+          armLine.setAttribute('y2', BEAM_Y - 20);
+          armLine.setAttribute('stroke', w.signedDistance < 0 ? '#3b82f6' : '#f59e0b');
+          armLine.setAttribute('stroke-width', '2');
+          armLine.setAttribute('stroke-dasharray', '4 2');
+          armsGroup.appendChild(armLine);
+
+          const armTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          armTxt.setAttribute('x', (fulcrumPx + wx) / 2);
+          armTxt.setAttribute('y', BEAM_Y - 26);
+          armTxt.setAttribute('text-anchor', 'middle');
+          armTxt.setAttribute('font-size', '10');
+          armTxt.setAttribute('font-weight', 'bold');
+          armTxt.setAttribute('fill', w.signedDistance < 0 ? '#2563eb' : '#d97706');
+          armTxt.textContent = `d = ${w.trueArm.toFixed(2)} м`;
+          armsGroup.appendChild(armTxt);
+        }
+
+        // Подвес и тело груза
+        const rope = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        rope.setAttribute('x1', wx);
+        rope.setAttribute('y1', BEAM_Y + 8);
+        rope.setAttribute('x2', wx);
+        rope.setAttribute('y2', BEAM_Y + 40);
+        rope.setAttribute('stroke', '#475569');
+        rope.setAttribute('stroke-width', '2');
+        weightsGroup.appendChild(rope);
+
+        const wGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        wGroup.setAttribute('class', 'cursor-ew-resize weight-handle');
+        wGroup.dataset.weightId = w.id;
+
+        // Хитбокс
+        const hitbox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        hitbox.setAttribute('x', wx - 25);
+        hitbox.setAttribute('y', BEAM_Y + 20);
+        hitbox.setAttribute('width', '50');
+        hitbox.setAttribute('height', '60');
+        hitbox.setAttribute('fill', 'transparent');
+        wGroup.appendChild(hitbox);
+
+        // Прямоугольник груза (высота зависит от массы)
+        const h = Math.min(50, Math.max(25, 20 + w.mass * 3));
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', wx - 22);
+        rect.setAttribute('y', BEAM_Y + 40);
+        rect.setAttribute('width', '44');
+        rect.setAttribute('height', h);
+        rect.setAttribute('rx', '4');
+        rect.setAttribute('fill', '#94a3b8');
+        rect.setAttribute('stroke', '#334155');
+        rect.setAttribute('stroke-width', '2');
+        wGroup.appendChild(rect);
+
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', wx);
+        label.setAttribute('y', BEAM_Y + 40 + h / 2 + 4);
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('font-size', '11');
+        label.setAttribute('font-weight', 'bold');
+        label.setAttribute('fill', '#0f172a');
+        label.textContent = `${w.mass.toFixed(1)}кг`;
+        wGroup.appendChild(label);
+        weightsGroup.appendChild(wGroup);
+
+        // Вектор силы
+        if (state.showForces) {
+          const forceLen = Math.min(80, Math.max(25, w.force * 1.2));
+          if (!isAngled) {
+            // Обычная вертикальная сила тяжести
+            const fLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            fLine.setAttribute('x1', wx);
+            fLine.setAttribute('y1', BEAM_Y + 40 + h);
+            fLine.setAttribute('x2', wx);
+            fLine.setAttribute('y2', BEAM_Y + 40 + h + forceLen);
+            fLine.setAttribute('stroke', '#ef4444');
+            fLine.setAttribute('stroke-width', '3');
+            fLine.setAttribute('marker-end', 'url(#arrow-down)');
+            forcesGroup.appendChild(fLine);
+
+            const fTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            fTxt.setAttribute('x', wx + 6);
+            fTxt.setAttribute('y', BEAM_Y + 40 + h + forceLen + 14);
+            fTxt.setAttribute('font-size', '11');
+            fTxt.setAttribute('font-weight', 'bold');
+            fTxt.setAttribute('fill', '#dc2626');
+            fTxt.textContent = state.showValues ? `${w.force.toFixed(1)}Н` : 'F';
+            forcesGroup.appendChild(fTxt);
+          } else {
+            // Наклонная сила F (ЕГЭ №26) с линией действия и перпендикуляром к оси
+            const fEndLocalX = wx + forceLen * Math.cos(w.angleRad);
+            const fEndLocalY = BEAM_Y + forceLen * Math.sin(w.angleRad);
+
+            const fLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            fLine.setAttribute('x1', wx);
+            fLine.setAttribute('y1', BEAM_Y);
+            fLine.setAttribute('x2', fEndLocalX);
+            fLine.setAttribute('y2', fEndLocalY);
+            fLine.setAttribute('stroke', '#2563eb');
+            fLine.setAttribute('stroke-width', '3');
+            fLine.setAttribute('marker-end', 'url(#arrow-angled)');
+            forcesGroup.appendChild(fLine);
+
+            const fTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            fTxt.setAttribute('x', fEndLocalX + 6);
+            fTxt.setAttribute('y', fEndLocalY + 12);
+            fTxt.setAttribute('font-size', '11');
+            fTxt.setAttribute('font-weight', 'bold');
+            fTxt.setAttribute('fill', '#1d4ed8');
+            fTxt.textContent = isMasked ? 'F = ? Н' : (state.showValues ? `${w.force.toFixed(1)}Н (α=${w.angleDeg}°)` : 'F');
+            forcesGroup.appendChild(fTxt);
+
+            // Линия действия силы (пунктир) через всю плоскость
+            const actLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            const extLen = 280;
+            actLine.setAttribute('x1', wx - extLen * Math.cos(w.angleRad));
+            actLine.setAttribute('y1', BEAM_Y - extLen * Math.sin(w.angleRad));
+            actLine.setAttribute('x2', wx + extLen * Math.cos(w.angleRad));
+            actLine.setAttribute('y2', BEAM_Y + extLen * Math.sin(w.angleRad));
+            actLine.setAttribute('stroke', '#3b82f6');
+            actLine.setAttribute('stroke-dasharray', '3 3');
+            actLine.setAttribute('stroke-width', '1.2');
+            actLine.setAttribute('opacity', '0.7');
+            angledForceLayer.appendChild(actLine);
+
+            // Перпендикуляр из опоры к линии действия силы
+            // Линия действия проходит через (wx, BEAM_Y) с направлением n = (cos(α), sin(α)).
+            // Вектор от wx к fulcrumPx: v = (fulcrumPx - wx, 0).
+            // Проекция v на линию действия: proj = (fulcrumPx - wx) * cos(α).
+            // Ближайшая точка на линии: P = (wx + proj*cos(α), BEAM_Y + proj*sin(α)).
+            const proj = (fulcrumPx - wx) * Math.cos(w.angleRad);
+            const pX = wx + proj * Math.cos(w.angleRad);
+            const pY = BEAM_Y + proj * Math.sin(w.angleRad);
+
+            const perpLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            perpLine.setAttribute('x1', fulcrumPx);
+            perpLine.setAttribute('y1', BEAM_Y);
+            perpLine.setAttribute('x2', pX);
+            perpLine.setAttribute('y2', pY);
+            perpLine.setAttribute('stroke', '#059669');
+            perpLine.setAttribute('stroke-width', '2.5');
+            perpLine.setAttribute('stroke-dasharray', '4 2');
+            angledForceLayer.appendChild(perpLine);
+
+            // Квадрат прямого угла в точке (pX, pY)
+            const sqSize = 8;
+            const dirX = Math.cos(w.angleRad);
+            const dirY = Math.sin(w.angleRad);
+            // нормаль
+            const nX = (fulcrumPx - pX) / Math.hypot(fulcrumPx - pX, BEAM_Y - pY);
+            const nY = (BEAM_Y - pY) / Math.hypot(fulcrumPx - pX, BEAM_Y - pY);
+
+            const p1X = pX + nX * sqSize;
+            const p1Y = pY + nY * sqSize;
+            const p2X = p1X + dirX * sqSize;
+            const p2Y = p1Y + dirY * sqSize;
+            const p3X = pX + dirX * sqSize;
+            const p3Y = pY + dirY * sqSize;
+
+            const rightAngleMark = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            rightAngleMark.setAttribute('points', `${p1X},${p1Y} ${p2X},${p2Y} ${p3X},${p3Y}`);
+            rightAngleMark.setAttribute('fill', 'none');
+            rightAngleMark.setAttribute('stroke', '#059669');
+            rightAngleMark.setAttribute('stroke-width', '1.5');
+            angledForceLayer.appendChild(rightAngleMark);
+
+            // Подпись истинного плеча d
+            const perpLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            perpLabel.setAttribute('x', (fulcrumPx + pX) / 2 - 12);
+            perpLabel.setAttribute('y', (BEAM_Y + pY) / 2 - 8);
+            perpLabel.setAttribute('font-size', '11');
+            perpLabel.setAttribute('font-weight', 'bold');
+            perpLabel.setAttribute('fill', '#047857');
+            perpLabel.textContent = `d⟂ = ${w.trueArm.toFixed(2)} м`;
+            angledForceLayer.appendChild(perpLabel);
+          }
+        }
+      });
+
+      // Дуги моментов вокруг опоры
+      momentsArcGroup.innerHTML = '';
+      if (state.showMoments) {
+        // Левый момент M1
+        const r1 = 38;
+        const arcM1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        arcM1.setAttribute('d', `M ${fulcrumPx - r1} ${BEAM_Y} A ${r1} ${r1} 0 0 1 ${fulcrumPx} ${BEAM_Y - r1}`);
+        arcM1.setAttribute('fill', 'none');
+        arcM1.setAttribute('stroke', '#3b82f6');
+        arcM1.setAttribute('stroke-width', '3');
+        arcM1.setAttribute('marker-end', 'url(#arrow-moment-ccw)');
+        momentsArcGroup.appendChild(arcM1);
+
+        // Правый момент M2
+        const r2 = 46;
+        const arcM2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        arcM2.setAttribute('d', `M ${fulcrumPx} ${BEAM_Y - r2} A ${r2} ${r2} 0 0 1 ${fulcrumPx + r2} ${BEAM_Y}`);
+        arcM2.setAttribute('fill', 'none');
+        arcM2.setAttribute('stroke', '#f59e0b');
+        arcM2.setAttribute('stroke-width', '3');
+        arcM2.setAttribute('marker-end', 'url(#arrow-moment-cw)');
+        momentsArcGroup.appendChild(arcM2);
+      }
+
+      // Информационные блоки
+      document.getElementById('info-m1-val').textContent = `${comp.momentCCW.toFixed(2)} Н·м`;
+      document.getElementById('info-m2-val').textContent = `${comp.momentCW.toFixed(2)} Н·м`;
+      document.getElementById('info-dm-val').textContent = `${Math.abs(comp.netMoment).toFixed(2)} Н·м`;
+
+      const badgeBalance = document.getElementById('badge-balance');
+      const statusDot = document.getElementById('status-dot');
+      const statusText = document.getElementById('status-text');
+      const canvasBadge = document.getElementById('canvas-status-badge');
+
+      if (comp.isBalanced) {
+        badgeBalance.textContent = 'Равновесие (баланс)';
+        badgeBalance.className = 'text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300';
+        statusDot.className = 'inline-block h-3.5 w-3.5 rounded-full bg-emerald-600 animate-pulse';
+        statusText.textContent = 'Рычаг находится в равновесии (ΣM = 0)';
+        canvasBadge.className = 'font-bold text-emerald-600 dark:text-emerald-400';
+        canvasBadge.textContent = '● Рычаг в равновесии';
+      } else {
+        const dir = comp.netMoment > 0 ? 'влево (против часовой стрелки)' : 'вправо (по часовой стрелке)';
+        badgeBalance.textContent = 'Дисбаланс';
+        badgeBalance.className = 'text-[11px] font-semibold px-2 py-0.5 rounded bg-red-100 dark:bg-red-950 text-red-800 dark:text-rose-300';
+        statusDot.className = 'inline-block h-3.5 w-3.5 rounded-full bg-red-600';
+        statusText.textContent = `Перевес ${dir}: ΔM = ${Math.abs(comp.netMoment).toFixed(2)} Н·м`;
+        canvasBadge.className = 'font-bold text-red-600 dark:text-rose-400';
+        canvasBadge.textContent = '● Нарушено равновесие';
+      }
+    }
+
+    // Полная перерисовка (включая DOM ползунков)
+    function renderAll() {
+      renderControls();
+      updateVisualsOnly();
+    }
+
+    function renderControls() {
+      controlsContainer.innerHTML = '';
+      state.weights.forEach((w, idx) => {
+        const card = document.createElement('div');
+        card.className = 'p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-2';
+        card.innerHTML = `
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-800 dark:text-slate-200">Груз #${idx + 1} (${w.position < state.fulcrumX ? 'Слева' : 'Справа'})</span>
+            <div class="flex items-center gap-2">
+              <span id="label-mass-${w.id}" class="font-mono font-bold text-blue-600 dark:text-blue-400">${w.mass.toFixed(1)} кг</span>
+              ${state.weights.length > 1 ? `<button class="btn-del-weight text-red-500 hover:text-red-700 p-1" data-id="${w.id}">✕</button>` : ''}
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <div class="flex justify-between text-slate-500 mb-1">
+                <span>Масса m:</span>
+              </div>
+              <input type="range" class="slider-weight-mass w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600" data-id="${w.id}" min="0.5" max="15" step="0.5" value="${w.mass}" />
+            </div>
+            <div>
+              <div class="flex justify-between text-slate-500 mb-1">
+                <span>Координата x:</span>
+                <span id="label-pos-${w.id}" class="font-mono font-semibold">${w.position > 0 ? '+' : ''}${w.position.toFixed(2)} м</span>
+              </div>
+              <input type="range" class="slider-weight-pos w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-slate-600" data-id="${w.id}" min="-1.0" max="1.0" step="0.05" value="${w.position}" />
+            </div>
+          </div>
+        `;
+        controlsContainer.appendChild(card);
+      });
+
+      // События кнопок удаления
+      controlsContainer.querySelectorAll('.btn-del-weight').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          state.weights = state.weights.filter(w => w.id !== id);
+          renderAll();
+        });
+      });
+    }
+
+    // Делегирование событий на контейнер ползунков (БЕЗ сноса innerHTML во время drag)
+    controlsContainer.addEventListener('input', (e) => {
+      const massSlider = e.target.closest('.slider-weight-mass');
+      if (massSlider) {
+        const id = massSlider.dataset.id;
+        const val = parseFloat(massSlider.value);
+        const w = state.weights.find(item => item.id === id);
+        if (w) {
+          w.mass = val;
+          const lab = document.getElementById(`label-mass-${id}`);
+          if (lab) lab.textContent = `${val.toFixed(1)} кг`;
+          updateVisualsOnly();
+        }
+        return;
+      }
+
+      const posSlider = e.target.closest('.slider-weight-pos');
+      if (posSlider) {
+        const id = posSlider.dataset.id;
+        const val = parseFloat(posSlider.value);
+        const w = state.weights.find(item => item.id === id);
+        if (w) {
+          w.position = val;
+          const lab = document.getElementById(`label-pos-${id}`);
+          if (lab) lab.textContent = `${val > 0 ? '+' : ''}${val.toFixed(2)} м`;
+          updateVisualsOnly();
+        }
+      }
+    });
+
+    // Интерактивное перетаскивание на SVG
+    let activeDrag = null;
+
+    fulcrumGroup.addEventListener('pointerdown', (e) => {
+      activeDrag = { type: 'fulcrum' };
+      document.body.classList.add('dragging');
+      e.target.setPointerCapture?.(e.pointerId);
+    });
+
+    svgEl.addEventListener('pointerdown', (e) => {
+      const handle = e.target.closest('.weight-handle');
+      if (handle) {
+        activeDrag = { type: 'weight', id: handle.dataset.weightId };
+        document.body.classList.add('dragging');
+        e.target.setPointerCapture?.(e.pointerId);
+      }
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!activeDrag) return;
+      const m = clientXToMeters(e.clientX);
+      if (activeDrag.type === 'fulcrum') {
+        state.fulcrumX = Number(Math.max(-0.6, Math.min(0.6, m)).toFixed(2));
+        updateVisualsOnly();
+      } else if (activeDrag.type === 'weight') {
+        const w = state.weights.find(item => item.id === activeDrag.id);
+        if (w) {
+          w.position = Number(m.toFixed(2));
+          const lab = document.getElementById(`label-pos-${w.id}`);
+          if (lab) lab.textContent = `${w.position > 0 ? '+' : ''}${w.position.toFixed(2)} м`;
+          const input = controlsContainer.querySelector(`.slider-weight-pos[data-id="${w.id}"]`);
+          if (input) input.value = w.position;
+          updateVisualsOnly();
+        }
+      }
+    });
+
+    window.addEventListener('pointerup', () => {
+      if (activeDrag) {
+        activeDrag = null;
+        document.body.classList.remove('dragging');
+      }
+    });
+
+    window.addEventListener('themechanged', () => updateVisualsOnly());
+
+    // Первый рендер
+    renderAll();
+  </script>
+</body>
+</html>
