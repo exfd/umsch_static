@@ -129,6 +129,16 @@
         <rect x="80" y="18" width="540" height="14" fill="url(#ceiling-hatch)" />
         <line x1="80" y1="32" x2="620" y2="32" stroke="#475569" stroke-width="3" />
 
+        <!-- Заклёпки крепления балки к перекрытию (секретная пасхалка на левой заклёпке) -->
+        <g id="secret-easter-egg" class="cursor-pointer" style="cursor: pointer;">
+          <!-- Увеличенная зона клика (36x36px) -->
+          <circle cx="115" cy="25" r="18" fill="transparent" />
+          <circle cx="115" cy="25" r="4.5" fill="#475569" stroke="#94a3b8" stroke-width="1.2" />
+          <circle cx="115" cy="25" r="1.8" fill="#1e293b" />
+        </g>
+        <circle cx="585" cy="25" r="4.5" fill="#475569" stroke="#94a3b8" stroke-width="1.2" />
+        <circle cx="585" cy="25" r="1.8" fill="#1e293b" />
+
         <!-- Динамическое содержимое сцены -->
         <g id="scene-content"></g>
       </svg>
@@ -201,6 +211,25 @@
           <span>2,5 кг</span>
           <span>5,0 кг</span>
         </div>
+      </div>
+    </div>
+  
+    <!-- Скрытое модальное окно пасхалки -->
+    <div id="secret-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 hidden">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 sm:p-7 max-w-sm w-full text-center space-y-4">
+        <div class="w-14 h-14 mx-auto rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-3xl shadow-xs">
+          🎁
+        </div>
+        <div class="space-y-1">
+          <h3 class="text-base font-bold text-slate-900">Секретная пасхалка!</h3>
+          <p class="text-xs text-slate-500">Поздравляем с находкой</p>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 text-slate-800 text-sm font-semibold rounded-xl p-3.5 leading-snug">
+          Ты нашел секрет) Напиши мне в лс, чтобы получить сюрприз
+        </div>
+        <button id="btn-close-secret" class="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition active:scale-95 shadow-sm">
+          Закрыть
+        </button>
       </div>
     </div>
   </main>
@@ -717,6 +746,50 @@
 
     // Запуск
     renderAll();
+  
+    // Обработчик секретной пасхалки
+    (function initSecretEasterEgg() {
+      const secretEgg = document.getElementById('secret-easter-egg');
+      const secretModal = document.getElementById('secret-modal');
+      const btnCloseSecret = document.getElementById('btn-close-secret');
+
+      function openModal(e) {
+        if (e) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        const modal = document.getElementById('secret-modal') || secretModal;
+        if (modal) {
+          modal.classList.remove('hidden');
+        }
+      }
+
+      function closeModal() {
+        const modal = document.getElementById('secret-modal') || secretModal;
+        if (modal) {
+          modal.classList.add('hidden');
+        }
+      }
+
+      if (secretEgg) {
+        secretEgg.addEventListener('click', openModal);
+        secretEgg.addEventListener('pointerdown', (e) => {
+          e.stopPropagation();
+        });
+      }
+
+      if (btnCloseSecret) {
+        btnCloseSecret.addEventListener('click', closeModal);
+      }
+
+      if (secretModal) {
+        secretModal.addEventListener('click', (e) => {
+          if (e.target === secretModal) {
+            closeModal();
+          }
+        });
+      }
+    })();
   </script>
 </body>
 </html>
